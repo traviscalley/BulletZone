@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'bullet-zone-server'
+    version = '2.0'
+    manifest {
+        attributes 'Implementation-Title': 'Bullet Zone Server',
+                'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.guava:guava:22.0'
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'junit:junit:4.+'
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude(group: 'commons-logging', module: 'commons-logging')
+    }
+    testCompile 'com.jayway.jsonpath:json-path:0.9.1'
+}
