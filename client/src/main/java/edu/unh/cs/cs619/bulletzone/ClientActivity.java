@@ -112,7 +112,7 @@ public class ClientActivity extends Activity {
     }
 
     public void updateGrid(GridWrapper gw) {
-        mGridAdapter.updateList(gw.getGrid());
+        mGridAdapter.updateList(gw.getResourceGrid());
     }
 
     @Click({R.id.buttonUp, R.id.buttonDown, R.id.buttonLeft, R.id.buttonRight})
