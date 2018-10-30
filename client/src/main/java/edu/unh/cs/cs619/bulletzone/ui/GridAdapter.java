@@ -1,18 +1,15 @@
 package edu.unh.cs.cs619.bulletzone.ui;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.SystemService;
 
 import edu.unh.cs.cs619.bulletzone.R;
-import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
 @EBean
 public class GridAdapter extends BaseAdapter {
@@ -20,41 +17,23 @@ public class GridAdapter extends BaseAdapter {
     private final Object monitor = new Object();
     @SystemService
     protected LayoutInflater inflater;
-    private final int NUM_IMAGES = 16 * 16;
-    private int[] imageId = new int[NUM_IMAGES];
-    private Context context;
-    //private int[][] mEntities = new int[16][16];
+    private int[][] mEntities = new int[16][16];
 
-    public GridAdapter(Context c)
-    {
-        context = c;
-
-        // by default set all grid values to 0
-        for (int i = 0; i < NUM_IMAGES; i++)
-            imageId[i] = R.drawable.blank;
-    }
-
-    public void updateList(int[] entities) {
+    public void updateList(int[][] entities) {
         synchronized (monitor) {
-            this.imageId = entities;
+            this.mEntities = entities;
             this.notifyDataSetChanged();
         }
     }
 
-    public void update(GridWrapper simGrid)
-    {
-        for (int i = 0; i < NUM_IMAGES; i++)
-            imageId[i] = simGrid.getCell(i).getResourceID();
-    }
-
     @Override
     public int getCount() {
-        return NUM_IMAGES;
+        return 16 * 16;
     }
 
     @Override
     public Object getItem(int position) {
-        return imageId[position];
+        return mEntities[(int) position / 16][position % 16];
     }
 
     @Override
@@ -63,21 +42,34 @@ public class GridAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        ImageView imageView;
-        if (convertView == null)
-        {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(80, 65));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(5, 5, 5, 5);
-        }
-        else
-            imageView = (ImageView) convertView;
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        imageView.setImageResource(imageId[position]);
-        return imageView;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.field_item, null);
+        }
+
+        int row = position / 16;
+        int col = position % 16;
+
+        int val = mEntities[row][col];
+
+        if (convertView instanceof TextView) {
+            synchronized (monitor) {
+                if (val > 0) {
+                    if (val == 1000 || (val>1000&&val<=2000)) {
+                        ((TextView) convertView).setText("W");
+                    } else if (val >= 2000000 && val <= 3000000) {
+                        ((TextView) convertView).setText("B");
+                    } else if (val >= 10000000 && val <= 20000000) {
+                        ((TextView) convertView).setText("T");
+                    }
+                } else {
+                    ((TextView) convertView).setText("");
+                }
+            }
+        }
+
+        return convertView;
     }
 }
 

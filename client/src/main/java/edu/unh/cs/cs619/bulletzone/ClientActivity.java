@@ -23,7 +23,6 @@ import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
 
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
-import edu.unh.cs.cs619.bulletzone.model.GridFacade;
 import edu.unh.cs.cs619.bulletzone.rest.BZRestErrorhandler;
 import edu.unh.cs.cs619.bulletzone.rest.BulletZoneRestClient;
 import edu.unh.cs.cs619.bulletzone.rest.GridPollerTask;
@@ -113,7 +112,7 @@ public class ClientActivity extends Activity {
     }
 
     public void updateGrid(GridWrapper gw) {
-        mGridAdapter.updateList(gw.getResourceGrid());
+        mGridAdapter.updateList(gw.getGrid());
     }
 
     @Click({R.id.buttonUp, R.id.buttonDown, R.id.buttonLeft, R.id.buttonRight})
