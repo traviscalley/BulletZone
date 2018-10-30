@@ -115,7 +115,7 @@ public class ClientActivity extends Activity {
         mGridAdapter.updateList(gw.getGrid());
     }
 
-    @Click({R.id.buttonUp, R.id.buttonDown})
+    @Click({R.id.buttonUp, R.id.buttonDown, R.id.buttonLeft, R.id.buttonRight})
     protected void onButtonMove(View view) {
         final int viewId = view.getId();
         byte direction = 0;
@@ -127,18 +127,6 @@ public class ClientActivity extends Activity {
             case R.id.buttonDown:
                 direction = 4;
                 break;
-            default:
-                Log.e(TAG, "Unknown movement button id: " + viewId);
-                break;
-        }
-        this.moveAsync(tankId, direction);
-    }
-
-    @Click({R.id.buttonLeft, R.id.buttonRight})
-    protected void onButtonTurn(View view) {
-        final int viewId = view.getId();
-        byte direction = 0;
-        switch (viewId) {
             case R.id.buttonLeft:
                 direction = 6;
                 break;
@@ -149,9 +137,8 @@ public class ClientActivity extends Activity {
                 Log.e(TAG, "Unknown movement button id: " + viewId);
                 break;
         }
-        this.turnAsync(tankId, direction);
+        this.moveAsync(tankId, direction);
     }
-    
 
     @Background
     void moveAsync(long tankId, byte direction) {
@@ -173,14 +160,14 @@ public class ClientActivity extends Activity {
     @Background
     void leaveGame() {
         System.out.println("leaveGame() called, tank ID: "+tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", false);
+        BackgroundExecutor.cancelAll("grid_poller_task", true);
         restClient.leave(tankId);
     }
 
     @Background
     void leaveAsync(long tankId) {
         System.out.println("Leave called, tank ID: " + tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", false);
+        BackgroundExecutor.cancelAll("grid_poller_task", true);
         restClient.leave(tankId);
     }
 }
