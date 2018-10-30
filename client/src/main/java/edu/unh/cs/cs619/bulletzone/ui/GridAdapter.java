@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.SystemService;
@@ -53,18 +53,18 @@ public class GridAdapter extends BaseAdapter {
 
         int val = mEntities[row][col];
 
-        if (convertView instanceof TextView) {
+        if (convertView instanceof ImageView) {
             synchronized (monitor) {
                 if (val > 0) {
                     if (val == 1000 || (val>1000&&val<=2000)) {
-                        ((TextView) convertView).setText("W");
+                        ((ImageView) convertView).setImageResource(R.drawable.wall);
                     } else if (val >= 2000000 && val <= 3000000) {
-                        ((TextView) convertView).setText("B");
+                        ((ImageView) convertView).setImageResource(R.drawable.bullet);
                     } else if (val >= 10000000 && val <= 20000000) {
-                        ((TextView) convertView).setText("T");
+                        ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
                     }
                 } else {
-                    ((TextView) convertView).setText("");
+                    ((ImageView) convertView).setImageResource(R.drawable.blank);
                 }
             }
         }
