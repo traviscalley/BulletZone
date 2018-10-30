@@ -6,7 +6,7 @@ import edu.unh.cs.cs619.bulletzone.R;
  *
  * @author Travis Calley
  */
-public class Wall extends GridCell
+public class WallItem extends GridCell
 {
     /** Plant - constructor for the Plant GridCell object.
      *
@@ -14,7 +14,7 @@ public class Wall extends GridCell
      * @param r - the row value passed to the parent
      * @param c = the column value passed to the parent
      */
-    public Wall(int val, int index)
+    public WallItem(int val, int index)
     {
         super(val, index);
 
@@ -28,11 +28,6 @@ public class Wall extends GridCell
         {
             resourceID = R.drawable.bushes; //destrictible wall
             cellType = "Bush";
-        }
-        else // Catches all invalid values
-        {
-            resourceID = R.drawable.blank;
-            cellType = "Blank";
         }
     }
 }

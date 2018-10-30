@@ -8,9 +8,11 @@ import edu.unh.cs.cs619.bulletzone.R;
  *               The Gardener ID should be included in the info shown on screen.
  * @author Travis Calley
  */
-public class GardenerItem extends GridCell
+public class TankItem extends GridCell
 {
-    private int GID; // GardenerID
+    private int TID; // GardenerID
+    private int life;
+    private int direction;
     private LinkedList<String> locHistory; // Location History
 
     /** GardenerItem - constructor for the GardenerItem
@@ -19,40 +21,26 @@ public class GardenerItem extends GridCell
      * @param r - row value passed to parent
      * @param c - column value passed to parent
      */
-    public GardenerItem(int val, int r, int c)
+    public TankItem(int val, int index)
     {
-        super(val, r, c);
-        locHistory = new LinkedList<String>();
+        super(val, index);
+        /*locHistory = new LinkedList<String>();
 
         String data = "(" + r + ", " + c + ") " + System.currentTimeMillis() + "\n";
-        locHistory.add(data);
+        locHistory.add(data);*/
 
         // Set the resourceID of the GardenerItem GridCell
-        if (val >= 1000000 && val < 2000000) // Gardener
+        if (val >= 10000000 && val < 20000000) // tank
         {
-            super.resourceID = R.drawable.gardender_icon;
-            cellType = "Gardener";
-            GID = val % 1000000;
-            GID = GID / 1000;
-        }
-        else if (val >= 2000000 && val < 3000000) // Shovel
-        {
-            super.resourceID = R.drawable.shovel_icon;
-            cellType = "Shovel";
-            GID = val % 2000000;
-            GID = GID / 1000;
-        }
-        else if (val >= 10000000 && val < 20000000) // Golf cart
-        {
-            super.resourceID = R.drawable.golfcart_icon;
+            super.resourceID = R.drawable.golfcart_icon; //tank
             cellType = "Golf cart";
-            GID = val % 10000000;
-            GID = GID / 10000;
-        }
-        else
-        {
-            super.resourceID = R.drawable.blank;
-            cellType = "Blank";
+            TID = val % 10000000;
+            TID /=  10000;
+
+            life = val % 10000;
+            life /= 10;
+
+            direction = val % 10;
         }
     }
 
@@ -62,15 +50,15 @@ public class GardenerItem extends GridCell
      */
     public String getCellInfo()
     {
-        return super.getCellInfo() + "\nGardener ID: " + GID;
+        return super.getCellInfo() + "\nGardener ID: " + TID;
     }
 
     /** getGID
      * @return int - return the GardenerID
      */
-    public int getGID()
+    public int getTID()
     {
-        return GID;
+        return TID;
     }
 
     /** setLocation - method to allow updating of GardenerItem since they

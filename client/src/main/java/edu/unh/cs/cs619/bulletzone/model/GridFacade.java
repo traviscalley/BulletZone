@@ -172,11 +172,11 @@ public class GridFacade implements GridSubscriber
             // update the gridView
             this.setUsingJSON(array);
 
-            selectedCell = simGrid.getCell(selectedPosition);
+            /*selectedCell = simGrid.getCell(selectedPosition);
             // update the textView
             String displayString = "Selected " + selectedCell.getCellType() +
                     "\n" + selectedCell.getCellInfo();
-            textView.setText(displayString);
+            textView.setText(displayString);*/
         }
     }
     // ==============================================================

@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class GridCellFactory
 {
     private static GridCellFactory _instance;
-    private HashMap<Integer, GardenerItem> gItems = new HashMap<Integer, GardenerItem>();
+    private HashMap<Integer, TankItem> gItems = new HashMap<>();
 
     /** GridCellFactory - default constructor needs not to be implemented. */
     private GridCellFactory() { }
@@ -37,41 +37,23 @@ public class GridCellFactory
     public GridCell makeCell(int val, int index)
     {
         if(val >= 1000 && val < 2000)
-            return new Wall(val, index);
-
-        GridCell cell = null;
-
-        // Empty Cell, Reserved
-        if (val == 0 || (val > 4000 && val < 1000000))
-            cell = new GridCell(val, row, col);
-
-            // Plant: Tree, Clover, Mushroom, Sunflower
-        else if (val == 1000 || (val > 1000 && val < 2000) ||
-                val == 2002 || val == 2003 || val == 3000)
-            cell = new Plant(val, row, col);
-
-            // Gardener, Shovel, Cart
-        else if ((val >= 1000000 && val < 2000000) || (val >= 2000000 && val < 3000000) ||
-                (val >= 10000000 && val < 20000000))
+            return new WallItem(val, index);
+        else if(val >= 2000000 && val < 3000000)
+            return new BulletItem(val, index);
+        else if(val >= 10000000 && val < 20000000)
         {
-            int ser_val = (val / 1000);
-            cell = gItems.get(ser_val);
+            int key = val/10000;
+            TankItem ti = gItems.get(key);
 
-            // checks if GardenerItem exists, if not create the
-            // GardenerItem and add it to HashMap
-            if (cell == null)
+            if(ti == null)
             {
-                cell = new GardenerItem(val, row, col);
-                gItems.put(ser_val, (GardenerItem)cell);
+                ti = new TankItem(val, index);
+                gItems.put(key, ti);
             }
-            // GardenerItem exists so simply update the location
-            else
-                ((GardenerItem)cell).setLocation(row, col);
+            ti.setLocation(index/16, index%16);
+            return ti;
         }
-        // Invalid
         else
-            cell = new GridCell(val, row, col);
-
-        return cell;
+            return new GridCell(val, index);
     }
 }

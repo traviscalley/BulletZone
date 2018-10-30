@@ -1,11 +1,14 @@
 package edu.unh.cs.cs619.bulletzone.util;
 
+import java.io.Serializable;
+
 import edu.unh.cs.cs619.bulletzone.model.GridCell;
 
 /**
  * Created by simon on 10/1/14.
  */
-public class GridWrapper {
+public class GridWrapper implements Serializable
+{
     // constants
     private final int NUM_ROWS = 16;
     private final int NUM_COLS = 16;

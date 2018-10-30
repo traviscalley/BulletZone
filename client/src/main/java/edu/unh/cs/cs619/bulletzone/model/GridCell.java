@@ -1,12 +1,14 @@
 package edu.unh.cs.cs619.bulletzone.model;
 
+import java.io.Serializable;
+
 import edu.unh.cs.cs619.bulletzone.R;
 
 /** GridCell - The parent class of all basic Grid objects.
  *
  * @author Travis
  */
-public class GridCell
+public class GridCell implements Serializable
 {
     // class variables
     protected int row;
