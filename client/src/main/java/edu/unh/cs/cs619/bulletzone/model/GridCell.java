@@ -20,8 +20,7 @@ public class GridCell implements Serializable
     /** GridCell - Constructor that takes 3 parameters required to create a GridCell object.
      *
      * @param val - integer containing raw server value of the item
-     * @param r - integer containing the row of the item
-     * @param c - integer containing the col of the item
+     * @param index - current index of GridCell being constructed
      */
     public GridCell(int val, int index)
     {
@@ -29,17 +28,8 @@ public class GridCell implements Serializable
         row = index/16;
         col = index%16;
 
-        // Empty Cell
-        //if (val == 0 || (val > 4000 && val < 1000000))
-        //{
-            resourceID = R.drawable.blank;
-            cellType = "Blank";
-        //}
-        //else
-        //{
-            //resourceID = R.drawable.blank;
-            //cellType = "Blank";
-        //}
+        resourceID = R.drawable.blank;
+        cellType = "Blank";
     }
 
     /** getLocationHistory - gets the Location history of a GridCell. This method is

@@ -23,6 +23,7 @@ import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
 
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
+import edu.unh.cs.cs619.bulletzone.model.GridFacade;
 import edu.unh.cs.cs619.bulletzone.rest.BZRestErrorhandler;
 import edu.unh.cs.cs619.bulletzone.rest.BulletZoneRestClient;
 import edu.unh.cs.cs619.bulletzone.rest.GridPollerTask;
