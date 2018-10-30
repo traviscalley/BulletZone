@@ -107,6 +107,7 @@ public class ClientActivity extends Activity {
         try {
             tankId = restClient.join().getResult();
             gridPollTask.doPoll();
+            mGridAdapter.setPlayerID(tankId);
         } catch (Exception e) {
         }
     }
@@ -159,15 +160,15 @@ public class ClientActivity extends Activity {
     @Click(R.id.buttonLeave)
     @Background
     void leaveGame() {
-        System.out.println("leaveGame() called, tank ID: "+tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", true);
+        System.out.println("leaveGame() called, tank ID: " + tankId);
+        BackgroundExecutor.cancelAll("grid_poller_task", false);
         restClient.leave(tankId);
     }
 
     @Background
     void leaveAsync(long tankId) {
         System.out.println("Leave called, tank ID: " + tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", true);
+        BackgroundExecutor.cancelAll("grid_poller_task", false);
         restClient.leave(tankId);
     }
 }

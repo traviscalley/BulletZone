@@ -18,6 +18,7 @@ public class GridAdapter extends BaseAdapter {
     @SystemService
     protected LayoutInflater inflater;
     private int[][] mEntities = new int[16][16];
+    private long playerID;
 
     public void updateList(int[][] entities) {
         synchronized (monitor) {
@@ -41,6 +42,11 @@ public class GridAdapter extends BaseAdapter {
         return position;
     }
 
+    public void setPlayerID(long tankID)
+    {
+        playerID = tankID;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -61,7 +67,10 @@ public class GridAdapter extends BaseAdapter {
                     } else if (val >= 2000000 && val <= 3000000) {
                         ((ImageView) convertView).setImageResource(R.drawable.bullet);
                     } else if (val >= 10000000 && val <= 20000000) {
-                        ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
+                        if (val != playerID)
+                            ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_up);
+                        else
+                            ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
                     }
                 } else {
                     ((ImageView) convertView).setImageResource(R.drawable.blank);
