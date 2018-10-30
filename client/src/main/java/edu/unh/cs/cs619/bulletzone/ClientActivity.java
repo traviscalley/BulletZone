@@ -107,6 +107,7 @@ public class ClientActivity extends Activity {
         try {
             tankId = restClient.join().getResult();
             gridPollTask.doPoll();
+            mGridAdapter.setPlayerID(tankId);
         } catch (Exception e) {
         }
     }
