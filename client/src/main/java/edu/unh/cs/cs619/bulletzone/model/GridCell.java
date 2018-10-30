@@ -21,23 +21,23 @@ public class GridCell
      * @param r - integer containing the row of the item
      * @param c - integer containing the col of the item
      */
-    public GridCell(int val, int r, int c)
+    public GridCell(int val, int index)
     {
         serverVal = val;
-        row = r;
-        col = c;
+        row = index/16;
+        col = index%16;
 
         // Empty Cell
-        if (val == 0 || (val > 4000 && val < 1000000))
-        {
+        //if (val == 0 || (val > 4000 && val < 1000000))
+        //{
             resourceID = R.drawable.blank;
             cellType = "Blank";
-        }
-        else
-        {
-            resourceID = R.drawable.blank;
-            cellType = "Blank";
-        }
+        //}
+        //else
+        //{
+            //resourceID = R.drawable.blank;
+            //cellType = "Blank";
+        //}
     }
 
     /** getLocationHistory - gets the Location history of a GridCell. This method is
