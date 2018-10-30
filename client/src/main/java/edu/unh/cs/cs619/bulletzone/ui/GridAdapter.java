@@ -58,8 +58,6 @@ public class GridAdapter extends BaseAdapter {
         int col = position % 16;
 
         int val = mEntities[row][col];
-        int TID = (val / 10000) % 1000;
-        int dir = val % 10;
 
         if (convertView instanceof ImageView) {
             synchronized (monitor) {
@@ -69,28 +67,10 @@ public class GridAdapter extends BaseAdapter {
                     } else if (val >= 2000000 && val <= 3000000) {
                         ((ImageView) convertView).setImageResource(R.drawable.bullet);
                     } else if (val >= 10000000 && val <= 20000000) {
-
-                        // check if player tank or enemy tank
-                        if (TID != playerID) {
-                            if (dir == 0)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_up);
-                            else if (dir == 2)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_right);
-                            else if (dir == 4)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_down);
-                            else if (dir == 6)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_left);
-                        }
-                        else {
-                            if (dir == 0)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
-                            else if (dir == 2)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_right);
-                            else if (dir == 4)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_down);
-                            else if (dir == 6)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_left);
-                        }
+                        if (val != playerID)
+                            ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_up);
+                        else
+                            ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
                     }
                 } else {
                     ((ImageView) convertView).setImageResource(R.drawable.blank);
