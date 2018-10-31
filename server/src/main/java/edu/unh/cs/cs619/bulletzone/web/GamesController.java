@@ -97,6 +97,16 @@ class GamesController {
         );
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "{tankId}/fire", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    ResponseEntity<BooleanWrapper> fire(@PathVariable long tankId)
+            throws TankDoesNotExistException, LimitExceededException {
+        return new ResponseEntity<BooleanWrapper>(
+                new BooleanWrapper(gameRepository.fire(tankId, 1)),
+                HttpStatus.ACCEPTED
+        );
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "{tankId}/leave", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     HttpStatus leave(@PathVariable long tankId)

@@ -22,8 +22,8 @@ import edu.unh.cs.cs619.bulletzone.util.LongWrapper;
  * http://10.0.2.2:8080/
  * Created by simon on 10/1/14.
  */
-
-@Rest(rootUrl = "http://stman1.cs.unh.edu:61906/games",
+//temporary ip address
+@Rest(rootUrl = "http://192.168.1.120:8080/games",
         converters = {StringHttpMessageConverter.class, MappingJackson2HttpMessageConverter.class}
         // TODO: disable intercepting and logging
         // , interceptors = { HttpLoggerInterceptor.class }
