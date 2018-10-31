@@ -19,6 +19,8 @@ import edu.unh.cs.cs619.bulletzone.model.Wall;
 import sun.rmi.runtime.Log;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
+import static edu.unh.cs.cs619.bulletzone.model.Direction.toByte;
 
 @Component
 public class InMemoryGameRepository implements GameRepository {
@@ -154,7 +156,7 @@ public class InMemoryGameRepository implements GameRepository {
     }
 
     @Override
-    public boolean move(long tankId, Direction direction)
+    public boolean move(long tankId, Direction direction) //we need to interpret up as forward, down as back
             throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException {
         synchronized (this.monitor) {
             // Find tank
@@ -174,12 +176,22 @@ public class InMemoryGameRepository implements GameRepository {
 
             FieldHolder parent = tank.getParent();
 
+            if(direction == Direction.Up)
+                direction = tank.getDirection();
+            else if(direction == Direction.Down)
+                direction = fromByte((byte)((toByte(tank.getDirection()) + 4)%8));
+            else
+                return false;
+
             FieldHolder nextField = parent.getNeighbor(direction);
             checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
 
             boolean isCompleted;
-            if (!nextField.isPresent()) {
+            if (!nextField.isPresent())
+            {
                 // If the next field is empty move the user
+
+
 
                 /*try {
                     Thread.sleep(500);
@@ -192,7 +204,9 @@ public class InMemoryGameRepository implements GameRepository {
                 tank.setParent(nextField);
 
                 isCompleted = true;
-            } else {
+            }
+            else
+            {
                 isCompleted = false;
             }
 
