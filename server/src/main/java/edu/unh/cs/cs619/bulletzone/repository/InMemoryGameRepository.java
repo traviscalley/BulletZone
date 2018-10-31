@@ -125,33 +125,16 @@ public class InMemoryGameRepository implements GameRepository {
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }*/
-            if(tank.getDirection() == Direction.Up){
-                if(direction == Direction.Left){
-                    tank.setDirection(Direction.Left);
-                } else if(direction == Direction.Right){
-                    tank.setDirection(Direction.Right);
-                }
-            }else if(tank.getDirection() == Direction.Right){
-                if(direction == Direction.Left){
-                    tank.setDirection(Direction.Up);
-                } else if(direction == Direction.Right){
-                    tank.setDirection(Direction.Down);
-                }
-            }else if(tank.getDirection() == Direction.Down){
-                if(direction == Direction.Left){
-                    tank.setDirection(Direction.Right);
-                } else if(direction == Direction.Right) {
-                    tank.setDirection(Direction.Left);
-                }
-            }else if(tank.getDirection() == Direction.Left){
-                if(direction == Direction.Left){
-                    tank.setDirection(Direction.Down);
-                } else if(direction == Direction.Right) {
-                    tank.setDirection(Direction.Up);
-                }
-            }
+            int rotation;
+            if(direction == Direction.Right)
+                rotation = 2;
+            else if(direction == Direction.Left)
+                rotation = -2;
+            else
+                return false;
+            tank.setDirection(fromByte((byte)((toByte(tank.getDirection()) + rotation)%8)));
 
-            return true; // TODO check
+            return true;
         }
     }
 
