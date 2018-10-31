@@ -1,6 +1,10 @@
 package edu.unh.cs.cs619.bulletzone;
 
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -23,6 +27,7 @@ import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
 
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
+import edu.unh.cs.cs619.bulletzone.events.ShakeListener;
 import edu.unh.cs.cs619.bulletzone.rest.BZRestErrorhandler;
 import edu.unh.cs.cs619.bulletzone.rest.BulletZoneRestClient;
 import edu.unh.cs.cs619.bulletzone.rest.GridPollerTask;
@@ -59,9 +64,29 @@ public class ClientActivity extends Activity {
      */
     private long tankId = -1;
 
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeListener mShakeListener;
+
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeListener = new ShakeListener();
+        mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener()
+        {
+            @Override
+            public void onShake(int count)
+            {
+                restClient.fire(tankId);
+            }
+        });
     }
 
     @Override
