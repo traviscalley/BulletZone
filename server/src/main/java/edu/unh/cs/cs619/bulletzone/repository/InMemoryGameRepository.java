@@ -16,7 +16,6 @@ import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
-import sun.rmi.runtime.Log;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -125,15 +124,24 @@ public class InMemoryGameRepository implements GameRepository {
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }*/
-            int rotation;
+
+            byte rotation;
             if(direction == Direction.Right)
                 rotation = 2;
-            else if(direction == Direction.Left)
-                rotation = -2;
+            else if(direction == Direction.Left) {
+                if (tank.getDirection() == Direction.Up)
+                    rotation = -6;
+                else
+                    rotation = -2;
+            }
             else
                 return false;
-            tank.setDirection(fromByte((byte)((toByte(tank.getDirection()) + rotation)%8)));
 
+            byte dir = toByte(tank.getDirection());
+            dir += rotation;
+            dir %= 8;
+
+            tank.setDirection(fromByte(dir));
             return true;
         }
     }
@@ -173,8 +181,6 @@ public class InMemoryGameRepository implements GameRepository {
             if (!nextField.isPresent())
             {
                 // If the next field is empty move the user
-
-
 
                 /*try {
                     Thread.sleep(500);
