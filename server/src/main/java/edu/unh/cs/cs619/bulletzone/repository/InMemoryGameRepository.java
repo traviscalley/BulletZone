@@ -129,10 +129,7 @@ public class InMemoryGameRepository implements GameRepository {
             if(direction == Direction.Right)
                 rotation = 2;
             else if(direction == Direction.Left) {
-                if (tank.getDirection() == Direction.Up)
-                    rotation = -6;
-                else
-                    rotation = -2;
+                rotation = 6;
             }
             else
                 return false;

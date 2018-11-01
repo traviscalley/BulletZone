@@ -97,15 +97,14 @@ public class GridAdapter extends BaseAdapter {
                                 resource = R.drawable.user_tank_left;
                         }
                     }
-                } else {
+                } else
                     resource = R.drawable.blank;
-                }
+
                 ((ImageView) convertView).setImageResource(resource);
             }
         }
+        return convertView;
     }
 
-        return convertView;
-}
 }
 
