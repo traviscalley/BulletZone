@@ -64,44 +64,48 @@ public class GridAdapter extends BaseAdapter {
 
         if (convertView instanceof ImageView) {
             synchronized (monitor) {
+                int resource = 0;
                 if (val > 0) {
-                    if (val == 1000) {
-                        ((ImageView) convertView).setImageResource(R.drawable.wall);
-                    } else if (val>1000&&val<=2000) {
-                        ((ImageView) convertView).setImageResource(R.drawable.wall_breakable);
-                    } else if (val >= 2000000 && val <= 3000000) {
-                        ((ImageView) convertView).setImageResource(R.drawable.bullet);
-                    } else if (val >= 10000000 && val <= 20000000) {
-
+                    if (val == 1000)
+                        resource = R.drawable.wall;
+                    else if (val>1000&&val<=2000)
+                        resource = R.drawable.wall_breakable;
+                    else if (val >= 2000000 && val <= 3000000)
+                        resource = R.drawable.bullet;
+                    else if (val >= 10000000 && val <= 20000000)
+                    {
                         // check if player tank or enemy tank
-                        if (TID != playerID) {
+                        if (TID != playerID)
+                        {
                             if (dir == 0)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_up);
+                                resource = R.drawable.enemy_tank_up;
                             else if (dir == 2)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_right);
+                                resource = R.drawable.enemy_tank_right;
                             else if (dir == 4)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_down);
+                                resource = R.drawable.enemy_tank_down;
                             else if (dir == 6)
-                                ((ImageView) convertView).setImageResource(R.drawable.enemy_tank_left);
+                                resource = R.drawable.enemy_tank_left;
                         }
                         else {
                             if (dir == 0)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_up);
+                                resource = R.drawable.user_tank_up;
                             else if (dir == 2)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_right);
+                                resource = R.drawable.user_tank_right;
                             else if (dir == 4)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_down);
+                                resource = R.drawable.user_tank_down;
                             else if (dir == 6)
-                                ((ImageView) convertView).setImageResource(R.drawable.user_tank_left);
+                                resource = R.drawable.user_tank_left;
                         }
                     }
                 } else {
-                    ((ImageView) convertView).setImageResource(R.drawable.blank);
+                    resource = R.drawable.blank;
                 }
+                ((ImageView) convertView).setImageResource(resource);
             }
         }
+    }
 
         return convertView;
-    }
+}
 }
 
