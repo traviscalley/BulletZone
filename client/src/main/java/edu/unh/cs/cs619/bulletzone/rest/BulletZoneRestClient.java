@@ -23,7 +23,7 @@ import edu.unh.cs.cs619.bulletzone.util.LongWrapper;
  * Created by Travis on 10/1/14.
  */
 //temporary ip address
-@Rest(rootUrl = "http://stman1.cs.unh.edu:61916/games",
+@Rest(rootUrl = "http://stman1.cs.unh.edu:6192/games",
         converters = {StringHttpMessageConverter.class, MappingJackson2HttpMessageConverter.class}
         // TODO: disable intercepting and logging
         // , interceptors = { HttpLoggerInterceptor.class }

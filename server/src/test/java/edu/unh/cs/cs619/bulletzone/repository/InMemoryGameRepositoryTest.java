@@ -34,7 +34,7 @@ public class InMemoryGameRepositoryTest {
         Assert.assertTrue(tank.getDirection() == Direction.Up);
         Assert.assertNotNull(tank.getParent());
     }
-    /*
+
     @Test
     public void testTurn() throws Exception {
         Tank tank = repo.join("");
@@ -50,7 +50,7 @@ public class InMemoryGameRepositoryTest {
         thrown.expect(TankDoesNotExistException.class);
         thrown.expectMessage("Tank '1000' does not exist");
         repo.turn(1000, Direction.Right);
-    } */
+    }
 
     @Test
     public void testMove() throws Exception {
