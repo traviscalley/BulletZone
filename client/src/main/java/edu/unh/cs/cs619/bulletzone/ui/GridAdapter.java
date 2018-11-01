@@ -12,14 +12,21 @@ import org.androidannotations.annotations.SystemService;
 
 import edu.unh.cs.cs619.bulletzone.R;
 
+/**
+ * Bridges between UI components and the data source that fill data into UI Component
+ */
 @EBean
 public class GridAdapter extends BaseAdapter {
 
+    /**
+     * Class Variables
+     */
     private final Object monitor = new Object();
     @SystemService
     protected LayoutInflater inflater;
     private int[][] mEntities = new int[16][16];
     private long playerID;
+
 
     public void updateList(int[][] entities) {
         synchronized (monitor) {
@@ -48,6 +55,16 @@ public class GridAdapter extends BaseAdapter {
         playerID = tankID;
     }
 
+    /**
+     * Get a View that displays the data at the specified position in the data set. You can either
+     * create a View manually or inflate it from an XML layout file.
+     *
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent The parent that this view will eventually be attached to
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -97,15 +114,14 @@ public class GridAdapter extends BaseAdapter {
                                 resource = R.drawable.user_tank_left;
                         }
                     }
-                } else {
+                } else
                     resource = R.drawable.blank;
-                }
+
                 ((ImageView) convertView).setImageResource(resource);
             }
         }
+        return convertView;
     }
 
-        return convertView;
-}
 }
 

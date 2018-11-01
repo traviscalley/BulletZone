@@ -27,6 +27,10 @@ import edu.unh.cs.cs619.bulletzone.util.BooleanWrapper;
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 import edu.unh.cs.cs619.bulletzone.util.LongWrapper;
 
+/**
+ * Games Controller w/repository
+ * methods have not been used as of yet
+ */
 @RestController
 @RequestMapping(value = "/games")
 class GamesController {

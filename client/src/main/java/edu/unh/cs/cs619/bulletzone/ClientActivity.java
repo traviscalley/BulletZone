@@ -141,6 +141,11 @@ public class ClientActivity extends Activity {
         mGridAdapter.updateList(gw.getGrid());
     }
 
+    /**
+     * Value of direction causes either case of a "buttonUp" press
+     * or a "buttonDown" press and moves the tank accordingly
+     * @param view view 
+     */
     @Click({R.id.buttonUp, R.id.buttonDown})
     protected void onButtonMove(View view) {
         final int viewId = view.getId();
@@ -160,6 +165,11 @@ public class ClientActivity extends Activity {
         this.moveAsync(tankId, direction);
     }
 
+    /**
+     * Value of direction causes either case of a "buttonLeft" press
+     * or a "buttonRight" press and moves the tank accordingly
+     * @param view view
+     */
     @Click({R.id.buttonLeft, R.id.buttonRight})
     protected void onButtonTurn(View view) {
         final int viewId = view.getId();
