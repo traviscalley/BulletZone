@@ -6,8 +6,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import java.lang.Math;
 
-import static android.content.Context.SENSOR_SERVICE;
-
 public class ShakeListener implements SensorEventListener
 {
 
