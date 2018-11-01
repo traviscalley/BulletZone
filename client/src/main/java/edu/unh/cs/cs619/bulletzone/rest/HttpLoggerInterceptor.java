@@ -20,8 +20,15 @@ public class HttpLoggerInterceptor implements ClientHttpRequestInterceptor {
 
     private static final String TAG = "HttpLoggerInterceptor";
 
+    /**
+     * Logging/authentication, intercept
+     * @param data data
+     * @param execution execution
+     * @param req request
+     */
     @Override
-    public ClientHttpResponse intercept(HttpRequest req, byte[] data, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest req, byte[] data, ClientHttpRequestExecution
+            execution) throws IOException {
 
         // TODO: do improved logging/authentication can be done here as well
         Log.d(TAG, "Http Request: " + req.getMethod() + " " + req.getURI());

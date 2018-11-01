@@ -41,6 +41,7 @@ public class InMemoryGameRepository implements GameRepository {
 
     /**
      * Tank's default life [life]
+     * Class Variables
      */
     private static final int TANK_LIFE = 100;
     private final Timer timer = new Timer();
@@ -51,6 +52,10 @@ public class InMemoryGameRepository implements GameRepository {
     private int bulletDelay[]={500,1000,1500};
     private int trackActiveBullets[]={0,0};
 
+    /**
+     * Joins sever
+     * @param ip joins game with IP
+     */
     @Override
     public Tank join(String ip) {
         synchronized (this.monitor) {
@@ -90,6 +95,9 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * getGrid method to create it
+     */
     @Override
     public int[][] getGrid() {
         synchronized (this.monitor) {
@@ -99,7 +107,11 @@ public class InMemoryGameRepository implements GameRepository {
         }
         return game.getGrid2D();
     }
-
+    /**
+     * Should fire bullet from tank
+     * @param tankId ID of tank
+     * @param direction bullet direction
+     */
     @Override
     public boolean turn(long tankId, Direction direction)
             throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException {
@@ -143,6 +155,11 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * Should fire bullet from tank
+     * @param tankId ID of tank
+     * @param direction bullet direction
+     */
     @Override
     public boolean move(long tankId, Direction direction) //we need to interpret up as forward, down as back
             throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException {
@@ -200,6 +217,11 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * Should fire bullet from tank
+     * @param tankId ID of tank
+     * @param bulletType type of bullet
+     */
     @Override
     public boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException, LimitExceededException {
@@ -310,6 +332,10 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * Leave Game and should kick you off server
+     * @param tankId
+     */
     @Override
     public void leave(long tankId)
             throws TankDoesNotExistException {
@@ -327,6 +353,9 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * New Game
+     */
     public void create() {
         if (game != null) {
             return;
@@ -377,6 +406,10 @@ public class InMemoryGameRepository implements GameRepository {
         }
     }
 
+    /**
+     * Builds the connections and field of view
+     * @param game field holder grid is created
+     */
     private void createFieldHolderGrid(Game game) {
         synchronized (this.monitor) {
             game.getHolderGrid().clear();
