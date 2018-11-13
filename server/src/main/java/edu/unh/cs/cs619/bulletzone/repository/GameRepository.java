@@ -12,15 +12,6 @@ public interface GameRepository {
 
     int[][] getGrid();
 
-    boolean turn(long tankId, Direction direction)
-            throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException;
-
-    boolean move(long tankId, Direction direction)
-            throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException;
-
-    boolean fire(long tankId, int strength)
-            throws TankDoesNotExistException, LimitExceededException;
-
     public void leave(long tankId)
             throws TankDoesNotExistException;
 }

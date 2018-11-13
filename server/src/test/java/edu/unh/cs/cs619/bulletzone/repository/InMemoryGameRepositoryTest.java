@@ -1,5 +1,6 @@
 package edu.unh.cs.cs619.bulletzone.repository;
 
+import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Game;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,7 +46,7 @@ public class InMemoryGameRepositoryTest {
         Assert.assertNotNull(tank.getDirection());
         Assert.assertTrue(tank.getDirection() == Direction.Up);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(repo.turn(tank.getId(), Direction.Right));
+        Assert.assertTrue(TankUtilities.turn(tank.getId(), Direction.Right));
         Assert.assertTrue(tank.getDirection() == Direction.Right);
 
 //        thrown.expect(TankDoesNotExistException.class);
@@ -61,7 +62,7 @@ public class InMemoryGameRepositoryTest {
         Assert.assertNotNull(tank.getDirection());
         Assert.assertTrue(tank.getDirection() == Direction.Up);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(repo.move(tank.getId(), Direction.Up));
+        Assert.assertTrue(TankUtilities.move(tank.getId(), Direction.Up));
         Assert.assertTrue(tank.getDirection() == Direction.Up);
 
     }
@@ -72,7 +73,7 @@ public class InMemoryGameRepositoryTest {
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(repo.fire(tank.getId(), 1));
+        Assert.assertTrue(TankUtilities.fire(tank.getId(), 1));
 
     }
 
