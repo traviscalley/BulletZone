@@ -9,9 +9,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
+import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
+import edu.unh.cs.cs619.bulletzone.model.Hill;
 import edu.unh.cs.cs619.bulletzone.model.IllegalTransitionException;
 import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
@@ -152,6 +154,15 @@ public class InMemoryGameRepository implements GameRepository {
             game.getHolderGrid().get(41).setFieldEntity(new Wall());
             game.getHolderGrid().get(57).setFieldEntity(new Wall());
             game.getHolderGrid().get(73).setFieldEntity(new Wall());
+
+            game.getHolderGrid().get(199).setFieldEntity(new DebrisField());
+            game.getHolderGrid().get(200).setFieldEntity(new DebrisField());
+            game.getHolderGrid().get(201).setFieldEntity(new DebrisField());
+
+            game.getHolderGrid().get(105).setFieldEntity(new Hill());
+            game.getHolderGrid().get(104).setFieldEntity(new Hill());
+            game.getHolderGrid().get(103).setFieldEntity(new Hill());
+            game.getHolderGrid().get(106).setFieldEntity(new Hill());
         }
     }
 

@@ -85,11 +85,15 @@ public class GridAdapter extends BaseAdapter {
                 if (val > 0) {
                     if (val == 1000)
                         resource = R.drawable.wall;
-                    else if (val>1000&&val<=2000)
+                    else if (val > 1000 && val < 2000)
                         resource = R.drawable.wall_breakable;
-                    else if (val >= 2000000 && val <= 3000000)
+                    else if (val == 2000)
+                        resource = R.drawable.hill;
+                    else if (val == 3000)
+                        resource = R.drawable.debris_field;
+                    else if (val >= 2000000 && val < 3000000)
                         resource = R.drawable.bullet;
-                    else if (val >= 10000000 && val <= 20000000)
+                    else if (val >= 10000000 && val < 20000000)
                     {
                         // check if player tank or enemy tank
                         if (TID != playerID)

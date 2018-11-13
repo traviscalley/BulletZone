@@ -44,7 +44,7 @@ public abstract class TankUtilities
     public static void setGame(Game game1) {game = game1;}
 
     public static boolean turn(long tankId, Direction direction)
-            throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException
+            throws TankDoesNotExistException
     {
         synchronized (monitor) {
             checkNotNull(direction);
@@ -84,15 +84,24 @@ public abstract class TankUtilities
     }
 
     public static boolean move(long tankId, Direction direction)
-            throws TankDoesNotExistException, IllegalTransitionException, LimitExceededException {
+            throws TankDoesNotExistException {
         synchronized (monitor) {
             // Find tank
 
             Tank tank = game.getTanks().get(tankId);
             if (tank == null) {
-                //Log.i(TAG, "Cannot find user with id: " + tankId);
-                //return false;
                 throw new TankDoesNotExistException(tankId);
+            }
+
+            int terrainType = tank.getParent().getEntity().getIntValue();
+
+            switch (terrainType)
+            {
+                case 2000: // hill
+                    tank.setAllowedMoveInterval(1000);
+                    break;
+                default:
+                    tank.setAllowedMoveInterval(500);
             }
 
             long millis = System.currentTimeMillis();
@@ -114,6 +123,7 @@ public abstract class TankUtilities
             checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
 
             boolean isCompleted;
+
             if (!nextField.isPresent())
             {
                 parent.clearField();
@@ -132,7 +142,7 @@ public abstract class TankUtilities
     }
 
     public static boolean fire(long tankId, int bulletType)
-            throws TankDoesNotExistException, LimitExceededException {
+            throws TankDoesNotExistException {
         synchronized (monitor) {
 
             // Find tank
