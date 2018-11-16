@@ -100,6 +100,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         @Subscribe
         public void onUpdateGrid(GridUpdateEvent event) {
             updateGrid(event.gw);
+            storeState(event.gw);
         }
     };
 
@@ -129,6 +130,10 @@ public class ClientActivity extends Activity implements SensorEventListener{
 
     public void updateGrid(GridWrapper gw) {
         mGridAdapter.updateList(gw.getGrid());
+    }
+
+    public void storeState(GridWrapper gw){
+
     }
 
     /**
