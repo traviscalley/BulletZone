@@ -9,17 +9,17 @@ import java.util.List;
 public class GridRepo {
 
     private GridDao mGridDao;
-    private LiveData<List<GridEntity>> mAllWords;
+    private LiveData<List<GridEntity>> mAllGrids;
 
     GridRepo(Application application)
     {
         GridDatabase db = GridDatabase.getDatabase(application);
         mGridDao = db.gridDao();
-        mAllWords = mGridDao.getAll();
+        mAllGrids = mGridDao.getAll();
     }
 
     public LiveData<List<GridEntity>> getAll(){
-        return mAllWords;
+        return mAllGrids;
     }
 
     //access point???
