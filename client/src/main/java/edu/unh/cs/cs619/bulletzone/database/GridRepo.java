@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
+import java.util.function.Function;
 
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
@@ -18,11 +19,16 @@ public class GridRepo {
     {
         GridDatabase db = GridDatabase.getDatabase(application);
         mGridDao = db.gridDao();
-        mAllGrids = mGridDao.getAll();
+        //mAllGrids = mGridDao.getAll();
     }
 
+    /*public void startGetAll(Function<List<GridEntity>, Void> callback){
+
+        new getAllTask(mGridDao).execute(callback);///mGridDao.getAll();//mAllGrids;
+    }*/
+
     public List<GridEntity> getAll(){
-        return mAllGrids;
+        return mGridDao.getAll();
     }
 
     //access point???
@@ -34,6 +40,25 @@ public class GridRepo {
     public void insert(GridWrapper ge) {
         new insertAsyncTask(mGridDao).execute(ge);
     }
+
+    /*private static class getAllTask extends AsyncTask<Function<List<GridEntity>, Void>, Void, Void>{
+        private GridDao mAsyncTaskDao;
+
+        getAllTask(GridDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Function... functions) {
+            functions[0].apply(mAsyncTaskDao.getAll());
+            return null;
+        }
+
+        /*@Override
+        protected List<GridEntity> doInBackground(Void... voids) {
+            return mAsyncTaskDao.getAll();
+        }
+    }*/
 
     private static class insertAsyncTask extends AsyncTask<GridWrapper, Void, Void> {
 

@@ -11,15 +11,15 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 public class GridViewModel extends AndroidViewModel {
     private GridRepo repo;
 
-    private LiveData<List<GridEntity>> allGrids;
+    private List<GridEntity> allGrids;
 
     public GridViewModel(Application application){
         super(application);
         repo = new GridRepo(application);
-        allGrids = repo.getAll();
+        //allGrids = repo.getAll();
     }
 
-    public LiveData<List<GridEntity>> getAllGrids() { return allGrids; }
+    public List<GridEntity> getAllGrids() { return allGrids; }
 
     public void insert(GridWrapper ge) { repo.insert(ge); }
 }

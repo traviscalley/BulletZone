@@ -53,11 +53,10 @@ dependencies {
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
-
     defaultConfig {
         applicationId "edu.unh.cs.cs619.bulletzone"
-        minSdkVersion 18
-        targetSdkVersion 27
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -68,8 +67,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     // This is only needed if you project structure doesn't fit the one found here
     // http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Project-Structure
@@ -91,5 +90,7 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
         exclude 'META-INF/ASL2.0'
+    }
+    productFlavors {
     }
 }

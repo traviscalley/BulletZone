@@ -191,9 +191,36 @@ public class ClientActivity extends Activity implements SensorEventListener{
         this.turnAsync(tankId, direction);
     }
 
+    @Background
     @Click(R.id.buttonReplay)
     protected void onButtonReplay(View view){
-        List<GridEntity> idfk = gridRepo.getAll();
+        //leave async
+        //not sure if this is what to do
+        leaveAsync(tankId);
+        List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
+    //}
+
+    //protected void handlePast(List<GridEntity> kek){
+
+        GridEntity unconverted = idfk.get(0);
+
+        //get an entry
+        //make a grid wrapper
+        GridWrapper next = new GridWrapper();
+        int[][] grid = new int[16][16];
+        String[] rows = unconverted.getGrid().split("]");
+        for(int r = 0; r < rows.length; r++)
+        {
+            String[] row = rows[r].split(",");
+            for(int c = 0; c < row.length; c++)
+                Log.d(null, row[c]);
+
+        }
+
+        //update teh grid
+
+        //busProvider.getEventBus().post(new GridUpdateEvent(gw));
+
     }
     
 
