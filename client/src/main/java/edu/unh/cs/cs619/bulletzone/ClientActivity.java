@@ -27,6 +27,8 @@ import org.androidannotations.rest.spring.annotations.RestService;
 import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
 
+import edu.unh.cs.cs619.bulletzone.database.GridEntity;
+import edu.unh.cs.cs619.bulletzone.database.GridRepo;
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
 import edu.unh.cs.cs619.bulletzone.rest.BZRestErrorhandler;
 import edu.unh.cs.cs619.bulletzone.rest.BulletZoneRestClient;
@@ -67,6 +69,8 @@ public class ClientActivity extends Activity implements SensorEventListener{
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
+    private GridRepo gridRepo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,6 +81,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
 
+        gridRepo = new GridRepo(this.getApplication());
     }
 
     @Override
@@ -133,7 +138,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
     }
 
     public void storeState(GridWrapper gw){
-
+        gridRepo.insert(new GridEntity(gw));//res, gw.getTimeStamp()) );
     }
 
     /**

@@ -11,7 +11,7 @@ public class GridRepo {
     private GridDao mGridDao;
     private LiveData<List<GridEntity>> mAllGrids;
 
-    GridRepo(Application application)
+    public GridRepo(Application application)
     {
         GridDatabase db = GridDatabase.getDatabase(application);
         mGridDao = db.gridDao();

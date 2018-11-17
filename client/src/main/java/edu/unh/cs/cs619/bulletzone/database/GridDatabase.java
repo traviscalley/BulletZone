@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {GridEntity.class}, version = 1)
+@Database(entities = {GridEntity.class}, version = 1, exportSchema = false)
 public abstract class GridDatabase extends RoomDatabase {
     public abstract GridDao gridDao();
 
