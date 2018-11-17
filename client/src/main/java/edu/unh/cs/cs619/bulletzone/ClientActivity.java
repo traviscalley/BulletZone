@@ -1,6 +1,7 @@
 package edu.unh.cs.cs619.bulletzone;
 
 import android.app.Activity;
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -26,6 +27,8 @@ import org.androidannotations.rest.spring.annotations.Rest;
 import org.androidannotations.rest.spring.annotations.RestService;
 import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
+
+import java.util.List;
 
 import edu.unh.cs.cs619.bulletzone.database.GridEntity;
 import edu.unh.cs.cs619.bulletzone.database.GridRepo;
@@ -138,7 +141,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
     }
 
     public void storeState(GridWrapper gw){
-        gridRepo.insert(new GridEntity(gw));//res, gw.getTimeStamp()) );
+        gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
     }
 
     /**
@@ -186,6 +189,11 @@ public class ClientActivity extends Activity implements SensorEventListener{
                 break;
         }
         this.turnAsync(tankId, direction);
+    }
+
+    @Click(R.id.buttonReplay)
+    protected void onButtonReplay(View view){
+        List<GridEntity> idfk = gridRepo.getAll();
     }
     
 

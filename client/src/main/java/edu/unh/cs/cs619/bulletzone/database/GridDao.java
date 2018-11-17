@@ -17,5 +17,5 @@ public interface GridDao {
     void deleteAll();
 
     @Query("SELECT * FROM gridTable ORDER BY time ASC")
-    LiveData<List<GridEntity>> getAll();
+    List<GridEntity> getAll();
 }

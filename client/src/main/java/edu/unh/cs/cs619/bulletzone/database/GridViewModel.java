@@ -6,6 +6,8 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
+
 public class GridViewModel extends AndroidViewModel {
     private GridRepo repo;
 
@@ -19,5 +21,5 @@ public class GridViewModel extends AndroidViewModel {
 
     public LiveData<List<GridEntity>> getAllGrids() { return allGrids; }
 
-    public void insert(GridEntity ge) { repo.insert(ge); }
+    public void insert(GridWrapper ge) { repo.insert(ge); }
 }

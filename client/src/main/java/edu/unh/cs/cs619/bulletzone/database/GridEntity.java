@@ -21,20 +21,6 @@ public class GridEntity {
 
     public GridEntity(GridWrapper gw){
 
-        //maybe put this not in main thread??
-        int[][] rawData = gw.getGrid();
-        StringBuffer res = new StringBuffer("[");
-        for(int[] i : rawData)
-        {
-            res.append("[");
-            for(int j : i)
-                res.append(Integer.toString(j) + ",");
-            res.append(",]");
-        }
-        res.append("]");
-        this.grid = res.toString();
-        Log.d(null, this.grid);// jsut to see
-        this.timestamp = gw.getTimeStamp();
     }
 
     public GridEntity(@NonNull String grid, long timestamp){
