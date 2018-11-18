@@ -5,6 +5,8 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.androidannotations.annotations.Background;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -83,7 +85,7 @@ public class GridRepo {
             }
             res.append("]");
             //this.grid = res.toString();
-            Log.d(null, Long.toString(params[0].getTimeStamp()));
+            //Log.d(null, Long.toString(params[0].getTimeStamp()));
             //this.timestamp = gw.getTimeStamp();
 
             mAsyncTaskDao.insert(new GridEntity(res.toString(), params[0].getTimeStamp()));

@@ -3,6 +3,7 @@ package edu.unh.cs.cs619.bulletzone;
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -140,6 +141,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         mGridAdapter.updateList(gw.getGrid());
     }
 
+    @Background
     public void storeState(GridWrapper gw){
         gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
     }
@@ -198,10 +200,9 @@ public class ClientActivity extends Activity implements SensorEventListener{
         //not sure if this is what to do
         //leaveAsync(tankId);
         leaveGame();
-        List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
-    //}
+        startActivity(new Intent(ClientActivity.this, ReplayActivity.class));
 
-    //protected void handlePast(List<GridEntity> kek){
+        /*List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
 
         GridEntity unconverted = idfk.get(0);
 
@@ -210,10 +211,13 @@ public class ClientActivity extends Activity implements SensorEventListener{
         GridWrapper next = new GridWrapper();
         int[][] grid = new int[16][16];
         Log.d(null, unconverted.getGrid());
-        String[] rows = unconverted.getGrid().split("]");
+        String[] rows = unconverted.getGrid().split("\\],\\[");
         for(int r = 0; r < grid.length; r++)
         {
+            //if(rows[r].charAt(0) == ',')
+                //rows[r].replaceFirst(",","");
             String[] row = rows[r].split(",");
+            //Log.d(null, rows[r]);
             for(int c = 0; c < grid.length; c++) {
                 //Log.d(null, row[c]);
                 //if(row[c] != "")
@@ -226,7 +230,9 @@ public class ClientActivity extends Activity implements SensorEventListener{
         //update teh grid
 
         //hypothetically this should work, just for one frame though
-        busProvider.getEventBus().post(new GridUpdateEvent(next));
+        //eventually
+        //busProvider.getEventBus().post(new GridUpdateEvent(next));
+*/
 
     }
     
