@@ -196,7 +196,8 @@ public class ClientActivity extends Activity implements SensorEventListener{
     protected void onButtonReplay(View view){
         //leave async
         //not sure if this is what to do
-        leaveAsync(tankId);
+        //leaveAsync(tankId);
+        leaveGame();
         List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
     //}
 
@@ -208,18 +209,24 @@ public class ClientActivity extends Activity implements SensorEventListener{
         //make a grid wrapper
         GridWrapper next = new GridWrapper();
         int[][] grid = new int[16][16];
+        Log.d(null, unconverted.getGrid());
         String[] rows = unconverted.getGrid().split("]");
-        for(int r = 0; r < rows.length; r++)
+        for(int r = 0; r < grid.length; r++)
         {
             String[] row = rows[r].split(",");
-            for(int c = 0; c < row.length; c++)
-                Log.d(null, row[c]);
+            for(int c = 0; c < grid.length; c++) {
+                //Log.d(null, row[c]);
+                //if(row[c] != "")
+                grid[r][c] = Integer.valueOf(row[c].replace("[", ""));
+            }
 
         }
+        next.setGrid(grid);
 
         //update teh grid
 
-        //busProvider.getEventBus().post(new GridUpdateEvent(gw));
+        //hypothetically this should work, just for one frame though
+        busProvider.getEventBus().post(new GridUpdateEvent(next));
 
     }
     
