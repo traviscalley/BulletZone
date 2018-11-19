@@ -1,6 +1,8 @@
 package edu.unh.cs.cs619.bulletzone.ui;
 
+import android.content.Context;
 import android.media.Image;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.SystemService;
 
 import edu.unh.cs.cs619.bulletzone.R;
+import edu.unh.cs.cs619.bulletzone.database.GridRepo;
 
 /**
  * Bridges between UI components and the data source that fill data into UI Component
@@ -22,11 +25,17 @@ public class GridAdapter extends BaseAdapter {
      * Class Variables
      */
     private final Object monitor = new Object();
-    @SystemService
+    //@SystemService
     protected LayoutInflater inflater;
     private int[][] mEntities = new int[16][16];
     private long playerID;
+    private Context context;
 
+    public GridAdapter(Context c)
+    {
+        context = c;
+        inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+    }
 
     public void updateList(int[][] entities) {
         synchronized (monitor) {

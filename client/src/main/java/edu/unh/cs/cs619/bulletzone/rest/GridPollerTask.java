@@ -33,12 +33,17 @@ public class GridPollerTask {
     // TODO: disable trace
     // @Trace(tag="CustomTag", level=Log.WARN)
     public void doPoll() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
+            //try {
 
+            //Log.d(null, "poller still running");
             onGridUpdate(restClient.grid());
 
             // poll server every 100ms
             SystemClock.sleep(100);
+            //}
+            //catch (Exception e)
+            //{break;}
         }
     }
 

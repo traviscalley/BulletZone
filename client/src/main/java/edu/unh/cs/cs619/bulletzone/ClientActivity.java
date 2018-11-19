@@ -29,6 +29,7 @@ import org.androidannotations.rest.spring.annotations.RestService;
 import org.androidannotations.rest.spring.api.RestClientHeaders;
 import org.androidannotations.api.BackgroundExecutor;
 
+import java.io.IOException;
 import java.util.List;
 
 import edu.unh.cs.cs619.bulletzone.database.GridEntity;
@@ -141,7 +142,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         mGridAdapter.updateList(gw.getGrid());
     }
 
-    @Background
+    @Background(id = "grid_insert")
     public void storeState(GridWrapper gw){
         gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
     }
@@ -200,7 +201,10 @@ public class ClientActivity extends Activity implements SensorEventListener{
         //not sure if this is what to do
         //leaveAsync(tankId);
         leaveGame();
-        startActivity(new Intent(ClientActivity.this, ReplayActivity.class));
+        //try {
+            //BackgroundExecutor.cancelAll("grid_poller_task", true);
+        //}catch(Exception e){}
+        startActivity(new Intent(this, DBActivity.class));
 
         /*List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
 
