@@ -69,7 +69,7 @@ public class DBPollerTask {
             onGridUpdate(next);//restClient.grid());
 
             // poll server every 100ms
-            SystemClock.sleep(1000);
+            SystemClock.sleep(100);
             //}
         }
     }
