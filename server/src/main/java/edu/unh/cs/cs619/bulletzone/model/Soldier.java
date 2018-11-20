@@ -2,12 +2,14 @@ package edu.unh.cs.cs619.bulletzone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Tank extends PlayableObject
+public class Soldier extends PlayableObject
 {
-    private static final String TAG = "Tank";
+    private static final String TAG = "Soldier";
 
-    public Tank(long id, Direction direction, String ip) {
+    public Soldier(long id, Direction direction, String ip) {
         super(id, direction, ip);
+
+        // @TODO
         numberOfBullets = 0;
         allowedNumberOfBullets = 2;
         lastFireTime = 0;
@@ -24,7 +26,7 @@ public class Tank extends PlayableObject
     @Override
     public void hit(int damage) {
         life = life - damage;
-        System.out.println("Tank life: " + id + " : " + life);
+        System.out.println("Soldier life: " + id + " : " + life);
 //		Log.d(TAG, "TankId: " + id + " hit -> life: " + life);
 
         if (life <= 0) {
@@ -33,11 +35,8 @@ public class Tank extends PlayableObject
             //eventBus.post(new Object());
         }
     }
-    @JsonIgnore
-    public long getId() {
-        return id;
-    }
 
+    // @TODO
     @Override
     public int getIntValue() {
         return (int) (10000000 + 10000 * id + 10 * life + Direction
