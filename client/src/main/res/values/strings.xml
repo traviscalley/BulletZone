@@ -10,6 +10,10 @@
     <string name="fire">FIRE</string>
     <string name="join">JOIN</string>
     <string name="leave">LEAVE</string>
+    <string name="X2">X2</string>
+    <string name="X3">X3</string>
+    <string name="X4">X4</string>
+    <string name="pause">PAUSE</string>
     <string name="title_activity_my">MyActivity</string>
 
 </resources>

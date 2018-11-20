@@ -3,6 +3,7 @@ package edu.unh.cs.cs619.bulletzone;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
 
 import com.squareup.otto.Bus;
@@ -12,6 +13,7 @@ import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.api.BackgroundExecutor;
 
@@ -59,6 +61,46 @@ public class DBActivity extends AppCompatActivity {
         startPoller();
     }
 
+    public void onButtonReplay(View view){
+        BackgroundExecutor.cancelAll("dbpoller", true);
+        //startPoller();
+        //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
+            @Override
+            public void execute() {
+                try {
+                    dbPollerTask.doPoll();
+                    //GridPollerTask_.super.doPoll();
+                } catch (final Throwable e) {
+                    Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                }
+            }
+        });
+    }
+
+    public void onButtonPause(View view) {
+        //idk
+        //dbPollerTask.setSpeed(0);
+        BackgroundExecutor.cancelAll("dbpoller", true);
+    }
+
+    public void onButton2(View view) {
+        speedChange(2);
+    }
+
+    public void onButton3(View view) {
+        speedChange(3);
+    }
+
+    public void onButton4(View view) {
+        speedChange(4);
+    }
+
+    protected void speedChange(int i) {
+        //maybe shutdown thread?
+        dbPollerTask.setSpeed(i);
+    }
+
     /*@AfterInject
     void afterInject() {
         //busProvider = new BusProvider();
@@ -76,16 +118,17 @@ public class DBActivity extends AppCompatActivity {
         gridView.setAdapter(mGridAdapter);
     }*/
 
-    @Background(id = "gofuckyourself")
+    @Background(id = "dbpoller")
     protected void startPoller() {
         dbPollerTask = new DBPollerTask(busProvider);
         //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
-        BackgroundExecutor.execute(new BackgroundExecutor.Task("gofuckyourself", 0L, "") {
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
 
             @Override
             public void execute() {
                 try {
-                    dbPollerTask.doPoll(new GridRepo(getApplication()));
+                    dbPollerTask.initalizeDB(new GridRepo(getApplication()));
+                    dbPollerTask.doPoll();
                     //GridPollerTask_.super.doPoll();
                 } catch (final Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);

@@ -13,6 +13,7 @@ import java.util.List;
 
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
 import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
+import edu.unh.cs.cs619.bulletzone.ui.GridAdapter;
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
 public class DBPollerTask {
@@ -24,20 +25,32 @@ public class DBPollerTask {
 
     BusProvider busProvider;
 
+    private int replaySpeed = 1;
+    private List<GridEntity> events;
+
     public DBPollerTask(BusProvider bs)
     {
         busProvider = bs;
     }
 
+    public void setSpeed(int speed)
+    {
+        replaySpeed = speed;
+    }
+
     // TODO: disable trace
     // @Trace(tag="CustomTag", level=Log.WARN)
     //@Background(id = "db_poller_task")
-    public void doPoll(GridRepo gridRepo) {
         //busProvider = bus;
-        List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
+    public void initalizeDB(GridRepo gridRepo) {
+        events = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
+    }
 
-        for(int i = 0; i < idfk.size(); i++) {
-            GridEntity unconverted = idfk.get(i);
+    public void doPoll() {
+        for(int i = 0; i < events.size(); i++) {
+            if(Thread.currentThread().isInterrupted())
+                return;
+            GridEntity unconverted = events.get(i);
 
             //get an entry
             //make a grid wrapper
@@ -69,7 +82,10 @@ public class DBPollerTask {
             onGridUpdate(next);//restClient.grid());
 
             // poll server every 100ms
-            SystemClock.sleep(100);
+            if(i != events.size()-1) {
+                int sleepDelay = (int)(events.get(i+1).getTimestamp() - unconverted.getTimestamp())/replaySpeed;
+                SystemClock.sleep(sleepDelay);
+            }
             //}
         }
     }
