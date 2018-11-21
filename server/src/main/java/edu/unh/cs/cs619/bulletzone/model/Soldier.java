@@ -1,21 +1,17 @@
 package edu.unh.cs.cs619.bulletzone.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Soldier extends PlayableObject
 {
     private static final String TAG = "Soldier";
 
     public Soldier(long id, Direction direction, String ip) {
         super(id, direction, ip);
-
-        // @TODO
         numberOfBullets = 0;
-        allowedNumberOfBullets = 2;
+        allowedNumberOfBullets = 6;
         lastFireTime = 0;
-        allowedFireInterval = 1500;
+        allowedFireInterval = 250;
         lastMoveTime = 0;
-        allowedMoveInterval = 500;
+        allowedMoveInterval = 1000;
     }
 
     @Override
@@ -36,10 +32,9 @@ public class Soldier extends PlayableObject
         }
     }
 
-    // @TODO
     @Override
     public int getIntValue() {
-        return (int) (10000000 + 10000 * id + 10 * life + Direction
+        return (int) (1000000 + 1000 * id + 10 * life + Direction
                 .toByte(direction));
     }
 

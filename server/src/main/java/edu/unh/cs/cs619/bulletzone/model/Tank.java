@@ -2,9 +2,13 @@ package edu.unh.cs.cs619.bulletzone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Tank extends PlayableObject
 {
     private static final String TAG = "Tank";
+    private Soldier soldier;
+    private boolean isEjected = false;
 
     public Tank(long id, Direction direction, String ip) {
         super(id, direction, ip);
@@ -47,5 +51,28 @@ public class Tank extends PlayableObject
     @Override
     public String toString() {
         return "T";
+    }
+
+    public boolean getEjected() {return isEjected;}
+
+    public Soldier getSoldier() {return soldier;}
+
+    public boolean eject()
+    {
+        if (getParent().getNeighbor(Direction.Up) != null) {
+            soldier = new Soldier(id, Direction.Up, ip);
+
+            FieldHolder nextField = parent.getNeighbor(direction);
+            checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
+
+            if (!nextField.isPresent()) {
+                nextField.setFieldEntity(soldier);
+                soldier.setParent(nextField);
+
+                isEjected = true;
+            }
+        }
+
+        return isEjected;
     }
 }

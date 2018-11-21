@@ -127,7 +127,19 @@ public class GridAdapter extends BaseAdapter {
                                 resource = R.drawable.user_tank_left;
                         }
                     }
-                } else
+                    else if (val >= 1000000 && val < 2000000)
+                    {
+                        if (dir == 0)
+                            resource = R.drawable.soldier_up;
+                        else if (dir == 2)
+                            resource = R.drawable.soldier_right;
+                        else if (dir == 4)
+                            resource = R.drawable.soldier_down;
+                        else if (dir == 6)
+                            resource = R.drawable.soldier_left;
+                    }
+                }
+                else
                     resource = R.drawable.blank;
 
                 ((ImageView) convertView).setImageResource(resource);

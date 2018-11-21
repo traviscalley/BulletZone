@@ -112,6 +112,16 @@ class GamesController {
         );
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "{tankId}/eject/0", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    ResponseEntity<BooleanWrapper> eject(@PathVariable long tankId)
+            throws TankDoesNotExistException {
+        return new ResponseEntity<BooleanWrapper>(
+                new BooleanWrapper(TankUtilities.ejectSoldier(tankId)),
+                HttpStatus.ACCEPTED
+        );
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "{tankId}/leave", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     HttpStatus leave(@PathVariable long tankId)

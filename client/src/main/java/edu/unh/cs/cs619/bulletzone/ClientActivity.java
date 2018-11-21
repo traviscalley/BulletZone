@@ -172,6 +172,16 @@ public class ClientActivity extends Activity implements SensorEventListener{
     }
 
     /**
+     * Allows the soldier to eject from tank.
+     * @param view View
+     */
+    @Background
+    @Click(R.id.buttonEject)
+    protected void onButtonEject(View view) {
+        restClient.eject(tankId);
+    }
+
+    /**
      * Value of direction causes either case of a "buttonLeft" press
      * or a "buttonRight" press and moves the tank accordingly
      * @param view view

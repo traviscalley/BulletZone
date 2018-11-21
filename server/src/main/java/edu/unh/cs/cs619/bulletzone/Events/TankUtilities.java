@@ -53,6 +53,9 @@ public abstract class TankUtilities
                 throw new TankDoesNotExistException(tankId);
             }
 
+            if (tank.getEjected() == true)
+                return SoldierUtilities.turn(tankId, direction);
+
             long millis = System.currentTimeMillis();
             if(millis < tank.getLastMoveTime())
                 return false;
@@ -90,6 +93,9 @@ public abstract class TankUtilities
             if (tank == null) {
                 throw new TankDoesNotExistException(tankId);
             }
+
+            if (tank.getEjected())
+                return SoldierUtilities.move(tankId, direction);
 
             int terrainType = tank.getParent().getEntity().getIntValue();
 
@@ -139,6 +145,18 @@ public abstract class TankUtilities
         }
     }
 
+    public static boolean ejectSoldier(long tankId)
+            throws TankDoesNotExistException
+    {
+        synchronized (monitor) {
+            Tank tank = game.getTanks().get(tankId);
+            if (tank == null)
+                throw new TankDoesNotExistException(tankId);
+
+            return tank.eject();
+        }
+    }
+
     public static boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException {
         synchronized (monitor) {
@@ -148,6 +166,9 @@ public abstract class TankUtilities
             if (tank == null) {
                 throw new TankDoesNotExistException(tankId);
             }
+
+            if (tank.getEjected() == true)
+                return SoldierUtilities.fire(tankId, bulletType);
 
             if(tank.getNumberOfBullets() >= tank.getAllowedNumberOfBullets())
                 return false;
