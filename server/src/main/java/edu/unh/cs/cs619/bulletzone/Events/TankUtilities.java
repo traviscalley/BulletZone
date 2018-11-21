@@ -4,9 +4,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
+import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
+import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
+import edu.unh.cs.cs619.bulletzone.model.Hill;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
@@ -89,6 +92,7 @@ public abstract class TankUtilities
             throws TankDoesNotExistException {
         synchronized (monitor) {
             // Find tank
+            FieldEntity prev = null;
 
             Tank tank = game.getTanks().get(tankId);
             if (tank == null) {
@@ -130,6 +134,15 @@ public abstract class TankUtilities
             boolean isCompleted;
 
             if (!nextField.isPresent())
+            {
+                parent.clearField();
+                nextField.setFieldEntity(tank);
+                tank.setParent(nextField);
+
+                isCompleted = true;
+            }
+            else if (nextField.getEntity() instanceof DebrisField ||
+                     nextField.getEntity() instanceof Hill)
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
