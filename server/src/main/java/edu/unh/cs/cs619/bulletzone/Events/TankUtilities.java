@@ -7,6 +7,7 @@ import edu.unh.cs.cs619.bulletzone.model.Bullet;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
+import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
@@ -211,11 +212,17 @@ public abstract class TankUtilities
                 @Override
                 public void run() {
                     synchronized (monitor) {
+                        int prev_dmg = bullet.getDamage();
+
                         System.out.println("Active Bullet: "+tank.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
                         FieldHolder currentField = bullet.getParent();
                         Direction direction = bullet.getDirection();
                         FieldHolder nextField = currentField
                                 .getNeighbor(direction);
+
+                        if (bullet.getDamage() != 0)
+                            prev_dmg = bullet.getDamage();
+                        bullet.setDamage(prev_dmg);
 
                         // Is the bullet visible on the field?
                         boolean isVisible = currentField.isPresent()
@@ -238,6 +245,16 @@ public abstract class TankUtilities
                                 Wall w = (Wall) nextField.getEntity();
                                 if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
                                     game.getHolderGrid().get(w.getPos()).clearField();
+                                }
+                            }
+                            else if (nextField.getEntity() instanceof Soldier)
+                            {
+                                Soldier s = (Soldier) nextField.getEntity();
+                                if (s.getLife() <= 0)
+                                {
+                                    s.getParent().clearField();
+                                    s.setParent(null);
+                                    game.removeTank(s.getId());
                                 }
                             }
 

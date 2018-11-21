@@ -59,18 +59,19 @@ public class Tank extends PlayableObject
 
     public boolean eject()
     {
-        if (getParent().getNeighbor(Direction.Up) != null) {
-            soldier = new Soldier(id, Direction.Up, ip);
+        if (isEjected)
+            return false;
 
-            FieldHolder nextField = parent.getNeighbor(direction);
-            checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
+        soldier = new Soldier(id, Direction.Up, ip);
 
-            if (!nextField.isPresent()) {
-                nextField.setFieldEntity(soldier);
-                soldier.setParent(nextField);
+        FieldHolder nextField = parent.getNeighbor(direction);
+        checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
 
-                isEjected = true;
-            }
+        if (!nextField.isPresent())
+        {
+            nextField.setFieldEntity(soldier);
+            soldier.setParent(nextField);
+            isEjected = true;
         }
 
         return isEjected;

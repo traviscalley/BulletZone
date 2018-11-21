@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
+import edu.unh.cs.cs619.bulletzone.Events.SoldierUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
 import edu.unh.cs.cs619.bulletzone.model.DebrisField;
@@ -114,6 +115,7 @@ public class InMemoryGameRepository implements GameRepository {
 
             this.game = new Game();
             TankUtilities.setGame(game);
+            SoldierUtilities.setGame(game);
 
             createFieldHolderGrid(game);
 

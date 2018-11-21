@@ -171,11 +171,16 @@ public abstract class SoldierUtilities
                 @Override
                 public void run() {
                     synchronized (monitor) {
+                        int prev_dmg = bullet.getDamage();
+
                         System.out.println("Active Bullet: "+soldier.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
                         FieldHolder currentField = bullet.getParent();
                         Direction direction = bullet.getDirection();
-                        FieldHolder nextField = currentField
-                                .getNeighbor(direction);
+                        FieldHolder nextField = currentField.getNeighbor(direction);
+
+                        if (bullet.getDamage() != 0)
+                            prev_dmg = bullet.getDamage();
+                        bullet.setDamage(prev_dmg);
 
                         // Is the bullet visible on the field?
                         boolean isVisible = currentField.isPresent()
@@ -185,8 +190,16 @@ public abstract class SoldierUtilities
                             // Something is there, hit it
                             nextField.getEntity().hit(bullet.getDamage());
 
-                            if ( nextField.getEntity() instanceof  Tank){
+
+
+                            if ( nextField.getEntity() instanceof  Tank)
+                            {
                                 Tank t = (Tank) nextField.getEntity();
+
+                                if (t.getId() == bullet.getBulletId()) {
+                                    bullet.setDamage(0);
+                                }
+
                                 System.out.println("tank is hit, tank life: " + t.getLife());
                                 if (t.getLife() <= 0 ){
                                     t.getParent().clearField();
@@ -198,6 +211,21 @@ public abstract class SoldierUtilities
                                 Wall w = (Wall) nextField.getEntity();
                                 if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
                                     game.getHolderGrid().get(w.getPos()).clearField();
+                                }
+                            }
+                            else if (nextField.getEntity() instanceof Soldier)
+                            {
+                                Soldier s = (Soldier) nextField.getEntity();
+
+                                if (s.getId() == bullet.getBulletId()) {
+                                    bullet.setDamage(0);
+                                }
+
+                                if (s.getLife() <= 0)
+                                {
+                                    s.getParent().clearField();
+                                    s.setParent(null);
+                                    game.removeTank(s.getId());
                                 }
                             }
 
