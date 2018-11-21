@@ -12,6 +12,7 @@ public class Soldier extends PlayableObject
         allowedFireInterval = 250;
         lastMoveTime = 0;
         allowedMoveInterval = 1000;
+        life = 25;
     }
 
     @Override

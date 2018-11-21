@@ -50,12 +50,6 @@ public abstract class SoldierUtilities
             // Find user
             Soldier soldier = game.getTanks().get(tankId).getSoldier();
 
-            long millis = System.currentTimeMillis();
-            if(millis < soldier.getLastMoveTime())
-                return false;
-
-            soldier.setLastMoveTime(millis+soldier.getAllowedMoveInterval());
-
             byte rotation;
             if(direction == Direction.Right)
                 rotation = 2;
@@ -115,6 +109,19 @@ public abstract class SoldierUtilities
 
                 isCompleted = true;
             }
+            else if (nextField.isPresent() && nextField.getEntity() instanceof Tank)
+            {
+                Tank cur = (Tank) nextField.getEntity();
+                if (cur.getId() == soldier.getId())
+                {
+                    parent.clearField();
+                    cur.reenter();
+
+                    isCompleted = true;
+                }
+                else
+                    isCompleted = false;
+            }
             else
             {
                 isCompleted = false;
@@ -159,7 +166,7 @@ public abstract class SoldierUtilities
             }
 
             // Create a new bullet to fire
-            final Bullet bullet = new Bullet(tankId, direction, bulletDamage[bulletType-1]);
+            final Bullet bullet = new Bullet(tankId, direction, 5);
             // Set the same parent for the bullet.
             // This should be only a one way reference.
             bullet.setParent(parent);

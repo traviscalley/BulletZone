@@ -18,6 +18,7 @@ public class Tank extends PlayableObject
         allowedFireInterval = 1500;
         lastMoveTime = 0;
         allowedMoveInterval = 500;
+        life = 100;
     }
 
     @Override
@@ -73,6 +74,16 @@ public class Tank extends PlayableObject
             soldier.setParent(nextField);
             isEjected = true;
         }
+
+        return isEjected;
+    }
+
+    public boolean reenter()
+    {
+        if (!isEjected)
+            return false;
+
+        isEjected = false;
 
         return isEjected;
     }
