@@ -100,6 +100,10 @@ public class GridAdapter extends BaseAdapter {
                         resource = R.drawable.hill;
                     else if (val == 3000)
                         resource = R.drawable.debris_field;
+                    else if (val == 4000)
+                        resource = R.drawable.coast;
+                    else if (val == 5000)
+                        resource = R.drawable.water;
                     else if (val >= 2000000 && val < 3000000)
                         resource = R.drawable.bullet;
                     else if (val >= 10000000 && val < 20000000)
