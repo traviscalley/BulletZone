@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
+import edu.unh.cs.cs619.bulletzone.model.Coast;
 import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
@@ -14,6 +15,7 @@ import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.model.Water;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -142,7 +144,9 @@ public abstract class TankUtilities
                 isCompleted = true;
             }
             else if (nextField.getEntity() instanceof DebrisField ||
-                     nextField.getEntity() instanceof Hill)
+                     nextField.getEntity() instanceof Hill ||
+                     nextField.getEntity() instanceof Coast ||
+                     nextField.getEntity() instanceof Water)
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
