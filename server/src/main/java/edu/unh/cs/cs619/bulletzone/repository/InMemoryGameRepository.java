@@ -2,6 +2,9 @@ package edu.unh.cs.cs619.bulletzone.repository;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,8 +13,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import edu.unh.cs.cs619.bulletzone.Events.SoldierUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
+import edu.unh.cs.cs619.bulletzone.model.Coast;
 import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
+import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.Hill;
@@ -20,6 +25,7 @@ import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.model.Water;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -40,6 +46,8 @@ public class InMemoryGameRepository implements GameRepository {
     private final AtomicLong idGenerator = new AtomicLong();
     private final Object monitor = new Object();
     private Game game = null;
+
+    private Random random = new Random();
 
     @Override
     public Tank join(String ip) {
@@ -119,8 +127,11 @@ public class InMemoryGameRepository implements GameRepository {
 
             createFieldHolderGrid(game);
 
+            int seed = new Random().nextInt(256);
+            loadMap(game, seed);
+
             // Test // TODO XXX Remove & integrate map loader
-            game.getHolderGrid().get(1).setFieldEntity(new Wall());
+            /*game.getHolderGrid().get(1).setFieldEntity(new Wall());
             game.getHolderGrid().get(2).setFieldEntity(new Wall());
             game.getHolderGrid().get(3).setFieldEntity(new Wall());
 
@@ -164,7 +175,119 @@ public class InMemoryGameRepository implements GameRepository {
             game.getHolderGrid().get(105).setFieldEntity(new Hill());
             game.getHolderGrid().get(104).setFieldEntity(new Hill());
             game.getHolderGrid().get(103).setFieldEntity(new Hill());
-            game.getHolderGrid().get(106).setFieldEntity(new Hill());
+            game.getHolderGrid().get(106).setFieldEntity(new Hill());*/
+        }
+    }
+
+    private void loadMap(Game game, int seed){
+        final int coastNeed = 20;
+        final int waterNeed = 20;
+        final int hillNeed = 1;
+        final int debrisNeed = 1;
+
+        int coasts = 0;
+        int waters = 0;
+        int hills = 0;
+        int debriss = 0;
+
+
+        synchronized (this.monitor){
+            ArrayList<FieldHolder> grid = game.getHolderGrid();
+
+            //make a small cross of water
+            grid.get(seed).setFieldEntity(new Water());
+            waters++;
+            try {
+                grid.get(seed).getNeighbor(Direction.Up).setFieldEntity(new Water());
+                waters++;
+                grid.get(seed).getNeighbor(Direction.Down).setFieldEntity(new Water());
+                waters++;
+                grid.get(seed).getNeighbor(Direction.Right).setFieldEntity(new Water());
+                waters++;
+                grid.get(seed).getNeighbor(Direction.Left).setFieldEntity(new Water());
+                waters++;
+            }
+            catch (Exception e){}// neighbor was off the edge, ignore
+
+            ArrayList<Integer> path = new ArrayList<>(256);
+            for(int i = 0; i < 256; i++)
+                path.add(i);
+            Collections.shuffle(path);
+            Collections.shuffle(path);
+
+            //generate the map
+            while(waters < waterNeed || hills < hillNeed || debriss < debrisNeed)
+            {
+                for(int cell : path)
+                {
+                    if(grid.get(cell).isPresent())
+                        continue;
+
+                    if(hills < 5 && 0.01 > Math.random()){
+                        grid.get(cell).setFieldEntity(new Hill());
+                        hills++;
+                    }
+                    else if(debriss < 5 && 0.01 > Math.random()){
+                        grid.get(cell).setFieldEntity(new DebrisField());
+                        debriss++;
+                    }
+                    else if(random.nextInt(3) < valueSurround(grid.get(cell), 5000)){
+                        grid.get(cell).setFieldEntity(new Water());
+                        waters++;
+                    }
+                }
+                //go through path and look at neighbors of grid
+            }
+            //while(coasts < coastNeed)
+            //{
+                for(int cell : path)
+                {
+                    if(grid.get(cell).isPresent())
+                        continue;
+                    //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
+                    if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
+                        grid.get(cell).setFieldEntity(new Coast());
+                        coasts++;
+                    }
+                }
+            //}
+        }
+    }
+
+    public int valueSurround(FieldHolder holder, int value){
+        synchronized (this.monitor) {
+            int sum = 0;
+            //sum += holder.getNeighbor().getNeighbor(Direction.Up).getNeighbor(Direction.Left).getEntity()
+
+            try {
+                sum += (holder.getNeighbor(Direction.Left).getEntity().getIntValue() == value) ? 1 : 0;
+            }catch (Exception e){}
+            try {
+                sum += (holder.getNeighbor(Direction.Up).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+                sum += (holder.getNeighbor(Direction.Right).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+                sum += (holder.getNeighbor(Direction.Down).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+
+                sum += (holder.getNeighbor(Direction.Up).getNeighbor(Direction.Left).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+                sum += (holder.getNeighbor(Direction.Up).getNeighbor(Direction.Right).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+
+                sum += (holder.getNeighbor(Direction.Down).getNeighbor(Direction.Left).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+            try {
+                sum += (holder.getNeighbor(Direction.Down).getNeighbor(Direction.Right).getEntity().getIntValue() == value)?1:0;
+            }catch (Exception e){}
+
+
+            return sum;
         }
     }
 
