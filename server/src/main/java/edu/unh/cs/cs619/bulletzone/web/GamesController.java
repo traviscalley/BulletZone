@@ -14,15 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
-
 import javax.servlet.http.HttpServletRequest;
-
+import edu.unh.cs.cs619.bulletzone.Events.PlayerUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.IllegalTransitionException;
 import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
-import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.repository.GameRepository;
 import edu.unh.cs.cs619.bulletzone.util.BooleanWrapper;
@@ -79,7 +77,7 @@ class GamesController {
     ResponseEntity<BooleanWrapper> turn(@PathVariable long tankId, @PathVariable byte direction)
             throws TankDoesNotExistException, LimitExceededException, IllegalTransitionException {
         return new ResponseEntity<BooleanWrapper>(
-                new BooleanWrapper(TankUtilities.turn(tankId, Direction.fromByte(direction))),
+                new BooleanWrapper(PlayerUtilities.turn(tankId, Direction.fromByte(direction))),
                 HttpStatus.ACCEPTED
         );
     }
@@ -99,7 +97,7 @@ class GamesController {
     ResponseEntity<BooleanWrapper> move(@PathVariable long tankId, @PathVariable byte direction)
             throws TankDoesNotExistException, LimitExceededException, IllegalTransitionException {
         return new ResponseEntity<BooleanWrapper>(
-                new BooleanWrapper(TankUtilities.move(tankId, Direction.fromByte(direction))),
+                new BooleanWrapper(PlayerUtilities.move(tankId, Direction.fromByte(direction))),
                 HttpStatus.ACCEPTED
         );
     }
@@ -109,7 +107,7 @@ class GamesController {
     ResponseEntity<BooleanWrapper> fire(@PathVariable long tankId, @PathVariable int bulletType)
             throws TankDoesNotExistException, LimitExceededException {
         return new ResponseEntity<BooleanWrapper>(
-                new BooleanWrapper(TankUtilities.fire(tankId, bulletType)),
+                new BooleanWrapper(PlayerUtilities.fire(tankId, bulletType)),
                 HttpStatus.ACCEPTED
         );
     }
@@ -119,7 +117,7 @@ class GamesController {
     ResponseEntity<BooleanWrapper> fire(@PathVariable long tankId)
             throws TankDoesNotExistException, LimitExceededException {
         return new ResponseEntity<BooleanWrapper>(
-                new BooleanWrapper(TankUtilities.fire(tankId, 1)),
+                new BooleanWrapper(PlayerUtilities.fire(tankId, 1)),
                 HttpStatus.ACCEPTED
         );
     }

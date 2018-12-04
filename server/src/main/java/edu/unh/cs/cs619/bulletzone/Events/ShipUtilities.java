@@ -5,17 +5,16 @@ import java.util.TimerTask;
 
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
 import edu.unh.cs.cs619.bulletzone.model.Coast;
-import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
-import edu.unh.cs.cs619.bulletzone.model.Hill;
 import edu.unh.cs.cs619.bulletzone.model.Ship;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.model.Water;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -83,37 +82,23 @@ public abstract class ShipUtilities
             // Find tank
             FieldEntity prev = null;
 
-            Tank tank = game.getTanks().get(tankId);
-            if (tank == null) {
+            Ship ship = game.getShips().get(tankId);
+            if (ship == null) {
                 throw new TankDoesNotExistException(tankId);
             }
 
-            if (tank.getEjected())
-                return SoldierUtilities.move(tankId, direction);
-
-            int terrainType = tank.getParent().getEntity().getIntValue();
-
-            switch (terrainType)
-            {
-                case 2000: // hill
-                    tank.setAllowedMoveInterval(1000);
-                    break;
-                default:
-                    tank.setAllowedMoveInterval(500);
-            }
-
             long millis = System.currentTimeMillis();
-            if(millis < tank.getLastMoveTime())
+            if(millis < ship.getLastMoveTime())
                 return false;
 
-            tank.setLastMoveTime(millis + tank.getAllowedMoveInterval());
+            ship.setLastMoveTime(millis + ship.getAllowedMoveInterval());
 
-            FieldHolder parent = tank.getParent();
+            FieldHolder parent = ship.getParent();
 
             if(direction == Direction.Up)
-                direction = tank.getDirection();
+                direction = ship.getDirection();
             else if(direction == Direction.Down)
-                direction = fromByte((byte)((toByte(tank.getDirection()) + 4)%8));
+                direction = fromByte((byte)((toByte(ship.getDirection()) + 4)%8));
             else
                 return false;
 
@@ -125,18 +110,17 @@ public abstract class ShipUtilities
             if (!nextField.isPresent())
             {
                 parent.clearField();
-                nextField.setFieldEntity(tank);
-                tank.setParent(nextField);
+                nextField.setFieldEntity(ship);
+                ship.setParent(nextField);
 
                 isCompleted = true;
             }
-            else if (nextField.getEntity() instanceof DebrisField ||
-                    nextField.getEntity() instanceof Hill ||
+            else if (nextField.getEntity() instanceof Water ||
                     nextField.getEntity() instanceof Coast)
             {
                 parent.clearField();
-                nextField.setFieldEntity(tank);
-                tank.setParent(nextField);
+                nextField.setFieldEntity(ship);
+                ship.setParent(nextField);
 
                 isCompleted = true;
             }
@@ -146,18 +130,6 @@ public abstract class ShipUtilities
             }
 
             return isCompleted;
-        }
-    }
-
-    public static boolean ejectSoldier(long tankId)
-            throws TankDoesNotExistException
-    {
-        synchronized (monitor) {
-            Tank tank = game.getTanks().get(tankId);
-            if (tank == null)
-                throw new TankDoesNotExistException(tankId);
-
-            return tank.eject();
         }
     }
 

@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
+import edu.unh.cs.cs619.bulletzone.Events.PlayerUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.SoldierUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Bullet;
@@ -47,13 +48,16 @@ public class InMemoryGameRepository implements GameRepository {
     private static final int TANK_LIFE = 100;
     private static final int SHIP_LIFE = 100;
     private final AtomicLong idGenerator = new AtomicLong();
-    private boolean isTank = true;
+    private boolean isTank = false;
     private final Object monitor = new Object();
     private Game game = null;
 
     private Random random = new Random();
 
-    public void setSelectBool(boolean isTank) { this.isTank = isTank; }
+    public void setSelectBool(boolean isTank)
+    {
+        this.isTank = isTank;
+    }
 
     public Ship joinShip(String ip)
     {
@@ -73,15 +77,14 @@ public class InMemoryGameRepository implements GameRepository {
             ship.setLife(SHIP_LIFE);
 
             Random random = new Random();
-            int x;
-            int y;
+            int x, y;
 
-            // This may run for forever.. If there is no free space. XXX
+            // This may run for forever.. If there is no free space.
             for (; ; ) {
                 x = random.nextInt(FIELD_DIM);
                 y = random.nextInt(FIELD_DIM);
                 FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
-                if (fieldElement.getEntity() instanceof Water) {
+                if (fieldElement != null && fieldElement.getEntity() instanceof Water) {
                     fieldElement.setFieldEntity(ship);
                     ship.setParent(fieldElement);
                     break;
@@ -115,7 +118,7 @@ public class InMemoryGameRepository implements GameRepository {
             int x;
             int y;
 
-            // This may run for forever.. If there is no free space. XXX
+            // This may run for forever.. If there is no free space.
             for (; ; ) {
                 x = random.nextInt(FIELD_DIM);
                 y = random.nextInt(FIELD_DIM);
@@ -135,10 +138,12 @@ public class InMemoryGameRepository implements GameRepository {
 
     @Override
     public PlayableObject join(String ip) {
-        if (isTank)
-            return joinTank(ip);
-        else
-            return joinShip(ip);
+        synchronized (this.monitor) {
+            if (isTank)
+                return joinTank(ip);
+            else
+                return joinShip(ip);
+        }
     }
 
     @Override
@@ -155,16 +160,25 @@ public class InMemoryGameRepository implements GameRepository {
     public void leave(long tankId)
             throws TankDoesNotExistException {
         synchronized (this.monitor) {
-            if (!this.game.getTanks().containsKey(tankId)) {
+            if (!this.game.getTanks().containsKey(tankId) ||
+                    !this.game.getShips().containsKey(tankId)) {
                 throw new TankDoesNotExistException(tankId);
             }
 
             System.out.println("leave() called, tank ID: " + tankId);
 
-            Tank tank = game.getTanks().get(tankId);
-            FieldHolder parent = tank.getParent();
-            parent.clearField();
-            game.removeTank(tankId);
+            if (isTank) {
+                Tank tank = game.getTanks().get(tankId);
+                FieldHolder parent = tank.getParent();
+                parent.clearField();
+                game.removeTank(tankId);
+            }
+            else {
+                Ship ship = game.getShips().get(tankId);
+                FieldHolder parent = ship.getParent();
+                parent.clearField();
+                game.removeShip(tankId);
+            }
         }
     }
 
@@ -177,6 +191,7 @@ public class InMemoryGameRepository implements GameRepository {
             this.game = new Game();
             TankUtilities.setGame(game);
             SoldierUtilities.setGame(game);
+            PlayerUtilities.setGame(game);
 
             createFieldHolderGrid(game);
 

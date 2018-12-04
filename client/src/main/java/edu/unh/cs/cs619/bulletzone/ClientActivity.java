@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.WorkerThread;
 import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
@@ -20,6 +21,7 @@ import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.BeforeTextChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.EBean;
@@ -47,7 +49,7 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 public class ClientActivity extends Activity implements SensorEventListener{
 
     private static final String TAG = "ClientActivity";
-    private boolean isTank;
+    private boolean isTank, isSet = false;
 
     @Bean
     protected GridAdapter mGridAdapter;
@@ -86,7 +88,6 @@ public class ClientActivity extends Activity implements SensorEventListener{
         // handle tank or ship
         Bundle bundle = getIntent().getExtras();
         isTank = bundle.getBoolean("isTankOrShip");
-        restClient.select(isTank);
 
         // Accelerometer shake handling
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -182,7 +183,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
      * Allows the soldier to eject from tank.
      * @param view View
      */
-    @Background
+    @WorkerThread
     @Click(R.id.buttonEject)
     protected void onButtonEject(View view) {
         restClient.eject(tankId);
@@ -212,53 +213,6 @@ public class ClientActivity extends Activity implements SensorEventListener{
     }
 
     @Background
-    @Click(R.id.buttonReplay)
-    protected void onButtonReplay(View view){
-        //leave async
-        //not sure if this is what to do
-        //leaveAsync(tankId);
-        leaveGame();
-        //try {
-            //BackgroundExecutor.cancelAll("grid_poller_task", true);
-        //}catch(Exception e){}
-        startActivity(new Intent(this, DBActivity.class));
-
-        /*List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
-
-        GridEntity unconverted = idfk.get(0);
-
-        //get an entry
-        //make a grid wrapper
-        GridWrapper next = new GridWrapper();
-        int[][] grid = new int[16][16];
-        Log.d(null, unconverted.getGrid());
-        String[] rows = unconverted.getGrid().split("\\],\\[");
-        for(int r = 0; r < grid.length; r++)
-        {
-            //if(rows[r].charAt(0) == ',')
-                //rows[r].replaceFirst(",","");
-            String[] row = rows[r].split(",");
-            //Log.d(null, rows[r]);
-            for(int c = 0; c < grid.length; c++) {
-                //Log.d(null, row[c]);
-                //if(row[c] != "")
-                grid[r][c] = Integer.valueOf(row[c].replace("[", ""));
-            }
-
-        }
-        next.setGrid(grid);
-
-        //update teh grid
-
-        //hypothetically this should work, just for one frame though
-        //eventually
-        //busProvider.getEventBus().post(new GridUpdateEvent(next));
-*/
-
-    }
-    
-
-    @Background
     void moveAsync(long tankId, byte direction) {
         restClient.move(tankId, direction);
     }
@@ -280,6 +234,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         System.out.println("leaveGame() called, tank ID: "+tankId);
         BackgroundExecutor.cancelAll("grid_poller_task", false);
         restClient.leave(tankId);
+        startActivity(new Intent(this, MainScreenActivity_.class));
     }
 
     @Background

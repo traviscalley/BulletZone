@@ -8,7 +8,6 @@ import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 
 public interface GameRepository {
-
     PlayableObject join(String ip);
 
     int[][] getGrid();
