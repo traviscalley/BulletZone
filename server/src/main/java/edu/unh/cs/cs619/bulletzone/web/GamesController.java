@@ -21,6 +21,7 @@ import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.IllegalTransitionException;
 import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.repository.GameRepository;
@@ -32,6 +33,7 @@ import edu.unh.cs.cs619.bulletzone.util.LongWrapper;
  * Games Controller w/repository
  * methods have not been used as of yet
  */
+
 @RestController
 @RequestMapping(value = "/games")
 class GamesController {
@@ -49,13 +51,13 @@ class GamesController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     ResponseEntity<LongWrapper> join(HttpServletRequest request) {
-        Tank tank;
+        PlayableObject player;
         try {
-            tank = gameRepository.join(request.getRemoteAddr());
-            log.info("Player joined: tankId={} IP={}", tank.getId(), request.getRemoteAddr());
+            player = gameRepository.join(request.getRemoteAddr());
+            log.info("Player joined: tankId={} IP={}", player.getId(), request.getRemoteAddr());
 
             return new ResponseEntity<LongWrapper>(
-                    new LongWrapper(tank.getId()),
+                    new LongWrapper(player.getId()),
                     HttpStatus.CREATED
             );
         } catch (RestClientException e) {
@@ -79,6 +81,16 @@ class GamesController {
         return new ResponseEntity<BooleanWrapper>(
                 new BooleanWrapper(TankUtilities.turn(tankId, Direction.fromByte(direction))),
                 HttpStatus.ACCEPTED
+        );
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value="", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BooleanWrapper> select(@PathVariable boolean isTank)
+    {
+        gameRepository.setSelectBool(isTank);
+        return new ResponseEntity<BooleanWrapper>(
+                new BooleanWrapper(true), HttpStatus.ACCEPTED
         );
     }
 

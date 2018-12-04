@@ -22,6 +22,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.Rest;
@@ -46,6 +47,7 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 public class ClientActivity extends Activity implements SensorEventListener{
 
     private static final String TAG = "ClientActivity";
+    private boolean isTank;
 
     @Bean
     protected GridAdapter mGridAdapter;
@@ -80,6 +82,11 @@ public class ClientActivity extends Activity implements SensorEventListener{
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // handle tank or ship
+        Bundle bundle = getIntent().getExtras();
+        isTank = bundle.getBoolean("isTankOrShip");
+        restClient.select(isTank);
 
         // Accelerometer shake handling
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);

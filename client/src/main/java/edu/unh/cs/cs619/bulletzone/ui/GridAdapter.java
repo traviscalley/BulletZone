@@ -142,6 +142,8 @@ public class GridAdapter extends BaseAdapter {
                         else if (dir == 6)
                             resource = R.drawable.soldier_left;
                     }
+                    else if (val >= 20000000 && val < 30000000)
+                        resource = R.drawable.boat;
                 }
                 else
                     resource = R.drawable.blank;

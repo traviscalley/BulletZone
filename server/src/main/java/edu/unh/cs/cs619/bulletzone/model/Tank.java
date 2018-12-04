@@ -9,6 +9,7 @@ public class Tank extends PlayableObject
     private static final String TAG = "Tank";
     private Soldier soldier;
     private boolean isEjected = false;
+    private long lastEjectTime;
 
     public Tank(long id, Direction direction, String ip) {
         super(id, direction, ip);
@@ -60,7 +61,8 @@ public class Tank extends PlayableObject
 
     public boolean eject()
     {
-        if (isEjected)
+        long curTime = System.currentTimeMillis();
+        if (curTime - lastEjectTime <= 3000 || isEjected)
             return false;
 
         soldier = new Soldier(id, Direction.Up, ip);
@@ -73,6 +75,7 @@ public class Tank extends PlayableObject
             nextField.setFieldEntity(soldier);
             soldier.setParent(nextField);
             isEjected = true;
+            lastEjectTime = System.currentTimeMillis();
         }
 
         return isEjected;

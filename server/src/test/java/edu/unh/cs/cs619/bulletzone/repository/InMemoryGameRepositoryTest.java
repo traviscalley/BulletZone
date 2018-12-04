@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.unh.cs.cs619.bulletzone.model.Direction;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 
@@ -30,7 +31,7 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testJoin() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
@@ -40,7 +41,7 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testTurn() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
@@ -56,7 +57,7 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testMove() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
@@ -69,7 +70,7 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testFire() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getParent());
@@ -79,7 +80,7 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testLeave() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getParent());

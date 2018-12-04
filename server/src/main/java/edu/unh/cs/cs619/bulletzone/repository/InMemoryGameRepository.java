@@ -22,6 +22,8 @@ import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.Hill;
 import edu.unh.cs.cs619.bulletzone.model.IllegalTransitionException;
 import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
+import edu.unh.cs.cs619.bulletzone.model.Ship;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
@@ -43,14 +45,57 @@ public class InMemoryGameRepository implements GameRepository {
      * Tank's default life [life]
      */
     private static final int TANK_LIFE = 100;
+    private static final int SHIP_LIFE = 100;
     private final AtomicLong idGenerator = new AtomicLong();
+    private boolean isTank = true;
     private final Object monitor = new Object();
     private Game game = null;
 
     private Random random = new Random();
 
-    @Override
-    public Tank join(String ip) {
+    public void setSelectBool(boolean isTank) { this.isTank = isTank; }
+
+    public Ship joinShip(String ip)
+    {
+        synchronized (this.monitor) {
+            Ship ship;
+            if (game == null) {
+                this.create();
+            }
+
+            if( (ship = game.getShip(ip)) != null){
+                return ship;
+            }
+
+            Long id = this.idGenerator.getAndIncrement();
+
+            ship = new Ship(id, Direction.Up, ip);
+            ship.setLife(SHIP_LIFE);
+
+            Random random = new Random();
+            int x;
+            int y;
+
+            // This may run for forever.. If there is no free space. XXX
+            for (; ; ) {
+                x = random.nextInt(FIELD_DIM);
+                y = random.nextInt(FIELD_DIM);
+                FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
+                if (fieldElement.getEntity() instanceof Water) {
+                    fieldElement.setFieldEntity(ship);
+                    ship.setParent(fieldElement);
+                    break;
+                }
+            }
+
+            game.addShip(ip, ship);
+
+            return ship;
+        }
+    }
+
+    public Tank joinTank(String ip)
+    {
         synchronized (this.monitor) {
             Tank tank;
             if (game == null) {
@@ -86,6 +131,14 @@ public class InMemoryGameRepository implements GameRepository {
 
             return tank;
         }
+    }
+
+    @Override
+    public PlayableObject join(String ip) {
+        if (isTank)
+            return joinTank(ip);
+        else
+            return joinShip(ip);
     }
 
     @Override

@@ -15,7 +15,6 @@ import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
-import edu.unh.cs.cs619.bulletzone.model.Water;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -145,8 +144,7 @@ public abstract class TankUtilities
             }
             else if (nextField.getEntity() instanceof DebrisField ||
                      nextField.getEntity() instanceof Hill ||
-                     nextField.getEntity() instanceof Coast ||
-                     nextField.getEntity() instanceof Water)
+                     nextField.getEntity() instanceof Coast)
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
@@ -192,9 +190,8 @@ public abstract class TankUtilities
                 return false;
 
             long millis = System.currentTimeMillis();
-            if(millis < tank.getLastFireTime()/*>tank.getAllowedFireInterval()*/){
+            if(millis < tank.getLastFireTime())
                 return false;
-            }
 
             Direction direction = tank.getDirection();
             FieldHolder parent = tank.getParent();

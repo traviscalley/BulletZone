@@ -14,9 +14,11 @@ public final class Game {
      */
     private static final int FIELD_DIM = 16;
     private final long id;
+    private boolean isTank;
     private final ArrayList<FieldHolder> holderGrid = new ArrayList<>();
 
     private final ConcurrentMap<Long, Tank> tanks = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, Ship> ships = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Long> playersIP = new ConcurrentHashMap<>();
 
     private final Object monitor = new Object();
@@ -30,6 +32,12 @@ public final class Game {
         return id;
     }
 
+    public boolean isTank() { return isTank; }
+
+    public boolean isShip() {return !isTank; }
+
+    public void setTank(boolean b) {isTank = b;}
+
     @JsonIgnore
     public ArrayList<FieldHolder> getHolderGrid() {
         return holderGrid;
@@ -42,13 +50,26 @@ public final class Game {
         }
     }
 
+    public void addShip(String ip, Ship ship)
+    {
+        synchronized (ships)
+        {
+            ships.put(ship.getId(), ship);
+            playersIP.put(ip, ship.getId());
+        }
+    }
+
     public Tank getTank(int tankId) {
         return tanks.get(tankId);
     }
 
+    public Ship getShip(int id) { return ships.get(id); }
+
     public ConcurrentMap<Long, Tank> getTanks() {
         return tanks;
     }
+
+    public ConcurrentMap<Long, Ship> getShips() { return ships; }
 
     public List<Optional<FieldEntity>> getGrid() {
         synchronized (holderGrid) {
@@ -76,12 +97,29 @@ public final class Game {
         return null;
     }
 
+    public Ship getShip(String ip)
+    {
+        if (playersIP.containsKey(ip))
+            return ships.get(playersIP.get(ip));
+        return null;
+    }
+
     public void removeTank(long tankId){
         synchronized (tanks) {
             Tank t = tanks.remove(tankId);
             if (t != null) {
                 playersIP.remove(t.getIp());
             }
+        }
+    }
+
+    public void removeShip(long id)
+    {
+        synchronized (ships)
+        {
+            Ship s = ships.remove(id);
+            if (s != null)
+                playersIP.remove(s.getIp());
         }
     }
 
