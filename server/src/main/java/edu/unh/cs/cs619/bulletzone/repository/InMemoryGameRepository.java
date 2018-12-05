@@ -139,15 +139,14 @@ public class InMemoryGameRepository implements GameRepository {
             int seed = new Random().nextInt(256);
             loadMap(game, seed);
 
-            timer.schedule(new TimerTask() {
+            timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     //theres a 1 in 20 chance of running every second, so avg 20s
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextInt(10) == 0)
                         addPowerUp(random.nextInt(256));
-                    }
                 }
-            }, 1000);
+            }, 0, 1000);
 
             //UIthread
             /*Runnable spawnPowerup = () -> {

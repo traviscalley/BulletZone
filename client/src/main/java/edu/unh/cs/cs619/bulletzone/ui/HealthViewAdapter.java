@@ -15,7 +15,7 @@ public class HealthViewAdapter {
         this.linearLayout = ll;
     }
 
-    @Subscribe
+    //@Subscribe
     public void addHealthInfo(HealthInfoEvent event) {
         TextView valueTV = new TextView(context);
         valueTV.setText(event.healths);
