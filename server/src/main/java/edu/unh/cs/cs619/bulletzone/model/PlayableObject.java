@@ -2,6 +2,12 @@ package edu.unh.cs.cs619.bulletzone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
+import edu.unh.cs.cs619.bulletzone.powerup.PowerRack;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
+
 public abstract class PlayableObject extends FieldEntity {
     private static final String TAG = "AbstractPlayable";
 
@@ -10,6 +16,9 @@ public abstract class PlayableObject extends FieldEntity {
 
     protected long lastMoveTime;
     protected int allowedMoveInterval;
+
+    protected long lastTurnTime;
+    protected int allowedTurnInterval;
 
     protected long lastFireTime;
     protected int allowedFireInterval;
@@ -21,10 +30,16 @@ public abstract class PlayableObject extends FieldEntity {
 
     protected Direction direction;
 
+    //just one powerup for now
+    protected Powerup powerup;
+    protected Stack<PlayableConfig> stateStack = new Stack<>();
+    protected PlayableConfig initState;
+
     public PlayableObject(long id, Direction direction, String ip) {
         this.id = id;
         this.direction = direction;
         this.ip = ip;
+        initState = makeConfig();
     }
 
     @Override
@@ -41,6 +56,25 @@ public abstract class PlayableObject extends FieldEntity {
     public long getLastMoveTime() {
         return lastMoveTime;
     }
+
+    public long getLastTurnTime() {
+        return lastTurnTime;
+    }
+
+    public void setLastTurnTime(long lastMoveTime) {
+        this.lastTurnTime = lastTurnTime;
+    }
+
+    public long getAllowedTurnInterval() {
+        return allowedTurnInterval;
+    }
+
+    public void setAllowedTurnInterval(int allowedTurnInterval) {
+        this.allowedTurnInterval = allowedTurnInterval;
+    }
+
+
+
 
     public void setLastMoveTime(long lastMoveTime) {
         this.lastMoveTime = lastMoveTime;
@@ -114,6 +148,73 @@ public abstract class PlayableObject extends FieldEntity {
 
     public String getIp(){
         return ip;
+    }
+
+    @Override
+    public boolean powerupSpawnable(){return false;}
+
+    public void addPowerup(Powerup power){
+        if(powerup instanceof PowerRack) {//complex cas
+            if(((PowerRack) powerup).addPowerup(power)){ //if there is room to add, it is added
+                power.powerupPlayer(this);
+                stateStack.push(makeConfig());
+            }
+        }
+        else {//simple case
+            if(!stateStack.empty())
+                setConfig(stateStack.pop());
+            powerup = power;
+            powerup.powerupPlayer(this);
+            stateStack.push(makeConfig());
+        }
+    }
+
+    //called by eject
+    public void removePowerup(){
+        if(!stateStack.empty()) {
+            if(powerup instanceof PowerRack) {
+                if(((PowerRack) powerup).isEmpty()){
+                    while(!stateStack.isEmpty())
+                        stateStack.pop();
+
+                    setConfig(initState);
+                }
+                else {
+                    ((PowerRack) powerup).removePowerup();
+                    setConfig(stateStack.pop());
+                }
+            }
+            stateStack.pop();
+            setConfig(initState);
+        }
+        powerup = null;
+    }
+
+    private void setConfig(PlayableConfig config)
+    {
+        allowedMoveInterval = config.allowedMoveInterval;
+        allowedTurnInterval = config.allowedTurnInterval;
+        allowedFireInterval = config.allowedFireInterval;
+        allowedNumberOfBullets = config.allowedNumberOfBullets;
+    }
+
+    private PlayableConfig makeConfig(){
+        return new PlayableConfig(allowedMoveInterval, allowedTurnInterval,
+                allowedFireInterval, allowedNumberOfBullets);
+    }
+
+    private class PlayableConfig{
+        public int allowedMoveInterval;
+        public int allowedTurnInterval;
+        public int allowedFireInterval;
+        public int allowedNumberOfBullets;
+
+        public PlayableConfig(int move, int turn, int fire, int bullets){
+            allowedMoveInterval = move;
+            allowedTurnInterval = turn;
+            allowedFireInterval = fire;
+            allowedNumberOfBullets = bullets;
+        }
     }
 
 }

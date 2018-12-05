@@ -27,6 +27,9 @@ public class Wall extends FieldEntity {
         return "W";
     }
 
+    @Override
+    public boolean powerupSpawnable(){return false;}
+
     public int getPos(){
         return pos;
     }

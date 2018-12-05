@@ -28,6 +28,8 @@ public abstract class FieldEntity {
     public void hit(int damage) {
     }
 
+    public abstract boolean powerupSpawnable();
+
     /*public static final void registerEventBusListener(Object listener) {
         checkNotNull(listener);
         eventBus.register(listener);

@@ -8,12 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.SystemService;
 
+import java.util.ArrayList;
+
 import edu.unh.cs.cs619.bulletzone.R;
 import edu.unh.cs.cs619.bulletzone.database.GridRepo;
+import edu.unh.cs.cs619.bulletzone.events.BusProvider;
 
 /**
  * Bridges between UI components and the data source that fill data into UI Component
@@ -31,10 +36,14 @@ public class GridAdapter extends BaseAdapter {
     private long playerID;
     private Context context;
 
+    private BusProvider busProvider;
+
+
     public GridAdapter(Context c)
     {
         context = c;
         inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
+        busProvider = new BusProvider();
     }
 
     public void updateList(int[][] entities) {
@@ -87,6 +96,11 @@ public class GridAdapter extends BaseAdapter {
         int val = mEntities[row][col];
         int TID = (val / 10000) % 1000;
         int dir = val % 10;
+        int health = (val/10) % 1000; //i think so
+
+        //convertView.locat
+
+
 
         if (convertView instanceof ImageView) {
             synchronized (monitor) {
@@ -104,7 +118,13 @@ public class GridAdapter extends BaseAdapter {
                         resource = R.drawable.coast;
                     else if (val == 5000)
                         resource = R.drawable.water;
-                    else if (val >= 2000000 && val < 3000000)
+                    else if (val == 6000)
+                        resource = R.drawable.antigrav;
+                    else if (val == 7000)
+                        resource = R.drawable.fusion;
+                    else if (val == 8000)
+                        resource = R.drawable.powerrack;
+                    else if (val >=  2000000 && val <  3000000)
                         resource = R.drawable.bullet;
                     else if (val >= 10000000 && val < 20000000)
                     {
@@ -149,6 +169,14 @@ public class GridAdapter extends BaseAdapter {
                     resource = R.drawable.blank;
 
                 ((ImageView) convertView).setImageResource(resource);
+
+                if ((val >= 10000000 && val < 20000000) || (val >= 1000000 && val < 2000000)){
+
+
+                    //need to do somethign with health
+                    //busProvider.getEventBus().post(new HealthInfoEvent(TID + ":\t"+health));
+
+                }
             }
         }
         return convertView;

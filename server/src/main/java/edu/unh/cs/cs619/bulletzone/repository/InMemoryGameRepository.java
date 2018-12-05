@@ -1,13 +1,19 @@
 package edu.unh.cs.cs619.bulletzone.repository;
 
+import com.google.common.base.Optional;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+//import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.unh.cs.cs619.bulletzone.Events.PlayerUtilities;
@@ -29,6 +35,8 @@ import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
 import edu.unh.cs.cs619.bulletzone.model.Water;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
+import edu.unh.cs.cs619.bulletzone.powerup.PowerupFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -51,6 +59,7 @@ public class InMemoryGameRepository implements GameRepository {
     private boolean isTank = false;
     private final Object monitor = new Object();
     private Game game = null;
+    private static final Timer timer = new Timer();
 
     private Random random = new Random();
 
@@ -198,6 +207,28 @@ public class InMemoryGameRepository implements GameRepository {
             int seed = new Random().nextInt(256);
             loadMap(game, seed);
 
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    //theres a 1 in 20 chance of running every second, so avg 20s
+                    if (random.nextInt(10) == 0)
+                        addPowerUp(random.nextInt(256));
+                }
+            }, 0, 1000);
+
+            //UIthread
+            /*Runnable spawnPowerup = () -> {
+                if(Math.random() < 1.0/20)
+                {
+
+                }
+            };*/
+            //UIThread
+            //BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
+
+        }
+
+
             // Test // TODO XXX Remove & integrate map loader
             /*game.getHolderGrid().get(1).setFieldEntity(new Wall());
             game.getHolderGrid().get(2).setFieldEntity(new Wall());
@@ -244,8 +275,17 @@ public class InMemoryGameRepository implements GameRepository {
             game.getHolderGrid().get(104).setFieldEntity(new Hill());
             game.getHolderGrid().get(103).setFieldEntity(new Hill());
             game.getHolderGrid().get(106).setFieldEntity(new Hill());*/
+    }
+
+    private void addPowerUp(int target) {
+        FieldHolder field = game.getHolderGrid().get(target);
+        if(!field.isPresent() || field.getEntity().powerupSpawnable()){
+            FieldEntity idk = PowerupFactory.getInstance().makePowerup(random.nextInt(3)+6);
+            field.setFieldEntity(idk);
+
         }
     }
+
 
     private void loadMap(Game game, int seed){
         final int coastNeed = 20;
@@ -308,16 +348,16 @@ public class InMemoryGameRepository implements GameRepository {
             }
             //while(coasts < coastNeed)
             //{
-                for(int cell : path)
-                {
-                    if(grid.get(cell).isPresent())
-                        continue;
-                    //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
-                    if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
-                        grid.get(cell).setFieldEntity(new Coast());
-                        coasts++;
-                    }
+            for(int cell : path)
+            {
+                if(grid.get(cell).isPresent())
+                    continue;
+                //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
+                if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
+                    grid.get(cell).setFieldEntity(new Coast());
+                    coasts++;
                 }
+            }
             //}
         }
     }

@@ -13,4 +13,6 @@ public class DebrisField extends FieldEntity
     {
         return new DebrisField();
     }
+
+    public boolean powerupSpawnable(){return false;}
 }

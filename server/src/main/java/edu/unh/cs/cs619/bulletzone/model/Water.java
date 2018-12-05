@@ -12,4 +12,6 @@ public class Water extends FieldEntity{
     {
         return new Water();
     }
+
+    public boolean powerupSpawnable(){return false;}
 }

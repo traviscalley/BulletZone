@@ -28,4 +28,5 @@ public class NumberField extends FieldEntity {
         return Integer.toString(value == 1000 ? 1 : 2);
     }
 
+    public boolean powerupSpawnable(){return false;}
 }

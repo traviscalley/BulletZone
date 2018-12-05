@@ -58,4 +58,6 @@ public class Bullet extends FieldEntity {
     public int getBulletId(){
         return bulletId;
     }
+
+    public boolean powerupSpawnable(){return false;}
 }

@@ -13,4 +13,6 @@ public class Hill extends FieldEntity
     {
         return new Hill();
     }
+
+    public boolean powerupSpawnable(){return false;}
 }
