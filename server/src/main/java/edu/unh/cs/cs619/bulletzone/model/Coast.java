@@ -12,4 +12,6 @@ public class Coast extends FieldEntity{
     {
         return new Coast();
     }
+
+    public boolean powerupSpawnable(){return true;}
 }
