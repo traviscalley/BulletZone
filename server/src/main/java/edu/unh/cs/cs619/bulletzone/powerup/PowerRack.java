@@ -6,7 +6,7 @@ import edu.unh.cs.cs619.bulletzone.model.Soldier;
 
 public class PowerRack extends FieldEntity implements Powerup {
 
-    private final int RACK_CAPACITY = 3;
+    public final int RACK_CAPACITY = 3;
     private Powerup[] powerups = new Powerup[RACK_CAPACITY];
     private int holding = 0;
 
@@ -34,13 +34,6 @@ public class PowerRack extends FieldEntity implements Powerup {
             po.setAllowedMoveInterval(200);
             po.setAllowedTurnInterval(200);
         }
-
-    }
-
-    @Override
-    public void unpowerupPlayer(PlayableObject po) {
-        //recursive??
-        //might as well jsut reset the playable object
 
     }
 
@@ -80,6 +73,15 @@ public class PowerRack extends FieldEntity implements Powerup {
 
     public boolean isFull(){
         return holding == RACK_CAPACITY-1;
+    }
+
+    public boolean isEmpty(){
+        boolean res = true;
+        for(Powerup pu: powerups){
+            if(pu != null)
+                res = false;
+        }
+        return res;
     }
 
 

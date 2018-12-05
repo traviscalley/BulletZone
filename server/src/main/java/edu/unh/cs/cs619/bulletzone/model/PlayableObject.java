@@ -33,11 +33,13 @@ public abstract class PlayableObject extends FieldEntity {
     //just one powerup for now
     protected Powerup powerup;
     protected Stack<PlayableConfig> stateStack = new Stack<>();
+    protected PlayableConfig initState;
 
     public PlayableObject(long id, Direction direction, String ip) {
         this.id = id;
         this.direction = direction;
         this.ip = ip;
+        initState = makeConfig();
     }
 
     @Override
@@ -155,11 +157,10 @@ public abstract class PlayableObject extends FieldEntity {
         if(powerup instanceof PowerRack) {//complex cas
             if(((PowerRack) powerup).addPowerup(power)){ //if there is room to add, it is added
                 power.powerupPlayer(this);
+                stateStack.push(makeConfig());
             }
         }
         else {//simple case
-            //if(powerup != null)
-            //powerup.unpowerupPlayer(this);
             if(!stateStack.empty())
                 setConfig(stateStack.pop());
             powerup = power;
@@ -172,11 +173,19 @@ public abstract class PlayableObject extends FieldEntity {
     public void removePowerup(){
         if(!stateStack.empty()) {
             if(powerup instanceof PowerRack) {
-                ((PowerRack) powerup).removePowerup();
-                //lord save you
+                if(((PowerRack) powerup).isEmpty()){
+                    while(!stateStack.isEmpty())
+                        stateStack.pop();
 
+                    setConfig(initState);
+                }
+                else {
+                    ((PowerRack) powerup).removePowerup();
+                    setConfig(stateStack.pop());
+                }
             }
-            setConfig(stateStack.pop());
+            stateStack.pop();
+            setConfig(initState);
         }
         powerup = null;
     }

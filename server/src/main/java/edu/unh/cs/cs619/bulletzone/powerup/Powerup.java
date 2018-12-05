@@ -6,5 +6,4 @@ public interface Powerup {
     public void powerupPlayer(PlayableObject po);
 
     //for when powerup is ejected (maybe instaed have stack of state)
-    public void unpowerupPlayer(PlayableObject po);
 }

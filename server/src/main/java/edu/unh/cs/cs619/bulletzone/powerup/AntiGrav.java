@@ -28,11 +28,4 @@ public class AntiGrav extends FieldEntity implements Powerup {
         po.addPowerup(this);
 
     }
-
-    @Override
-    public void unpowerupPlayer(PlayableObject po) {
-        po.setAllowedMoveInterval((int)po.getAllowedMoveInterval()*2);
-        po.setAllowedFireInterval((int)po.getAllowedFireInterval()/2);
-
-    }
 }
