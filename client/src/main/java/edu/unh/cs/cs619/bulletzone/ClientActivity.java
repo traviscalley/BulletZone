@@ -110,6 +110,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         @Subscribe
         public void onUpdateGrid(GridUpdateEvent event) {
             updateGrid(event.gw);
+            //move store state to gridrepo
             storeState(event.gw);
         }
     };
