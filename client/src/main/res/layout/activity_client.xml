@@ -98,6 +98,22 @@
             android:layout_marginEnd="0dp"
             android:text="Replay" />
 
+        <ScrollView
+            android:id="@+id/HealthScroll"
+            android:layout_width="102dp"
+            android:layout_height="38dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="11dp"
+            android:layout_marginBottom="51dp">
+
+            <LinearLayout
+                android:id="@+id/HealthView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
     </RelativeLayout>
 
 </LinearLayout>
