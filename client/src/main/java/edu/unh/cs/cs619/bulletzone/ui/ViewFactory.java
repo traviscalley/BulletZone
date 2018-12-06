@@ -1,7 +1,6 @@
 package edu.unh.cs.cs619.bulletzone.ui;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
