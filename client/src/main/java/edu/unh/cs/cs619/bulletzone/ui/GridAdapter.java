@@ -102,8 +102,8 @@ public class GridAdapter extends BaseAdapter {
         int val = mEntities[row][col];
 
         //if it hasn't changed
-        if(val == prevEntities[row][col])
-            return convertView;
+        //if(val == prevEntities[row][col])
+            //return convertView;
 
         int TID = (val / 10000) % 1000;
         int dir = val % 10;
