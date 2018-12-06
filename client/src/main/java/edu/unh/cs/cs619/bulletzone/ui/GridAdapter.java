@@ -33,6 +33,8 @@ public class GridAdapter extends BaseAdapter {
     //@SystemService
     protected LayoutInflater inflater;
     private int[][] mEntities = new int[16][16];
+    private int[][] prevEntities = new int[16][16];
+    //TODO implememnt a delta int list that sores last state so ou don't hvae to make a new view every time
     private long playerID;
     private Context context;
     private ViewFactory viewFactory = ViewFactory.getInstance();
@@ -50,6 +52,7 @@ public class GridAdapter extends BaseAdapter {
 
     public void updateList(int[][] entities) {
         synchronized (monitor) {
+            this.prevEntities = this.mEntities;
             this.mEntities = entities;
             this.notifyDataSetChanged();
         }
@@ -97,6 +100,11 @@ public class GridAdapter extends BaseAdapter {
         int col = position % 16;
 
         int val = mEntities[row][col];
+
+        //if it hasn't changed
+        if(val == prevEntities[row][col])
+            return convertView;
+
         int TID = (val / 10000) % 1000;
         int dir = val % 10;
         int health = (val / 10) % 1000; //i think so
