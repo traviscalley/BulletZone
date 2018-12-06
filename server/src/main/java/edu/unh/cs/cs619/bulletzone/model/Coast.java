@@ -14,4 +14,8 @@ public class Coast extends FieldEntity{
     }
 
     public boolean powerupSpawnable(){return true;}
+    @Override
+    public boolean tankSpawnable() {
+        return true;
+    }
 }

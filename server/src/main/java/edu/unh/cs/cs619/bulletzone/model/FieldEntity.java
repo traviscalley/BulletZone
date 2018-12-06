@@ -30,6 +30,8 @@ public abstract class FieldEntity {
 
     public abstract boolean powerupSpawnable();
 
+    public abstract boolean tankSpawnable();
+
     /*public static final void registerEventBusListener(Object listener) {
         checkNotNull(listener);
         eventBus.register(listener);

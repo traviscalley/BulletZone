@@ -14,7 +14,10 @@ public final class Game {
      */
     private static final int FIELD_DIM = 16;
     private final long id;
+    //this will hold players and powerups and walls
     private final ArrayList<FieldHolder> holderGrid = new ArrayList<>();
+    //this will hold what's "under" the holder grid, like water and hills
+    private final ArrayList<FieldHolder> terrainGrid = new ArrayList<>();
 
     private final ConcurrentMap<Long, Tank> tanks = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Long> playersIP = new ConcurrentHashMap<>();
@@ -34,6 +37,12 @@ public final class Game {
     public ArrayList<FieldHolder> getHolderGrid() {
         return holderGrid;
     }
+
+    @JsonIgnore
+    public ArrayList<FieldHolder> getTerrainGrid() {
+        return terrainGrid;
+    }
+
 
     public void addTank(String ip, Tank tank) {
         synchronized (tanks) {
@@ -89,14 +98,22 @@ public final class Game {
         int[][] grid = new int[FIELD_DIM][FIELD_DIM];
 
         synchronized (holderGrid) {
-            FieldHolder holder;
-            for (int i = 0; i < FIELD_DIM; i++) {
-                for (int j = 0; j < FIELD_DIM; j++) {
-                    holder = holderGrid.get(i * FIELD_DIM + j);
-                    if (holder.isPresent()) {
-                        grid[i][j] = holder.getEntity().getIntValue();
-                    } else {
-                        grid[i][j] = 0;
+            synchronized (terrainGrid) {
+                FieldHolder holder;
+                FieldHolder terrain;
+                for (int i = 0; i < FIELD_DIM; i++) {
+                    for (int j = 0; j < FIELD_DIM; j++) {
+                        holder = holderGrid.get(i * FIELD_DIM + j);
+                        terrain = terrainGrid.get(i * FIELD_DIM + j);
+                        if (holder.isPresent()) {
+                            grid[i][j] = holder.getEntity().getIntValue();
+                        } else {
+                            grid[i][j] = 0;
+                        }
+
+                        //this is gonna break everyting in a second
+                        if (terrain.isPresent())
+                            grid[i][j] += terrain.getEntity().getIntValue();
                     }
                 }
             }

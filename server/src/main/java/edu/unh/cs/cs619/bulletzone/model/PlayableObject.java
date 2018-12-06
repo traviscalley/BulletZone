@@ -163,6 +163,11 @@ public abstract class PlayableObject extends FieldEntity {
     @Override
     public boolean powerupSpawnable(){return false;}
 
+    @Override
+    public boolean tankSpawnable(){
+        return false;
+    }
+
     public void addPowerup(Powerup power){
         if(powerLimit == 1) {
             if(powerupN != 0)

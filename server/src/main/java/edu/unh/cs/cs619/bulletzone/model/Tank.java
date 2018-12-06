@@ -72,7 +72,6 @@ public class Tank extends PlayableObject
         if (!nextField.isPresent())
         {
             nextField.setFieldEntity(soldier);
-            soldier.setParent(nextField);
             isEjected = true;
         }
 

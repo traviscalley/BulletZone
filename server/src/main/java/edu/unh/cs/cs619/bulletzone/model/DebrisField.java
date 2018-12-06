@@ -15,4 +15,8 @@ public class DebrisField extends FieldEntity
     }
 
     public boolean powerupSpawnable(){return false;}
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 }

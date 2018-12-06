@@ -105,7 +105,6 @@ public abstract class SoldierUtilities
             {
                 parent.clearField();
                 nextField.setFieldEntity(soldier);
-                soldier.setParent(nextField);
 
                 isCompleted = true;
             }
@@ -251,7 +250,6 @@ public abstract class SoldierUtilities
                             }
 
                             nextField.setFieldEntity(bullet);
-                            bullet.setParent(nextField);
                         }
                     }
                 }

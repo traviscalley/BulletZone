@@ -32,6 +32,8 @@ public class FieldHolder {
     public void setFieldEntity(FieldEntity entity) {
         entityHolder = Optional.of(checkNotNull(entity,
                 "FieldEntity cannot be null."));
+        //this is so that we don't have to manually add parent
+        entity.setParent(this);
     }
 
     public void clearField() {

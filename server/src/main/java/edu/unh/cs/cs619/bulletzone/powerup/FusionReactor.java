@@ -20,6 +20,11 @@ public class FusionReactor extends FieldEntity implements Powerup {
     }
 
     @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
+
+    @Override
     public void powerupPlayer(PlayableObject po) {
         po.setAllowedFireInterval((int)po.getAllowedFireInterval()/2);
         po.setAllowedNumberOfBullets(po.getAllowedNumberOfBullets()*2);

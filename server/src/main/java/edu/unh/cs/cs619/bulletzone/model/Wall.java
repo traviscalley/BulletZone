@@ -29,6 +29,10 @@ public class Wall extends FieldEntity {
 
     @Override
     public boolean powerupSpawnable(){return false;}
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 
     public int getPos(){
         return pos;

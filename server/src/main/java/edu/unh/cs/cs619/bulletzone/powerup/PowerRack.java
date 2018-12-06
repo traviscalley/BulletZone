@@ -21,6 +21,10 @@ public class PowerRack extends FieldEntity implements Powerup {
     public boolean powerupSpawnable() {
         return false;
     }
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 
     @Override
     public void powerupPlayer(PlayableObject po) {

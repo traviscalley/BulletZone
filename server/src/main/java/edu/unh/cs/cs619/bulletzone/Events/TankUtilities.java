@@ -139,7 +139,6 @@ public abstract class TankUtilities
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
-                tank.setParent(nextField);
 
                 isCompleted = true;
             }
@@ -150,7 +149,6 @@ public abstract class TankUtilities
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
-                tank.setParent(nextField);
 
                 isCompleted = true;
             }
@@ -290,7 +288,6 @@ public abstract class TankUtilities
                             }
 
                             nextField.setFieldEntity(bullet);
-                            bullet.setParent(nextField);
                         }
                     }
                 }
