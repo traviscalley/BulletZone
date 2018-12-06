@@ -51,7 +51,7 @@ public class InMemoryGameRepository implements GameRepository {
      * Tank's default life [life]
      */
     private static final int TANK_LIFE = 100;
-    private final AtomicLong idGenerator = new AtomicLong();
+    private final AtomicLong idGenerator = new AtomicLong(1);
     private final Object monitor = new Object();
     private Game game = null;
     private static final Timer timer = new Timer();
