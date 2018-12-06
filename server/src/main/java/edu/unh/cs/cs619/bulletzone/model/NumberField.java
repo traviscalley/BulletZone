@@ -15,7 +15,7 @@ public class NumberField extends FieldEntity {
 
     @Override
     public int getIntValue() {
-        return 0;
+        return -1;
     }
 
     @Override

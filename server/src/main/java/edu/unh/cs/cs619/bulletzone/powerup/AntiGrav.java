@@ -6,7 +6,7 @@ import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 public class AntiGrav extends FieldEntity implements Powerup {
     @Override
     public int getIntValue() {
-        return 6000;
+        return 6 * 10000000;
     }
 
     @Override

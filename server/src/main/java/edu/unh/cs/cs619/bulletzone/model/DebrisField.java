@@ -1,11 +1,9 @@
 package edu.unh.cs.cs619.bulletzone.model;
 
-public class DebrisField extends FieldEntity
-{
+public class DebrisField extends FieldEntity {
     @Override
-    public int getIntValue()
-    {
-        return 3000;
+    public int getIntValue() {
+        return 2 * 100000000;
     }
 
     @Override

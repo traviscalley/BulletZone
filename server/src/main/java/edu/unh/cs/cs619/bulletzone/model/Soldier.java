@@ -36,8 +36,7 @@ public class Soldier extends PlayableObject
 
     @Override
     public int getIntValue() {
-        return (int) (1000000 + 1000 * id + 10 * life + Direction
-                .toByte(direction));
+        return (int)(2 * 10000000 + id * 10000 + life * 10 + Direction.toByte(direction));
     }
 
     @Override

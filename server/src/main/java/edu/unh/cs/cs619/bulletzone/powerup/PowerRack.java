@@ -9,7 +9,7 @@ public class PowerRack extends FieldEntity implements Powerup {
 
     @Override
     public int getIntValue() {
-        return 8000;
+        return 8 * 10000000;
     }
 
     @Override

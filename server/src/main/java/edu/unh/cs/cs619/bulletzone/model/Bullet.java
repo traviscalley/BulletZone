@@ -14,7 +14,7 @@ public class Bullet extends FieldEntity {
 
     @Override
     public int getIntValue() {
-        return (int) (2000000 + 1000 * tankId + damage * 10 + bulletId);
+        return (int)(4 * 10000000 + tankId * 10000 + damage * 10 + Direction.toByte(direction));
     }
 
     @Override

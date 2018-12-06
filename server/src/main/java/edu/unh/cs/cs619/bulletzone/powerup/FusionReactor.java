@@ -6,7 +6,7 @@ import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 public class FusionReactor extends FieldEntity implements Powerup {
     @Override
     public int getIntValue() {
-        return 7000;
+        return 7 * 10000000;
     }
 
     @Override
