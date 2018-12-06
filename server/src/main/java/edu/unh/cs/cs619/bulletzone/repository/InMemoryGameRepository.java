@@ -84,7 +84,7 @@ public class InMemoryGameRepository implements GameRepository {
                 x = random.nextInt(FIELD_DIM);
                 y = random.nextInt(FIELD_DIM);
                 FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
-                FieldHolder terrainElement = game.getHolderGrid().get(x * FIELD_DIM + y);
+                FieldHolder terrainElement = game.getTerrainGrid().get(x * FIELD_DIM + y);
 
                 if (!fieldElement.isPresent() && (!terrainElement.isPresent() || terrainElement.getEntity().tankSpawnable())) {
                     fieldElement.setFieldEntity(tank);
@@ -213,7 +213,8 @@ public class InMemoryGameRepository implements GameRepository {
 
     private void addPowerUp(int target) {
         FieldHolder field = game.getHolderGrid().get(target);
-        if(!field.isPresent() || game.getTerrainGrid().get(target).getEntity().powerupSpawnable()){
+        FieldHolder terrain = game.getTerrainGrid().get(target);
+        if(!field.isPresent() && (!terrain.isPresent() || terrain.getEntity().powerupSpawnable())){
             FieldEntity idk = PowerupFactory.getInstance().makePowerup(random.nextInt(3)+6);
             field.setFieldEntity(idk);
         }
@@ -225,25 +226,24 @@ public class InMemoryGameRepository implements GameRepository {
         final int waterNeed = 20;
         final int hillNeed = 1;
         final int debrisNeed = 1;
+        final int wallNeed = 7;
 
         int coasts = 0;
         int waters = 0;
         int hills = 0;
         int debriss = 0;
+        int walls = 0;
 
         synchronized (this.monitor){
             ArrayList<FieldHolder> grid = game.getTerrainGrid();
 
             //make a small cross of water
-            FieldEntity temp = new Water();
-            grid.get(seed).setFieldEntity(temp);
-            //temp.setParent(grid.get(seed));
+            grid.get(seed).setFieldEntity(new Water());
 
             waters++;
             try {
                 for(int i = 0; i < 8; i+=2) {
-                    grid.get(seed).getNeighbor(Direction.fromByte((byte)i)).setFieldEntity(temp = new Water());
-                    //temp.setParent(grid.get(seed).getNeighbor(Direction.fromByte((byte)i)));
+                    grid.get(seed).getNeighbor(Direction.fromByte((byte)i)).setFieldEntity(new Water());
                     waters++;
                 }
 
@@ -274,37 +274,62 @@ public class InMemoryGameRepository implements GameRepository {
                         continue;
 
                     if(hills < 5 && 0.01 > Math.random()){
-                        grid.get(cell).setFieldEntity(temp = new Hill());
-                        //temp.setParent(grid.get(cell));
+                        grid.get(cell).setFieldEntity(new Hill());
                         hills++;
                     }
                     else if(debriss < 5 && 0.01 > Math.random()){
-                        grid.get(cell).setFieldEntity(temp = new DebrisField());
-                        //temp.setParent(grid.get(cell));
+                        grid.get(cell).setFieldEntity(new DebrisField());
                         debriss++;
                     }
                     else if(random.nextInt(3) < valueSurround(grid.get(cell), 5000)){
-                        grid.get(cell).setFieldEntity(temp = new Water());
-                        //temp.setParent(grid.get(cell));
+                        grid.get(cell).setFieldEntity(new Water());
                         waters++;
                     }
                 }
                 //go through path and look at neighbors of grid
             }
-            //while(coasts < coastNeed)
-            //{
-            for(int cell : path)
+            while(coasts < coastNeed)
             {
-                if(grid.get(cell).isPresent())
-                    continue;
-                //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
-                if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
-                    grid.get(cell).setFieldEntity(temp = new Coast());
-                    //temp.setParent(grid.get(cell));
-                    coasts++;
+                for(int cell : path)
+                {
+                    if(grid.get(cell).isPresent())
+                        continue;
+                    //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
+                    if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
+                        grid.get(cell).setFieldEntity(new Coast());
+                        coasts++;
+                    }
                 }
             }
-            //}
+
+            ArrayList<FieldHolder> holderGrid = game.getHolderGrid();
+
+            int firstWall = random.nextInt(256);
+            while(!grid.get(firstWall).isPresent() && !holderGrid.get(firstWall).isPresent())
+                firstWall = random.nextInt(256);
+
+
+            holderGrid.get(firstWall).setFieldEntity(new Wall());
+            walls++;
+
+            while(walls < wallNeed) {
+                for (int cell : path) {
+                    //i'm not gonna make walls on the coast
+                    if (grid.get(cell).isPresent() || holderGrid.get(cell).isPresent())
+                        continue;
+
+                    //generate walls
+                    if (holderGrid.get(cell).getNeighbor(Direction.Up).getEntity() instanceof Wall ||
+                            holderGrid.get(cell).getNeighbor(Direction.Right).getEntity() instanceof Wall){
+
+                        if(random.nextBoolean())
+                            holderGrid.get(cell).setFieldEntity(new Wall());
+                        else
+                            holderGrid.get(cell).setFieldEntity(new Wall(999));//not sure what value here
+                        walls++;
+                    }
+                }
+            }
         }
     }
 
