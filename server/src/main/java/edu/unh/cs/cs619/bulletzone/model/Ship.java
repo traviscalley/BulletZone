@@ -13,6 +13,7 @@ public class Ship extends PlayableObject
         lastMoveTime = 0;
         allowedMoveInterval = 750;
         life = 100;
+        stateStack.push(makeConfig());
     }
 
     @JsonIgnore

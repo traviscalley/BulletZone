@@ -215,7 +215,8 @@ public abstract class ShipUtilities
                             else if ( nextField.getEntity() instanceof Wall){
                                 Wall w = (Wall) nextField.getEntity();
                                 if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
-                                    game.getHolderGrid().get(w.getPos()).clearField();
+                                    //game.getHolderGrid().get(w.getPos()).clearField();
+                                    nextField.clearField();
                                 }
                             }
                             else if (nextField.getEntity() instanceof Soldier)

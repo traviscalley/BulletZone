@@ -58,7 +58,7 @@ public abstract class TankUtilities
                 throw new TankDoesNotExistException(tankId);
             }
 
-            if (tank.getEjected() == true)
+            if (tank.getEjected())
                 return SoldierUtilities.turn(tankId, direction);
 
             long millis = System.currentTimeMillis();
@@ -181,7 +181,7 @@ public abstract class TankUtilities
                 throw new TankDoesNotExistException(tankId);
             }
 
-            if (tank.getEjected() == true)
+            if (tank.getEjected())
                 return SoldierUtilities.fire(tankId, bulletType);
 
             if(tank.getNumberOfBullets() >= tank.getAllowedNumberOfBullets())

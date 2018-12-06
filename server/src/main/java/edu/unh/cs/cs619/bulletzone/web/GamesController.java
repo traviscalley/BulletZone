@@ -127,7 +127,7 @@ class GamesController {
     ResponseEntity<BooleanWrapper> eject(@PathVariable long tankId)
             throws TankDoesNotExistException {
         return new ResponseEntity<BooleanWrapper>(
-                new BooleanWrapper(TankUtilities.ejectSoldier(tankId)),
+                new BooleanWrapper(PlayerUtilities.ejectSoldier(tankId)),
                 HttpStatus.ACCEPTED
         );
     }

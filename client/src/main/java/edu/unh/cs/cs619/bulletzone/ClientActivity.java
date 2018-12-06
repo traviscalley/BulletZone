@@ -123,7 +123,6 @@ public class ClientActivity extends Activity implements SensorEventListener{
         }
     };
 
-
     @AfterViews
     protected void afterViewInjection() {
         joinAsync();
@@ -235,7 +234,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         System.out.println("leaveGame() called, tank ID: "+tankId);
         BackgroundExecutor.cancelAll("grid_poller_task", false);
         restClient.leave(tankId);
-        startActivity(new Intent(this, MainScreenActivity_.class));
+        //startActivity(new Intent(this, MainScreenActivity_.class));
     }
 
     @Background

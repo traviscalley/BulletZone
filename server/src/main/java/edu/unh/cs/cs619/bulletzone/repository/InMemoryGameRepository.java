@@ -56,7 +56,7 @@ public class InMemoryGameRepository implements GameRepository {
     private static final int TANK_LIFE = 100;
     private static final int SHIP_LIFE = 100;
     private final AtomicLong idGenerator = new AtomicLong();
-    private boolean isTank = false;
+    private boolean isTank = true;
     private final Object monitor = new Object();
     private Game game = null;
     private static final Timer timer = new Timer();
@@ -203,6 +203,7 @@ public class InMemoryGameRepository implements GameRepository {
             TankUtilities.setGame(game);
             SoldierUtilities.setGame(game);
             PlayerUtilities.setGame(game);
+            this.game.setTank(isTank);
 
             createFieldGrids(game);
 

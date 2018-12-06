@@ -59,4 +59,15 @@ public abstract class PlayerUtilities
 
         return false;
     }
+
+    public static boolean ejectSoldier(long id)
+            throws TankDoesNotExistException
+    {
+        PlayableObject player = game.getShips().get(id);
+
+        if (player instanceof Tank && player != null)
+            return TankUtilities.ejectSoldier(id);
+        else
+            return false;
+    }
 }

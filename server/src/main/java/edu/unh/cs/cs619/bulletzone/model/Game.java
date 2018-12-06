@@ -14,7 +14,7 @@ public final class Game {
      */
     private static final int FIELD_DIM = 16;
     private final long id;
-    private boolean isTank;
+    private boolean isTank = true;
     //this will hold players and powerups and walls
     private final ArrayList<FieldHolder> holderGrid = new ArrayList<>();
     //this will hold what's "under" the holder grid, like water and hills
