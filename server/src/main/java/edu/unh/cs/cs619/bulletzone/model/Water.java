@@ -2,9 +2,8 @@ package edu.unh.cs.cs619.bulletzone.model;
 
 public class Water extends FieldEntity{
     @Override
-    public int getIntValue()
-    {
-        return 5000;
+    public int getIntValue() {
+        return 3 * 100000000;
     }
 
     @Override
@@ -14,4 +13,8 @@ public class Water extends FieldEntity{
     }
 
     public boolean powerupSpawnable(){return false;}
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 }

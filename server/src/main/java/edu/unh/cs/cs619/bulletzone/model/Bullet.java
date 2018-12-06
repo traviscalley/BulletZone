@@ -14,7 +14,7 @@ public class Bullet extends FieldEntity {
 
     @Override
     public int getIntValue() {
-        return (int) (2000000 + 1000 * tankId + damage * 10 + bulletId);
+        return (int)(4 * 10000000 + tankId * 10000 + damage * 10 + Direction.toByte(direction));
     }
 
     @Override
@@ -51,13 +51,22 @@ public class Bullet extends FieldEntity {
         this.damage = damage;
     }
 
-    public void setBulletId(int bulletId){
+    public void setBulletId(int bulletId) {
         this.bulletId = bulletId;
     }
 
-    public int getBulletId(){
+    public int getBulletId() {
         return bulletId;
     }
 
-    public boolean powerupSpawnable(){return false;}
+    @Override
+    public boolean powerupSpawnable() {
+        return false;
+    }
+
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 }
+

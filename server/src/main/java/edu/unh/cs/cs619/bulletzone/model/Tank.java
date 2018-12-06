@@ -20,6 +20,7 @@ public class Tank extends PlayableObject
         lastMoveTime = 0;
         allowedMoveInterval = 500;
         life = 100;
+        stateStack.push(makeConfig());
     }
 
     @Override
@@ -46,8 +47,7 @@ public class Tank extends PlayableObject
 
     @Override
     public int getIntValue() {
-        return (int) (10000000 + 10000 * id + 10 * life + Direction
-                .toByte(direction));
+        return (int)(1 * 10000000 + id * 10000 + life * 10 + Direction.toByte(direction));
     }
 
     @Override
@@ -73,7 +73,6 @@ public class Tank extends PlayableObject
         if (!nextField.isPresent())
         {
             nextField.setFieldEntity(soldier);
-            soldier.setParent(nextField);
             isEjected = true;
             lastEjectTime = System.currentTimeMillis();
         }

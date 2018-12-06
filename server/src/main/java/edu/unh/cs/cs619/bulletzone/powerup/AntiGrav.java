@@ -6,7 +6,7 @@ import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 public class AntiGrav extends FieldEntity implements Powerup {
     @Override
     public int getIntValue() {
-        return 6000;
+        return 6 * 10000000;
     }
 
     @Override
@@ -18,6 +18,10 @@ public class AntiGrav extends FieldEntity implements Powerup {
     public boolean powerupSpawnable() {
         return false;
     }
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 
     @Override
     public void powerupPlayer(PlayableObject po) {
@@ -25,7 +29,7 @@ public class AntiGrav extends FieldEntity implements Powerup {
         //slows firing? lets halve firing rate
         po.setAllowedFireInterval((int)po.getAllowedFireInterval()*2);
         ///po. add this to list
-        po.addPowerup(this);
+        //po.addPowerup(this);
 
     }
 }

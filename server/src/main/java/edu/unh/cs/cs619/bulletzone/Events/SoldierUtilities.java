@@ -104,7 +104,6 @@ public abstract class SoldierUtilities
             {
                 parent.clearField();
                 nextField.setFieldEntity(soldier);
-                soldier.setParent(nextField);
 
                 isCompleted = true;
             }
@@ -197,6 +196,8 @@ public abstract class SoldierUtilities
                             nextField.getEntity().hit(bullet.getDamage());
 
 
+                            //TODO
+                            //all this belowthis needs to be put in the "instanceof".hit methods
 
                             if ( nextField.getEntity() instanceof  Tank)
                             {
@@ -216,7 +217,8 @@ public abstract class SoldierUtilities
                             else if ( nextField.getEntity() instanceof Wall){
                                 Wall w = (Wall) nextField.getEntity();
                                 if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
-                                    game.getHolderGrid().get(w.getPos()).clearField();
+                                    //game.getHolderGrid().get(w.getPos()).clearField();
+                                    nextField.clearField();
                                 }
                             }
                             else if (nextField.getEntity() instanceof Soldier)
@@ -250,7 +252,6 @@ public abstract class SoldierUtilities
                             }
 
                             nextField.setFieldEntity(bullet);
-                            bullet.setParent(nextField);
                         }
                     }
                 }

@@ -15,7 +15,7 @@ public class NumberField extends FieldEntity {
 
     @Override
     public int getIntValue() {
-        return 0;
+        return -1;
     }
 
     @Override
@@ -29,4 +29,8 @@ public class NumberField extends FieldEntity {
     }
 
     public boolean powerupSpawnable(){return false;}
+    @Override
+    public boolean tankSpawnable() {
+        return false;
+    }
 }
