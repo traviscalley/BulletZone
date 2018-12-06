@@ -25,9 +25,5 @@ public class FusionReactor extends FieldEntity implements Powerup {
         po.setAllowedNumberOfBullets(po.getAllowedNumberOfBullets()*2);
         //slows move? lets halve moving rate
         po.setAllowedMoveInterval((int)po.getAllowedMoveInterval()*2);
-        ///po. add this to list
-        po.addPowerup(this);
-
-
     }
 }

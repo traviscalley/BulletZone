@@ -13,6 +13,7 @@ public class Soldier extends PlayableObject
         lastMoveTime = 0;
         allowedMoveInterval = 1000;
         life = 25;
+        stateStack.push(makeConfig());
     }
 
     @Override

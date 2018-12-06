@@ -25,7 +25,7 @@ public class AntiGrav extends FieldEntity implements Powerup {
         //slows firing? lets halve firing rate
         po.setAllowedFireInterval((int)po.getAllowedFireInterval()*2);
         ///po. add this to list
-        po.addPowerup(this);
+        //po.addPowerup(this);
 
     }
 }

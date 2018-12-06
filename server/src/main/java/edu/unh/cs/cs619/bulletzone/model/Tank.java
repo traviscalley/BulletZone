@@ -19,6 +19,7 @@ public class Tank extends PlayableObject
         lastMoveTime = 0;
         allowedMoveInterval = 500;
         life = 100;
+        stateStack.push(makeConfig());
     }
 
     @Override

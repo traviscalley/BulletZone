@@ -31,15 +31,19 @@ public abstract class PlayableObject extends FieldEntity {
     protected Direction direction;
 
     //just one powerup for now
-    protected Powerup powerup;
+    protected Stack<Powerup> powerupStack = new Stack<>();
+    protected int powerupN = 0;
+    protected int powerLimit = 1;
+
     protected Stack<PlayableConfig> stateStack = new Stack<>();
-    protected PlayableConfig initState;
+    //protected PlayableConfig initState;
 
     public PlayableObject(long id, Direction direction, String ip) {
         this.id = id;
         this.direction = direction;
         this.ip = ip;
-        initState = makeConfig();
+        //initState = makeConfig();
+
     }
 
     @Override
@@ -73,7 +77,13 @@ public abstract class PlayableObject extends FieldEntity {
         this.allowedTurnInterval = allowedTurnInterval;
     }
 
+    public void setPowerupLimit(int powerLimit){
+        this.powerLimit = powerLimit;
+    }
 
+    public int getPowerupLimit(){
+        return this.powerLimit;
+    }
 
 
     public void setLastMoveTime(long lastMoveTime) {
@@ -154,53 +164,45 @@ public abstract class PlayableObject extends FieldEntity {
     public boolean powerupSpawnable(){return false;}
 
     public void addPowerup(Powerup power){
-        if(powerup instanceof PowerRack) {//complex cas
-            if(((PowerRack) powerup).addPowerup(power)){ //if there is room to add, it is added
-                power.powerupPlayer(this);
-                stateStack.push(makeConfig());
-            }
+        if(powerLimit == 1) {
+            if(powerupN != 0)
+                remove1Powerup();
+            applyPowerup(power);
         }
-        else {//simple case
-            if(!stateStack.empty())
-                setConfig(stateStack.pop());
-            powerup = power;
-            powerup.powerupPlayer(this);
-            stateStack.push(makeConfig());
+        else{
+            if(powerupN < powerLimit)
+                applyPowerup(power);
         }
     }
 
-    //called by eject
-    public void removePowerup(){
-        if(!stateStack.empty()) {
-            if(powerup instanceof PowerRack) {
-                if(((PowerRack) powerup).isEmpty()){
-                    while(!stateStack.isEmpty())
-                        stateStack.pop();
+    private void applyPowerup(Powerup powerup){
+        powerup.powerupPlayer(this);
+        powerupStack.push(powerup);
+        powerupN++;
+        stateStack.push(makeConfig());
+    }
 
-                    setConfig(initState);
-                }
-                else {
-                    ((PowerRack) powerup).removePowerup();
-                    setConfig(stateStack.pop());
-                }
-            }
+    //called by eject and when it gets hit
+    public void remove1Powerup(){
+        if(powerupN != 0) {
             stateStack.pop();
-            setConfig(initState);
+            setConfig(stateStack.peek());
+            powerupStack.pop();
+            powerupN--;
         }
-        powerup = null;
     }
 
-    private void setConfig(PlayableConfig config)
-    {
+    protected void setConfig(PlayableConfig config) {
         allowedMoveInterval = config.allowedMoveInterval;
         allowedTurnInterval = config.allowedTurnInterval;
         allowedFireInterval = config.allowedFireInterval;
         allowedNumberOfBullets = config.allowedNumberOfBullets;
+        powerLimit = config.powerLimit;
     }
 
-    private PlayableConfig makeConfig(){
+    protected PlayableConfig makeConfig(){
         return new PlayableConfig(allowedMoveInterval, allowedTurnInterval,
-                allowedFireInterval, allowedNumberOfBullets);
+                allowedFireInterval, allowedNumberOfBullets, powerLimit);
     }
 
     private class PlayableConfig{
@@ -208,12 +210,14 @@ public abstract class PlayableObject extends FieldEntity {
         public int allowedTurnInterval;
         public int allowedFireInterval;
         public int allowedNumberOfBullets;
+        public int powerLimit;
 
-        public PlayableConfig(int move, int turn, int fire, int bullets){
+        public PlayableConfig(int move, int turn, int fire, int bullets, int plimit){
             allowedMoveInterval = move;
             allowedTurnInterval = turn;
             allowedFireInterval = fire;
             allowedNumberOfBullets = bullets;
+            powerLimit = plimit;
         }
     }
 
