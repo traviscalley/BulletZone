@@ -281,7 +281,7 @@ public class InMemoryGameRepository implements GameRepository {
                         grid.get(cell).setFieldEntity(new DebrisField());
                         debriss++;
                     }
-                    else if(random.nextInt(3) < valueSurround(grid.get(cell), 5000)){
+                    else if(random.nextInt(3) < valueSurround(grid.get(cell), 300000000)){
                         grid.get(cell).setFieldEntity(new Water());
                         waters++;
                     }
@@ -295,7 +295,7 @@ public class InMemoryGameRepository implements GameRepository {
                     if(grid.get(cell).isPresent())
                         continue;
                     //if(Math.abs(waterSurround(grid.get(cell)) - 4) < random.nextInt(3)) {
-                    if(valueSurround(grid.get(cell), 5000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 4000)){
+                    if(valueSurround(grid.get(cell), 300000000) >= 2 || random.nextInt(3) < valueSurround(grid.get(cell), 400000000)){
                         grid.get(cell).setFieldEntity(new Coast());
                         coasts++;
                     }
