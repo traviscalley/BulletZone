@@ -45,10 +45,11 @@ public class ViewFactory {
     public View makeCellView(ImageView iv, int value){
 
         //int layers[] = new int[]{-1, -1, -1};
-        Drawable[] layers = new Drawable[3];
+        Drawable[] layers = new Drawable[4];
         layers[0] = context.getDrawable(R.drawable.empty);
         layers[1] = context.getDrawable(R.drawable.empty);
         layers[2] = context.getDrawable(R.drawable.empty);
+        layers[3] = context.getDrawable(R.drawable.empty);
 
         int dir = value % 10;
         int health = (value/10) % 1000;
@@ -81,11 +82,36 @@ public class ViewFactory {
             int obj = R.drawable.empty;
             switch (objectType){
                 case TANK:
-                    obj = R.drawable.user_tank_up;//there's more
+                    //if(tankID == myID) {
+                        if (dir == 0)
+                            obj = R.drawable.user_tank_up;
+                        else if (dir == 2)
+                            obj = R.drawable.user_tank_right;
+                        else if (dir == 4)
+                            obj = R.drawable.user_tank_down;
+                        else if (dir == 6)
+                            obj = R.drawable.user_tank_left;
+                    /*}
+                    else {
+                        if (dir == 0)
+                            obj = R.drawable.enemy_tank_up;
+                        else if (dir == 2)
+                            obj = R.drawable.enemy_tank_right;
+                        else if (dir == 4)
+                            obj = R.drawable.enemy_tank_down;
+                        else if (dir == 6)
+                            obj = R.drawable.enemy_tank_left;
+                    }*/
                     break;
                 case SOLDIER:
-                    obj = R.drawable.soldier_up;
-                    break;
+                    if (dir == 0)
+                        obj = R.drawable.soldier_up;
+                    else if (dir == 2)
+                        obj = R.drawable.soldier_right;
+                    else if (dir == 4)
+                        obj = R.drawable.soldier_down;
+                    else if (dir == 6)
+                        obj = R.drawable.soldier_left;
                 case SHIP:
                     ///obj = R.drawable.ship_up;
                     //add more later
@@ -94,7 +120,10 @@ public class ViewFactory {
                     obj = R.drawable.bullet;
                     break;
                 case WALL:
-                    obj = R.drawable.wall;
+                    if(health == 0)
+                        obj = R.drawable.wall;
+                    else
+                        obj = R.drawable.wall_breakable;
                     break;
                 case ANTIGRAV:
                     obj = R.drawable.antigrav;
@@ -148,6 +177,9 @@ public class ViewFactory {
 
             layers[2] = context.getDrawable(hea);
         }
+
+        if(tankID == myID)
+            layers[3] = context.getDrawable(R.drawable.mine);
 
         iv.setImageDrawable(new LayerDrawable(layers));
         return iv;
