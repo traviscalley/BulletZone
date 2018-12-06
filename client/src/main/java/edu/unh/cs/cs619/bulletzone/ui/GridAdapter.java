@@ -35,6 +35,7 @@ public class GridAdapter extends BaseAdapter {
     private int[][] mEntities = new int[16][16];
     private long playerID;
     private Context context;
+    private ViewFactory viewFactory = ViewFactory.getInstance();
 
     private BusProvider busProvider;
 
@@ -44,6 +45,7 @@ public class GridAdapter extends BaseAdapter {
         context = c;
         inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         busProvider = new BusProvider();
+        viewFactory.setContext(context);
     }
 
     public void updateList(int[][] entities) {
@@ -71,6 +73,7 @@ public class GridAdapter extends BaseAdapter {
     public void setPlayerID(long tankID)
     {
         playerID = tankID;
+        viewFactory.setMyID((int)tankID);
     }
 
     /**
@@ -96,15 +99,15 @@ public class GridAdapter extends BaseAdapter {
         int val = mEntities[row][col];
         int TID = (val / 10000) % 1000;
         int dir = val % 10;
-        int health = (val/10) % 1000; //i think so
+        int health = (val / 10) % 1000; //i think so
 
         //convertView.locat
 
 
-
         if (convertView instanceof ImageView) {
             synchronized (monitor) {
-                int resource = 0;
+                return viewFactory.makeCellView((ImageView) convertView, val);
+                /*int resource = 0;
                 if (val > 0) {
                     if (val == 1000)
                         resource = R.drawable.wall;
@@ -174,11 +177,11 @@ public class GridAdapter extends BaseAdapter {
                     //need to do somethign with health
                     //busProvider.getEventBus().post(new HealthInfoEvent(TID + ":\t"+health));
 
-                }
+                }*/
             }
         }
         return convertView;
     }
-
 }
+
 
