@@ -56,12 +56,12 @@ public class InMemoryGameRepository implements GameRepository {
     private static final int TANK_LIFE = 100;
     private static final int SHIP_LIFE = 100;
     private final AtomicLong idGenerator = new AtomicLong();
-    private boolean isTank = true;
     private final Object monitor = new Object();
     private Game game = null;
     private static final Timer timer = new Timer();
 
     private Random random = new Random();
+    private boolean isTank = true;
 
     public void setSelectBool(boolean isTank)
     {
@@ -150,10 +150,11 @@ public class InMemoryGameRepository implements GameRepository {
     @Override
     public PlayableObject join(String ip) {
         synchronized (this.monitor) {
-            if (isTank)
-                return joinTank(ip);
-            else
-                return joinShip(ip);
+//            if (isTank)
+//                return joinTank(ip);
+//            else
+//                return joinShip(ip);
+            return joinTank(ip);
         }
     }
 
