@@ -33,9 +33,6 @@ public class GridAdapter extends BaseAdapter {
     //@SystemService
     protected LayoutInflater inflater;
     private int[][] mEntities = new int[16][16];
-    private int[][] prevEntities = new int[16][16];
-    //TODO implememnt a delta int list that sores last state so ou don't hvae to make a new view every time
-    //or better yet, have the two int arrays and one array of Views taht we only edit when the int arrays dont' match
     private long playerID;
     private Context context;
     private ViewFactory viewFactory = ViewFactory.getInstance();
@@ -52,7 +49,6 @@ public class GridAdapter extends BaseAdapter {
 
     public void updateList(int[][] entities) {
         synchronized (monitor) {
-            this.prevEntities = this.mEntities;
             this.mEntities = entities;
             this.notifyDataSetChanged();
         }
@@ -101,10 +97,6 @@ public class GridAdapter extends BaseAdapter {
 
         int val = mEntities[row][col];
 
-        //if it hasn't changed
-        //if(val == prevEntities[row][col])
-            //return convertView;
-
         int TID = (val / 10000) % 1000;
         int dir = val % 10;
         int health = (val / 10) % 1000; //i think so
@@ -113,8 +105,9 @@ public class GridAdapter extends BaseAdapter {
 
 
         if (convertView instanceof ImageView) {
-            synchronized (monitor) {
+            //synchronized (monitor) {
                 return viewFactory.makeCellView((ImageView) convertView, val);
+                //return viewFactory.makeCellView((ImageView)convertView, val);
                 /*int resource = 0;
                 if (val > 0) {
                     if (val == 1000)
@@ -186,7 +179,7 @@ public class GridAdapter extends BaseAdapter {
                     //busProvider.getEventBus().post(new HealthInfoEvent(TID + ":\t"+health));
 
                 }*/
-            }
+            //}
         }
         return convertView;
     }
