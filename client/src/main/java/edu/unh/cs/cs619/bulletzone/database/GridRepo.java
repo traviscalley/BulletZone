@@ -33,6 +33,9 @@ public class GridRepo {
         return mGridDao.getAll();
     }
 
+    public void deleteAll(){
+        mGridDao.deleteAll();
+    }
     //access point???
     //public void insert(GridEntity grid) {
         //new insertAsyncTask(mGridDao).execute(grid);

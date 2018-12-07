@@ -35,12 +35,12 @@ public class GridAdapter extends BaseAdapter {
     private int[][] mEntities = new int[16][16];
     private int[][] prevEntities = new int[16][16];
     //TODO implememnt a delta int list that sores last state so ou don't hvae to make a new view every time
+    //or better yet, have the two int arrays and one array of Views taht we only edit when the int arrays dont' match
     private long playerID;
     private Context context;
     private ViewFactory viewFactory = ViewFactory.getInstance();
 
     private BusProvider busProvider;
-
 
     public GridAdapter(Context c)
     {

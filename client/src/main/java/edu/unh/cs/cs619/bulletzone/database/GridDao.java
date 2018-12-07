@@ -13,7 +13,7 @@ public interface GridDao {
     @Insert
     void insert(GridEntity ge);
 
-    @Query("DELETE FROM gridTable")
+    @Query("DELETE FROM gridTable WHERE time < CURRENT_TIMESTAMP*1000 - 86400000")
     void deleteAll();
 
     @Query("SELECT * FROM gridTable ORDER BY time ASC")

@@ -87,6 +87,14 @@ public class ClientActivity extends Activity implements SensorEventListener{
         mSensorManager.registerListener(this, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
 
         gridRepo = new GridRepo(this.getApplication());
+
+        //clear old gameplays
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("dbdelete", 0L, "") {
+            @Override
+            public void execute() {
+                gridRepo.deleteAll();
+            }
+        });
     }
 
     @Override
