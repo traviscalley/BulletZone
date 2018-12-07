@@ -68,5 +68,8 @@ public class Bullet extends FieldEntity {
     public boolean tankSpawnable() {
         return false;
     }
+
+    @Override
+    public void hit(Bullet bullet){}
 }
 

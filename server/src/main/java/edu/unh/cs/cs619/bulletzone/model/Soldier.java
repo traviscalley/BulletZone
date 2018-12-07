@@ -4,8 +4,8 @@ public class Soldier extends PlayableObject
 {
     private static final String TAG = "Soldier";
 
-    public Soldier(long id, Direction direction, String ip) {
-        super(id, direction, ip);
+    public Soldier(long id, Direction direction, String ip, Game game) {
+        super(id, direction, ip, game);
         numberOfBullets = 0;
         allowedNumberOfBullets = 6;
         lastFireTime = 0;
@@ -18,20 +18,7 @@ public class Soldier extends PlayableObject
 
     @Override
     public FieldEntity copy() {
-        return new Tank(id, direction, ip);
-    }
-
-    @Override
-    public void hit(int damage) {
-        life = life - damage;
-        System.out.println("Soldier life: " + id + " : " + life);
-//		Log.d(TAG, "TankId: " + id + " hit -> life: " + life);
-
-        if (life <= 0) {
-//			Log.d(TAG, "Tank event");
-            //eventBus.post(Tank.this);
-            //eventBus.post(new Object());
-        }
+        return new Soldier(id, direction, ip, game);
     }
 
     @Override

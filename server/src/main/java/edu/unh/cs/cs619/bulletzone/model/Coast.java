@@ -17,4 +17,6 @@ public class Coast extends FieldEntity{
     public boolean tankSpawnable() {
         return true;
     }
+    @Override
+    public void hit(Bullet bullet){}
 }

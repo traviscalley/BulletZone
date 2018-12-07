@@ -10,8 +10,8 @@ public class Tank extends PlayableObject
     private Soldier soldier;
     private boolean isEjected = false;
 
-    public Tank(long id, Direction direction, String ip) {
-        super(id, direction, ip);
+    public Tank(long id, Direction direction, String ip, Game game) {
+        super(id, direction, ip, game);
         numberOfBullets = 0;
         allowedNumberOfBullets = 2;
         lastFireTime = 0;
@@ -24,21 +24,9 @@ public class Tank extends PlayableObject
 
     @Override
     public FieldEntity copy() {
-        return new Tank(id, direction, ip);
+        return new Tank(id, direction, ip, game);
     }
 
-    @Override
-    public void hit(int damage) {
-        life = life - damage;
-        System.out.println("Tank life: " + id + " : " + life);
-//		Log.d(TAG, "TankId: " + id + " hit -> life: " + life);
-
-        if (life <= 0) {
-//			Log.d(TAG, "Tank event");
-            //eventBus.post(Tank.this);
-            //eventBus.post(new Object());
-        }
-    }
     @JsonIgnore
     public long getId() {
         return id;
@@ -63,7 +51,7 @@ public class Tank extends PlayableObject
         if (isEjected)
             return false;
 
-        soldier = new Soldier(id, direction, ip);
+        soldier = new Soldier(id, direction, ip, game);
 
         FieldHolder nextField = parent.getNeighbor(direction);
         checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");

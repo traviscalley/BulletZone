@@ -72,7 +72,7 @@ public class InMemoryGameRepository implements GameRepository {
 
             Long tankId = this.idGenerator.getAndIncrement();
 
-            tank = new Tank(tankId, Direction.Up, ip);
+            tank = new Tank(tankId, Direction.Up, ip, game);
             tank.setLife(TANK_LIFE);
 
             Random random = new Random();

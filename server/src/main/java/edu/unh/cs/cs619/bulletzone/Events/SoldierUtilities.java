@@ -194,13 +194,14 @@ public abstract class SoldierUtilities
 
                         if (nextField.isPresent()) {
                             // Something is there, hit it
-                            nextField.getEntity().hit(bullet.getDamage());
+                            //nextField.getEntity().hit(bullet.getDamage());
+                            nextField.getEntity().hit(bullet);
 
 
                             //TODO
                             //all this belowthis needs to be put in the "instanceof".hit methods
 
-                            if ( nextField.getEntity() instanceof  Tank)
+                            /*if ( nextField.getEntity() instanceof  Tank)
                             {
                                 Tank t = (Tank) nextField.getEntity();
 
@@ -215,14 +216,14 @@ public abstract class SoldierUtilities
                                     game.removeTank(t.getId());
                                 }
                             }
-                            else if ( nextField.getEntity() instanceof Wall){
+                            else*/ /*if ( nextField.getEntity() instanceof Wall){
                                 Wall w = (Wall) nextField.getEntity();
                                 if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
                                     //game.getHolderGrid().get(w.getPos()).clearField();
                                     nextField.clearField();
                                 }
                             }
-                            else if (nextField.getEntity() instanceof Soldier)
+                            else*/ /*if (nextField.getEntity() instanceof Soldier)
                             {
                                 Soldier s = (Soldier) nextField.getEntity();
 
@@ -236,7 +237,7 @@ public abstract class SoldierUtilities
                                     s.setParent(null);
                                     game.removeTank(s.getId());
                                 }
-                            }
+                            }*/
 
                             if (isVisible) {
                                 // Remove bullet from field

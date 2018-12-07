@@ -257,9 +257,9 @@ public abstract class TankUtilities
 
                         if (nextField.isPresent()) {
                             // Something is there, hit it
-                            nextField.getEntity().hit(bullet.getDamage());
+                            nextField.getEntity().hit(bullet);
 
-                            if ( nextField.getEntity() instanceof  Tank){
+                            /*if ( nextField.getEntity() instanceof  Tank){
                                 Tank t = (Tank) nextField.getEntity();
                                 System.out.println("tank is hit, tank life: " + t.getLife());
                                 if (t.getLife() <= 0 ){
@@ -284,7 +284,7 @@ public abstract class TankUtilities
                                     s.setParent(null);
                                     game.removeTank(s.getId());
                                 }
-                            }
+                            }*/
 
                             if (isVisible) {
                                 // Remove bullet from field

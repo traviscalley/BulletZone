@@ -4,7 +4,7 @@ import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 
-public class PowerRack extends FieldEntity implements Powerup {
+public class PowerRack extends Powerup {
     private final int RACK_CAPACITY = 3;
 
     @Override
@@ -15,15 +15,6 @@ public class PowerRack extends FieldEntity implements Powerup {
     @Override
     public FieldEntity copy() {
         return new PowerRack();
-    }
-
-    @Override
-    public boolean powerupSpawnable() {
-        return false;
-    }
-    @Override
-    public boolean tankSpawnable() {
-        return false;
     }
 
     @Override

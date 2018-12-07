@@ -25,8 +25,7 @@ public abstract class FieldEntity {
 
     public abstract FieldEntity copy();
 
-    public void hit(int damage) {
-    }
+    public abstract void hit(Bullet bullet);
 
     public abstract boolean powerupSpawnable();
 
