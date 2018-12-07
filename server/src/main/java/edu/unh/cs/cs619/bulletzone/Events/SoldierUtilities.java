@@ -11,6 +11,7 @@ import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -120,6 +121,16 @@ public abstract class SoldierUtilities
                 }
                 else
                     isCompleted = false;
+            }
+            else if (nextField.isPresent() && nextField.getEntity() instanceof Powerup){
+                Powerup p = (Powerup) nextField.getEntity();
+
+                soldier.addPowerup(p);
+
+                parent.clearField();
+                nextField.setFieldEntity(soldier);
+
+                isCompleted = true;
             }
             else
             {

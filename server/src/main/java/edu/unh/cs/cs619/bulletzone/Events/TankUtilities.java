@@ -16,6 +16,7 @@ import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
 import edu.unh.cs.cs619.bulletzone.model.Water;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -147,6 +148,16 @@ public abstract class TankUtilities
                      nextField.getEntity() instanceof Coast ||
                      nextField.getEntity() instanceof Water)
             {
+                parent.clearField();
+                nextField.setFieldEntity(tank);
+
+                isCompleted = true;
+            }
+            else if (nextField.isPresent() && nextField.getEntity() instanceof Powerup){
+                Powerup p = (Powerup) nextField.getEntity();
+
+                tank.addPowerup(p);
+
                 parent.clearField();
                 nextField.setFieldEntity(tank);
 
