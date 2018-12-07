@@ -305,7 +305,7 @@ public class InMemoryGameRepository implements GameRepository {
             ArrayList<FieldHolder> holderGrid = game.getHolderGrid();
 
             int firstWall = random.nextInt(256);
-            while(!grid.get(firstWall).isPresent() && !holderGrid.get(firstWall).isPresent())
+            while(grid.get(firstWall).isPresent() || holderGrid.get(firstWall).isPresent())
                 firstWall = random.nextInt(256);
 
 
@@ -319,8 +319,11 @@ public class InMemoryGameRepository implements GameRepository {
                         continue;
 
                     //generate walls
-                    if (holderGrid.get(cell).getNeighbor(Direction.Up).getEntity() instanceof Wall ||
-                            holderGrid.get(cell).getNeighbor(Direction.Right).getEntity() instanceof Wall){
+                    FieldHolder up = holderGrid.get(cell).getNeighbor(Direction.Up);
+                    FieldHolder right = holderGrid.get(cell).getNeighbor(Direction.Right);
+
+                    if ((up.isPresent() && up.getEntity() instanceof Wall) ||
+                            (right.isPresent() && right.getEntity() instanceof Wall)){
 
                         if(random.nextBoolean())
                             holderGrid.get(cell).setFieldEntity(new Wall());

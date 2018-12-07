@@ -13,6 +13,7 @@ public interface GridDao {
     @Insert
     void insert(GridEntity ge);
 
+    //delete everything over a day old
     @Query("DELETE FROM gridTable WHERE time < CURRENT_TIMESTAMP*1000 - 86400000")
     void deleteAll();
 
