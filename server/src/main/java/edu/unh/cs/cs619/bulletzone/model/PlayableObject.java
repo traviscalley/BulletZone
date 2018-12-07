@@ -188,13 +188,15 @@ public abstract class PlayableObject extends FieldEntity {
     }
 
     //called by eject and when it gets hit
-    public void remove1Powerup(){
+    public boolean remove1Powerup(){
         if(powerupN != 0) {
             stateStack.pop();
             setConfig(stateStack.peek());
             powerupStack.pop();
             powerupN--;
+            return true;
         }
+        return false;
     }
 
     protected void setConfig(PlayableConfig config) {

@@ -173,6 +173,18 @@ public abstract class TankUtilities
         }
     }
 
+    public static boolean ejectPowerup(long tankId)
+            throws TankDoesNotExistException
+    {
+        synchronized (monitor) {
+            Tank tank = game.getTanks().get(tankId);
+            if (tank == null)
+                throw new TankDoesNotExistException(tankId);
+
+            return tank.remove1Powerup();
+        }
+    }
+
     public static boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException {
         synchronized (monitor) {

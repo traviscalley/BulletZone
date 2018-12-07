@@ -63,7 +63,7 @@ public class Tank extends PlayableObject
         if (isEjected)
             return false;
 
-        soldier = new Soldier(id, Direction.Up, ip);
+        soldier = new Soldier(id, direction, ip);
 
         FieldHolder nextField = parent.getNeighbor(direction);
         checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
