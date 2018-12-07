@@ -52,7 +52,7 @@ public class ViewFactory {
         layers[3] = context.getDrawable(R.drawable.empty);
 
         int dir = value % 10;
-        long health = (value/10) % 1000;
+        double health = (value/10) % 1000;
         int tankID = (value/10000) % 1000;
         int objectType = (value/ 10000000) % 10;
         int terrainType = value / 100000000;
@@ -142,7 +142,7 @@ public class ViewFactory {
         //set health
         if(health != 0) {
             int hea = R.drawable.empty;
-            long total = -1;
+            double total = -1;
 
             switch (objectType){
                 case TANK:
@@ -161,7 +161,7 @@ public class ViewFactory {
 
             }
 
-            long percentage = health/total;
+            double percentage = health/total;
             if(percentage == 0.0)
                 hea = R.drawable.health_0;
             else if(percentage > 0.0 && percentage <= 0.3)
