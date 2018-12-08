@@ -41,7 +41,6 @@ public class GridRepo {
     private Object gridEventHandler = new Object() {
         @Subscribe
         public void onUpdateGrid(GridUpdateEvent event) {
-            Log.d("fuck you", "lol");
             insert(event.gw);
         }
     };

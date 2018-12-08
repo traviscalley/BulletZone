@@ -55,7 +55,6 @@ public class GridAdapter extends BaseAdapter {
 
         @Subscribe
         public void help(DBGetEvent event) {
-            Log.d("its", "doing somethign");
             updateList(event.gw.getGrid());
         }
     };
