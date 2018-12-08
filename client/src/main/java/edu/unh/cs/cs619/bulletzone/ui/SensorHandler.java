@@ -1,6 +1,5 @@
 package edu.unh.cs.cs619.bulletzone.ui;
 
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;

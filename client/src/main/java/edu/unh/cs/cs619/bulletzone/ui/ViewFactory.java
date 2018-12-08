@@ -82,26 +82,14 @@ public class ViewFactory {
             int obj = R.drawable.empty;
             switch (objectType){
                 case TANK:
-                    //if(tankID == myID) {
-                        if (dir == 0)
-                            obj = R.drawable.user_tank_up;
-                        else if (dir == 2)
-                            obj = R.drawable.user_tank_right;
-                        else if (dir == 4)
-                            obj = R.drawable.user_tank_down;
-                        else if (dir == 6)
-                            obj = R.drawable.user_tank_left;
-                    /*}
-                    else {
-                        if (dir == 0)
-                            obj = R.drawable.enemy_tank_up;
-                        else if (dir == 2)
-                            obj = R.drawable.enemy_tank_right;
-                        else if (dir == 4)
-                            obj = R.drawable.enemy_tank_down;
-                        else if (dir == 6)
-                            obj = R.drawable.enemy_tank_left;
-                    }*/
+                    if (dir == 0)
+                        obj = R.drawable.user_tank_up;
+                    else if (dir == 2)
+                        obj = R.drawable.user_tank_right;
+                    else if (dir == 4)
+                        obj = R.drawable.user_tank_down;
+                    else if (dir == 6)
+                        obj = R.drawable.user_tank_left;
                     break;
                 case SOLDIER:
                     if (dir == 0)

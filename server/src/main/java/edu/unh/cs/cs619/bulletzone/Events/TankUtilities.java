@@ -270,33 +270,6 @@ public abstract class TankUtilities
                             // Something is there, hit it
                             nextField.getEntity().hit(bullet);
 
-                            /*if ( nextField.getEntity() instanceof  Tank){
-                                Tank t = (Tank) nextField.getEntity();
-                                System.out.println("tank is hit, tank life: " + t.getLife());
-                                if (t.getLife() <= 0 ){
-                                    t.getParent().clearField();
-                                    t.setParent(null);
-                                    game.removeTank(t.getId());
-                                }
-                            }
-                            else if ( nextField.getEntity() instanceof Wall){
-                                Wall w = (Wall) nextField.getEntity();
-                                if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
-                                    //game.getHolderGrid().get(w.getPos()).clearField();
-                                    nextField.clearField();
-                                }
-                            }
-                            else if (nextField.getEntity() instanceof Soldier)
-                            {
-                                Soldier s = (Soldier) nextField.getEntity();
-                                if (s.getLife() <= 0)
-                                {
-                                    s.getParent().clearField();
-                                    s.setParent(null);
-                                    game.removeTank(s.getId());
-                                }
-                            }*/
-
                             if (isVisible) {
                                 // Remove bullet from field
                                 currentField.clearField();

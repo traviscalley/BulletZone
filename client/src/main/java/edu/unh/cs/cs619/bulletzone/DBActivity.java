@@ -55,25 +55,15 @@ public class DBActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db);
-        //busProvider = new BusProvider();
-        //gridView = findViewById(R.id.gridView);
-        //mGridAdapter = new GridAdapter(this);
-
-        //busProvider.getEventBus().register(this);
-
-        //startPoller();
     }
 
     public void onButtonReplay(View view){
         BackgroundExecutor.cancelAll("dbpoller", true);
-        //startPoller();
-        //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
         BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
             @Override
             public void execute() {
                 try {
                     dbPollerTask.doPoll();
-                    //GridPollerTask_.super.doPoll();
                 } catch (final Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                 }
@@ -106,12 +96,6 @@ public class DBActivity extends AppCompatActivity {
 
     @AfterInject
     void afterInject() {
-        //busProvider = new BusProvider();
-        //gridView = findViewById(R.id.gridView);
-        //gridView.setAdapter(mGridAdapter);
-        //mGridAdapter = new GridAdapter(this);
-        //gridView.setAdapter(mGridAdapter);
-
         busProvider.getEventBus().register(gridEventHandler);
 
         startPoller();
@@ -124,8 +108,6 @@ public class DBActivity extends AppCompatActivity {
 
     @Background(id = "dbpoller")
     protected void startPoller() {
-        //dbPollerTask = new DBPollerTask();
-        //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
         BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
 
             @Override
@@ -133,7 +115,6 @@ public class DBActivity extends AppCompatActivity {
                 try {
                     dbPollerTask.initalizeDB(new GridRepo(getApplication()));
                     dbPollerTask.doPoll();
-                    //GridPollerTask_.super.doPoll();
                 } catch (final Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                 }

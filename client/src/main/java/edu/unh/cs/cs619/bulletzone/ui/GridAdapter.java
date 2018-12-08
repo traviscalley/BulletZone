@@ -1,30 +1,21 @@
 package edu.unh.cs.cs619.bulletzone.ui;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.SystemService;
-
-import java.util.ArrayList;
 
 import edu.unh.cs.cs619.bulletzone.R;
 import edu.unh.cs.cs619.bulletzone.database.DBGetEvent;
-import edu.unh.cs.cs619.bulletzone.database.GridRepo;
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
 import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
 
@@ -53,7 +44,6 @@ public class GridAdapter extends BaseAdapter {
         context = c;
         inflater = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
         viewFactory.setContext(context);
-        //busProvider = new BusProvider();
     }
 
 
@@ -125,19 +115,11 @@ public class GridAdapter extends BaseAdapter {
 
         int val = mEntities[row][col];
 
-        int TID = (val / 10000) % 1000;
-        int dir = val % 10;
-        int health = (val / 10) % 1000; //i think so
-
-        //convertView.locat
-
-
         if (convertView instanceof ImageView) {
-                return viewFactory.makeCellView((ImageView) convertView, val);
+            return viewFactory.makeCellView((ImageView) convertView, val);
         }
         return convertView;
     }
-
 }
 
 

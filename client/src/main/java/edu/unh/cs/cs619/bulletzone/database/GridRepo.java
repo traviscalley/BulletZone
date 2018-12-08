@@ -1,7 +1,5 @@
 package edu.unh.cs.cs619.bulletzone.database;
 
-import android.app.Application;
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,13 +7,11 @@ import android.util.Log;
 import com.squareup.otto.Subscribe;
 
 import org.androidannotations.annotations.AfterInject;
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
-import java.util.function.Function;
 
 import edu.unh.cs.cs619.bulletzone.events.BusProvider;
 import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
@@ -50,10 +46,6 @@ public class GridRepo {
         }
     };
 
-    /*public void startGetAll(Function<List<GridEntity>, Void> callback){
-
-        new getAllTask(mGridDao).execute(callback);///mGridDao.getAll();//mAllGrids;
-    }*/
 
     public List<GridEntity> getAll(){
         return mGridDao.getAll();
@@ -68,34 +60,11 @@ public class GridRepo {
             }
         });
     }
-    //access point???
-    //public void insert(GridEntity grid) {
-        //new insertAsyncTask(mGridDao).execute(grid);
-    //}
 
     //access point???
     public void insert(GridWrapper ge) {
         new insertAsyncTask(mGridDao).execute(ge);
     }
-
-    /*private static class getAllTask extends AsyncTask<Function<List<GridEntity>, Void>, Void, Void>{
-        private GridDao mAsyncTaskDao;
-
-        getAllTask(GridDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Function... functions) {
-            functions[0].apply(mAsyncTaskDao.getAll());
-            return null;
-        }
-
-        /*@Override
-        protected List<GridEntity> doInBackground(Void... voids) {
-            return mAsyncTaskDao.getAll();
-        }
-    }*/
 
     private static class insertAsyncTask extends AsyncTask<GridWrapper, Void, Void> {
 
@@ -107,7 +76,6 @@ public class GridRepo {
 
         @Override
         protected Void doInBackground(final GridWrapper... params) {
-            //mAsyncTaskDao.insert(params[0]);
             //maybe put this not in main thread??
             int[][] rawData = params[0].getGrid();
             StringBuilder res = new StringBuilder("[");
@@ -119,9 +87,6 @@ public class GridRepo {
                 res.append("],");
             }
             res.append("]");
-            //this.grid = res.toString();
-            //Log.d(null, Long.toString(params[0].getTimeStamp()));
-            //this.timestamp = gw.getTimeStamp();
 
             mAsyncTaskDao.insert(new GridEntity(res.toString(), params[0].getTimeStamp()));
             return null;
