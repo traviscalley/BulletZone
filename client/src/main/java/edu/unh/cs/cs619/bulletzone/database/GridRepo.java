@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.androidannotations.annotations.Background;
+import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
 import java.util.function.Function;
@@ -34,7 +35,13 @@ public class GridRepo {
     }
 
     public void deleteAll(){
-        mGridDao.deleteAll();
+
+        BackgroundExecutor.execute(new BackgroundExecutor.Task("dbdelete", 0L, "") {
+            @Override
+            public void execute() {
+                mGridDao.deleteAll();
+            }
+        });
     }
     //access point???
     //public void insert(GridEntity grid) {

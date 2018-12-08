@@ -40,10 +40,11 @@ import edu.unh.cs.cs619.bulletzone.rest.BulletZoneRestClient;
 import edu.unh.cs.cs619.bulletzone.rest.GridPollerTask;
 import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
 import edu.unh.cs.cs619.bulletzone.ui.GridAdapter;
+import edu.unh.cs.cs619.bulletzone.ui.SensorHandler;
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
 @EActivity(R.layout.activity_client)
-public class ClientActivity extends Activity implements SensorEventListener{
+public class ClientActivity extends Activity {
 
     private static final String TAG = "ClientActivity";
 
@@ -66,6 +67,8 @@ public class ClientActivity extends Activity implements SensorEventListener{
     @Bean
     BZRestErrorhandler bzRestErrorhandler;
 
+    SensorHandler sensorHandler;
+
     /**
      * Remote tank identifier
      */
@@ -82,19 +85,17 @@ public class ClientActivity extends Activity implements SensorEventListener{
         super.onCreate(savedInstanceState);
 
         // Accelerometer shake handling
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        /*mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(this, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAccelerometer, mSensorManager.SENSOR_DELAY_NORMAL);*/
+
+        sensorHandler = new SensorHandler((SensorManager) getSystemService(Context.SENSOR_SERVICE), this::onButtonFire);
 
         gridRepo = new GridRepo(this.getApplication());
 
+
         //clear old gameplays
-        BackgroundExecutor.execute(new BackgroundExecutor.Task("dbdelete", 0L, "") {
-            @Override
-            public void execute() {
-                gridRepo.deleteAll();
-            }
-        });
+        gridRepo.deleteAll();
     }
 
     @Override
@@ -231,7 +232,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
         //leaveAsync(tankId);
         leaveGame();
         //try {
-            //BackgroundExecutor.cancelAll("grid_poller_task", true);
+        //BackgroundExecutor.cancelAll("grid_poller_task", true);
         //}catch(Exception e){}
         startActivity(new Intent(this, DBActivity.class));
 
@@ -268,7 +269,7 @@ public class ClientActivity extends Activity implements SensorEventListener{
 */
 
     }
-    
+
 
     @Background
     void moveAsync(long tankId, byte direction) {
@@ -301,26 +302,4 @@ public class ClientActivity extends Activity implements SensorEventListener{
         restClient.leave(tankId);
     }
 
-    // IMPLEMENTATION OF SHAKE TO FIRE BULLETS
-    @Override
-    public void onSensorChanged(SensorEvent event)
-    {
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
-
-        float gX = x / SensorManager.GRAVITY_EARTH;
-        float gY = y / SensorManager.GRAVITY_EARTH;
-        float gZ = z / SensorManager.GRAVITY_EARTH;
-
-        // gForce will be close to 1 when there is no movement.
-        float gForce = (float)Math.sqrt(gX * gX + gY * gY + gZ * gZ);
-
-        if (gForce > 2.7f) {
-                this.onButtonFire();
-            }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 }
