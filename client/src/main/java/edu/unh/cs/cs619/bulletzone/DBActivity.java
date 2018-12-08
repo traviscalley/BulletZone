@@ -15,6 +15,8 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.NonConfigurationInstance;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.api.BackgroundExecutor;
 
 import edu.unh.cs.cs619.bulletzone.database.DBGetEvent;
@@ -34,31 +36,32 @@ public class DBActivity extends AppCompatActivity {
     @Bean
     protected GridAdapter mGridAdapter;
 
+    @ViewById
     protected GridView gridView;
 
+    @Bean
     DBPollerTask dbPollerTask;
 
-    //private Object gridEventHandler = new Object()
-    //{
-    @Subscribe
-    public void onUpdateGrid(DBGetEvent event) {
-        updateGrid(event.gw);
-    }
-    //};
+    private Object gridEventHandler = new Object()
+    {
+        @Subscribe
+        public void onUpdateGrid(DBGetEvent event) {
+            updateGrid(event.gw);
+        }
+    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db);
-        busProvider = new BusProvider();
-        gridView = findViewById(R.id.gridView);
-        mGridAdapter = new GridAdapter(this);
-        gridView.setAdapter(mGridAdapter);
+        //busProvider = new BusProvider();
+        //gridView = findViewById(R.id.gridView);
+        //mGridAdapter = new GridAdapter(this);
 
-        busProvider.getEventBus().register(this);
+        //busProvider.getEventBus().register(this);
 
-        startPoller();
+        //startPoller();
     }
 
     public void onButtonReplay(View view){
@@ -101,14 +104,15 @@ public class DBActivity extends AppCompatActivity {
         dbPollerTask.setSpeed(i);
     }
 
-    /*@AfterInject
+    @AfterInject
     void afterInject() {
         //busProvider = new BusProvider();
-        gridView = findViewById(R.id.gridView);
+        //gridView = findViewById(R.id.gridView);
+        //gridView.setAdapter(mGridAdapter);
         //mGridAdapter = new GridAdapter(this);
         //gridView.setAdapter(mGridAdapter);
 
-        busProvider.getEventBus().register(this);
+        busProvider.getEventBus().register(gridEventHandler);
 
         startPoller();
     }
@@ -116,11 +120,11 @@ public class DBActivity extends AppCompatActivity {
     @AfterViews
     protected void afterViewInjection() {
         gridView.setAdapter(mGridAdapter);
-    }*/
+    }
 
     @Background(id = "dbpoller")
     protected void startPoller() {
-        dbPollerTask = new DBPollerTask(busProvider);
+        //dbPollerTask = new DBPollerTask();
         //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
         BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
 

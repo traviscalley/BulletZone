@@ -2,28 +2,53 @@ package edu.unh.cs.cs619.bulletzone.database;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.squareup.otto.Subscribe;
+
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.EBean;
 import org.androidannotations.api.BackgroundExecutor;
 
 import java.util.List;
 import java.util.function.Function;
 
+import edu.unh.cs.cs619.bulletzone.events.BusProvider;
+import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
+@EBean
 public class GridRepo {
 
     private GridDao mGridDao;
     private List<GridEntity> mAllGrids;
 
-    public GridRepo(Application application)
+    @Bean
+    BusProvider busProvider;
+
+    public GridRepo(Context application)
     {
         GridDatabase db = GridDatabase.getDatabase(application);
         mGridDao = db.gridDao();
-        //mAllGrids = mGridDao.getAll();
     }
+
+    @AfterInject
+    void afterInject() {
+        busProvider.getEventBus().register(gridEventHandler);
+    }
+
+
+    private Object gridEventHandler = new Object() {
+        @Subscribe
+        public void onUpdateGrid(GridUpdateEvent event) {
+            Log.d("fuck you", "lol");
+            insert(event.gw);
+        }
+    };
 
     /*public void startGetAll(Function<List<GridEntity>, Void> callback){
 

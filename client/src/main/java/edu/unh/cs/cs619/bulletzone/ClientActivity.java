@@ -22,6 +22,7 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.Rest;
@@ -49,7 +50,7 @@ public class ClientActivity extends Activity {
     private static final String TAG = "ClientActivity";
 
     @Bean
-    protected GridAdapter mGridAdapter;
+    GridAdapter mGridAdapter;
 
     @ViewById
     protected GridView gridView;
@@ -77,7 +78,8 @@ public class ClientActivity extends Activity {
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
-    private GridRepo gridRepo;
+    @Bean
+    GridRepo gridRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -91,7 +93,8 @@ public class ClientActivity extends Activity {
 
         sensorHandler = new SensorHandler((SensorManager) getSystemService(Context.SENSOR_SERVICE), this::onButtonFire);
 
-        gridRepo = new GridRepo(this.getApplication());
+        //mGridAdapter = new GridAdapter(this);
+        //gridRepo = new GridRepo(this.getApplication());
 
 
         //clear old gameplays
@@ -101,7 +104,7 @@ public class ClientActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        busProvider.getEventBus().unregister(gridEventHandler);
+        //busProvider.getEventBus().unregister(gridEventHandler);
     }
 
     /**
@@ -114,15 +117,15 @@ public class ClientActivity extends Activity {
      * To get around the class hierarchy limitation, one can use a separate anonymous class to
      * handle the events.
      */
-    private Object gridEventHandler = new Object()
+    /*private Object gridEventHandler = new Object()
     {
         @Subscribe
         public void onUpdateGrid(GridUpdateEvent event) {
-            updateGrid(event.gw);
+            //updateGrid(event.gw);
             //move store state to gridrepo
-            storeState(event.gw);
+            //storeState(event.gw);
         }
-    };
+    };*/
 
 
     @AfterViews
@@ -135,14 +138,14 @@ public class ClientActivity extends Activity {
     @AfterInject
     void afterInject() {
         restClient.setRestErrorHandler(bzRestErrorhandler);
-        busProvider.getEventBus().register(gridEventHandler);
+        //busProvider.getEventBus().register(gridEventHandler);
     }
 
     @Background
     void joinAsync() {
         try {
             tankId = restClient.join().getResult();
-            gridPollTask.doPoll();
+            gridPollTask.start();
             mGridAdapter.setPlayerID(tankId);
         } catch (Exception e) {
         }
@@ -234,7 +237,7 @@ public class ClientActivity extends Activity {
         //try {
         //BackgroundExecutor.cancelAll("grid_poller_task", true);
         //}catch(Exception e){}
-        startActivity(new Intent(this, DBActivity.class));
+        startActivity(new Intent(this, DBActivity_.class));
 
         /*List<GridEntity> idfk = gridRepo.getAll();//(List<GridEntity> list) -> {handlePast(list);});
 
@@ -291,14 +294,14 @@ public class ClientActivity extends Activity {
     @Background
     void leaveGame() {
         System.out.println("leaveGame() called, tank ID: "+tankId);
-        gridPollTask.stopPoll();
+        gridPollTask.end();
         restClient.leave(tankId);
     }
 
     @Background
     void leaveAsync(long tankId) {
         System.out.println("Leave called, tank ID: " + tankId);
-        gridPollTask.stopPoll();
+        gridPollTask.end();
         restClient.leave(tankId);
     }
 

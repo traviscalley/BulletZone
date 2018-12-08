@@ -1,7 +1,10 @@
 package edu.unh.cs.cs619.bulletzone.database;
 
+import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
+
+import com.squareup.otto.Bus;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
@@ -16,6 +19,7 @@ import edu.unh.cs.cs619.bulletzone.rest.GridUpdateEvent;
 import edu.unh.cs.cs619.bulletzone.ui.GridAdapter;
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
+@EBean
 public class DBPollerTask {
 
 /**
@@ -23,15 +27,13 @@ public class DBPollerTask {
  */
     private static final String TAG = "PollDB";
 
+    @Bean
     BusProvider busProvider;
 
     private int replaySpeed = 1;
     private List<GridEntity> events;
 
-    public DBPollerTask(BusProvider bs)
-    {
-        busProvider = bs;
-    }
+    //public DBPollerTask(Context c){} { }
 
     public void setSpeed(int speed)
     {
