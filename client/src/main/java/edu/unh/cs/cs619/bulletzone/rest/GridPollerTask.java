@@ -8,6 +8,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.api.BackgroundExecutor;
 import org.androidannotations.rest.spring.annotations.RestService;
 import org.androidannotations.rest.spring.api.RestClientHeaders;
 
@@ -50,5 +51,10 @@ public class GridPollerTask {
     @UiThread
     public void onGridUpdate(GridWrapper gw) {
         busProvider.getEventBus().post(new GridUpdateEvent(gw));
+    }
+
+    @Background
+    public void stopPoll(){
+        BackgroundExecutor.cancelAll("grid_poller_task", false);
     }
 }

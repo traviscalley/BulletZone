@@ -291,14 +291,14 @@ public class ClientActivity extends Activity {
     @Background
     void leaveGame() {
         System.out.println("leaveGame() called, tank ID: "+tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", false);
+        gridPollTask.stopPoll();
         restClient.leave(tankId);
     }
 
     @Background
     void leaveAsync(long tankId) {
         System.out.println("Leave called, tank ID: " + tankId);
-        BackgroundExecutor.cancelAll("grid_poller_task", false);
+        gridPollTask.stopPoll();
         restClient.leave(tankId);
     }
 
