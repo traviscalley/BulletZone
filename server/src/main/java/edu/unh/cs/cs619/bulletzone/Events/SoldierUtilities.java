@@ -10,6 +10,7 @@ import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -120,6 +121,16 @@ public abstract class SoldierUtilities
                 else
                     isCompleted = false;
             }
+            else if (nextField.isPresent() && nextField.getEntity() instanceof Powerup){
+                Powerup p = (Powerup) nextField.getEntity();
+
+                soldier.addPowerup(p);
+
+                parent.clearField();
+                nextField.setFieldEntity(soldier);
+
+                isCompleted = true;
+            }
             else
             {
                 isCompleted = false;
@@ -193,49 +204,8 @@ public abstract class SoldierUtilities
 
                         if (nextField.isPresent()) {
                             // Something is there, hit it
-                            nextField.getEntity().hit(bullet.getDamage());
-
-
-                            //TODO
-                            //all this belowthis needs to be put in the "instanceof".hit methods
-
-                            if ( nextField.getEntity() instanceof  Tank)
-                            {
-                                Tank t = (Tank) nextField.getEntity();
-
-                                if (t.getId() == bullet.getBulletId()) {
-                                    bullet.setDamage(0);
-                                }
-
-                                System.out.println("tank is hit, tank life: " + t.getLife());
-                                if (t.getLife() <= 0 ){
-                                    t.getParent().clearField();
-                                    t.setParent(null);
-                                    game.removeTank(t.getId());
-                                }
-                            }
-                            else if ( nextField.getEntity() instanceof Wall){
-                                Wall w = (Wall) nextField.getEntity();
-                                if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
-                                    //game.getHolderGrid().get(w.getPos()).clearField();
-                                    nextField.clearField();
-                                }
-                            }
-                            else if (nextField.getEntity() instanceof Soldier)
-                            {
-                                Soldier s = (Soldier) nextField.getEntity();
-
-                                if (s.getId() == bullet.getBulletId()) {
-                                    bullet.setDamage(0);
-                                }
-
-                                if (s.getLife() <= 0)
-                                {
-                                    s.getParent().clearField();
-                                    s.setParent(null);
-                                    game.removeTank(s.getId());
-                                }
-                            }
+                            //nextField.getEntity().hit(bullet.getDamage());
+                            nextField.getEntity().hit(bullet);
 
                             if (isVisible) {
                                 // Remove bullet from field

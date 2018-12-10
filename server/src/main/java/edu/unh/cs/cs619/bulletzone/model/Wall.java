@@ -33,4 +33,13 @@ public class Wall extends FieldEntity {
         return false;
     }
 
+    @Override
+    public void hit(Bullet bullet){
+        if(health != 0) {
+            if(health <= bullet.getDamage())
+                parent.clearField();
+            else
+                health -= bullet.getDamage();
+        }
+    }
 }

@@ -15,6 +15,8 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.NonConfigurationInstance;
+import org.androidannotations.annotations.ViewById;
 import org.androidannotations.api.BackgroundExecutor;
 
 import edu.unh.cs.cs619.bulletzone.database.DBGetEvent;
@@ -34,43 +36,34 @@ public class DBActivity extends AppCompatActivity {
     @Bean
     protected GridAdapter mGridAdapter;
 
+    @ViewById
     protected GridView gridView;
 
+    @Bean
     DBPollerTask dbPollerTask;
 
-    //private Object gridEventHandler = new Object()
-    //{
-    @Subscribe
-    public void onUpdateGrid(DBGetEvent event) {
-        updateGrid(event.gw);
-    }
-    //};
+    private Object gridEventHandler = new Object()
+    {
+        @Subscribe
+        public void onUpdateGrid(DBGetEvent event) {
+            updateGrid(event.gw);
+        }
+    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_db);
-        busProvider = new BusProvider();
-        gridView = findViewById(R.id.gridView);
-        mGridAdapter = new GridAdapter(this);
-        gridView.setAdapter(mGridAdapter);
-
-        busProvider.getEventBus().register(this);
-
-        startPoller();
     }
 
     public void onButtonReplay(View view){
         BackgroundExecutor.cancelAll("dbpoller", true);
-        //startPoller();
-        //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
         BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
             @Override
             public void execute() {
                 try {
                     dbPollerTask.doPoll();
-                    //GridPollerTask_.super.doPoll();
                 } catch (final Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                 }
@@ -101,14 +94,9 @@ public class DBActivity extends AppCompatActivity {
         dbPollerTask.setSpeed(i);
     }
 
-    /*@AfterInject
+    @AfterInject
     void afterInject() {
-        //busProvider = new BusProvider();
-        gridView = findViewById(R.id.gridView);
-        //mGridAdapter = new GridAdapter(this);
-        //gridView.setAdapter(mGridAdapter);
-
-        busProvider.getEventBus().register(this);
+        busProvider.getEventBus().register(gridEventHandler);
 
         startPoller();
     }
@@ -116,12 +104,10 @@ public class DBActivity extends AppCompatActivity {
     @AfterViews
     protected void afterViewInjection() {
         gridView.setAdapter(mGridAdapter);
-    }*/
+    }
 
     @Background(id = "dbpoller")
     protected void startPoller() {
-        dbPollerTask = new DBPollerTask(busProvider);
-        //dbPollerTask.doPoll(new GridRepo(this.getApplication()));
         BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
 
             @Override
@@ -129,7 +115,6 @@ public class DBActivity extends AppCompatActivity {
                 try {
                     dbPollerTask.initalizeDB(new GridRepo(getApplication()));
                     dbPollerTask.doPoll();
-                    //GridPollerTask_.super.doPoll();
                 } catch (final Throwable e) {
                     Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
                 }

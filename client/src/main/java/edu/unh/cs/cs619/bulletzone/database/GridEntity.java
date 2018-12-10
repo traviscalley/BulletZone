@@ -4,7 +4,6 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 

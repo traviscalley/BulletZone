@@ -20,6 +20,7 @@ public final class Game {
     //this will hold what's "under" the holder grid, like water and hills
     private final ArrayList<FieldHolder> terrainGrid = new ArrayList<>();
 
+    //list of playable instead???
     private final ConcurrentMap<Long, Tank> tanks = new ConcurrentHashMap<>();
     private final ConcurrentMap<Long, Ship> ships = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Long> playersIP = new ConcurrentHashMap<>();

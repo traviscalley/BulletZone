@@ -11,6 +11,8 @@ import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 public abstract class PlayableObject extends FieldEntity {
     private static final String TAG = "AbstractPlayable";
 
+    protected Game game;
+
     protected final long id;
     protected final String ip;
 
@@ -28,6 +30,7 @@ public abstract class PlayableObject extends FieldEntity {
 
     protected int life;
 
+
     protected Direction direction;
 
     //just one powerup for now
@@ -38,23 +41,32 @@ public abstract class PlayableObject extends FieldEntity {
     protected Stack<PlayableConfig> stateStack = new Stack<>();
     //protected PlayableConfig initState;
 
-    public PlayableObject(long id, Direction direction, String ip) {
+    public PlayableObject(long id, Direction direction, String ip, Game g) {
         this.id = id;
         this.direction = direction;
         this.ip = ip;
+        this.game = g;
         //initState = makeConfig();
 
     }
 
     @Override
     public FieldEntity copy() {
-        return new Tank(id, direction, ip);
+        return new Tank(id, direction, ip, game);
     }
 
     @Override
-    public void hit(int damage) {
-        life = life - damage;
-        System.out.println("PlayableObject life: " + id + " : " + life);
+    public void hit(Bullet bullet) {
+        if (id == bullet.getBulletId()) {
+            bullet.setDamage(0);
+        }
+        life -= bullet.getDamage();
+
+        if (life <= 0) {
+            parent.clearField();
+            parent = null;
+            game.removeTank(id);
+        }
     }
 
     public long getLastMoveTime() {
@@ -188,13 +200,15 @@ public abstract class PlayableObject extends FieldEntity {
     }
 
     //called by eject and when it gets hit
-    public void remove1Powerup(){
+    public boolean remove1Powerup(){
         if(powerupN != 0) {
             stateStack.pop();
             setConfig(stateStack.peek());
             powerupStack.pop();
             powerupN--;
+            return true;
         }
+        return false;
     }
 
     protected void setConfig(PlayableConfig config) {

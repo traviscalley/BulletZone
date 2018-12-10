@@ -15,6 +15,8 @@ import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
+import edu.unh.cs.cs619.bulletzone.model.Water;
+import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
@@ -58,7 +60,7 @@ public abstract class TankUtilities
                 throw new TankDoesNotExistException(tankId);
             }
 
-            if (tank.getEjected())
+            if (tank.getEjected() == true)
                 return SoldierUtilities.turn(tankId, direction);
 
             long millis = System.currentTimeMillis();
@@ -143,8 +145,19 @@ public abstract class TankUtilities
             }
             else if (nextField.getEntity() instanceof DebrisField ||
                      nextField.getEntity() instanceof Hill ||
-                     nextField.getEntity() instanceof Coast)
+                     nextField.getEntity() instanceof Coast ||
+                     nextField.getEntity() instanceof Water)
             {
+                parent.clearField();
+                nextField.setFieldEntity(tank);
+
+                isCompleted = true;
+            }
+            else if (nextField.isPresent() && nextField.getEntity() instanceof Powerup){
+                Powerup p = (Powerup) nextField.getEntity();
+
+                tank.addPowerup(p);
+
                 parent.clearField();
                 nextField.setFieldEntity(tank);
 
@@ -171,6 +184,18 @@ public abstract class TankUtilities
         }
     }
 
+    public static boolean ejectPowerup(long tankId)
+            throws TankDoesNotExistException
+    {
+        synchronized (monitor) {
+            Tank tank = game.getTanks().get(tankId);
+            if (tank == null)
+                throw new TankDoesNotExistException(tankId);
+
+            return tank.remove1Powerup();
+        }
+    }
+
     public static boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException {
         synchronized (monitor) {
@@ -181,15 +206,16 @@ public abstract class TankUtilities
                 throw new TankDoesNotExistException(tankId);
             }
 
-            if (tank.getEjected())
+            if (tank.getEjected() == true)
                 return SoldierUtilities.fire(tankId, bulletType);
 
             if(tank.getNumberOfBullets() >= tank.getAllowedNumberOfBullets())
                 return false;
 
             long millis = System.currentTimeMillis();
-            if(millis < tank.getLastFireTime())
+            if(millis < tank.getLastFireTime()/*>tank.getAllowedFireInterval()*/){
                 return false;
+            }
 
             Direction direction = tank.getDirection();
             FieldHolder parent = tank.getParent();
@@ -242,34 +268,7 @@ public abstract class TankUtilities
 
                         if (nextField.isPresent()) {
                             // Something is there, hit it
-                            nextField.getEntity().hit(bullet.getDamage());
-
-                            if ( nextField.getEntity() instanceof  Tank){
-                                Tank t = (Tank) nextField.getEntity();
-                                System.out.println("tank is hit, tank life: " + t.getLife());
-                                if (t.getLife() <= 0 ){
-                                    t.getParent().clearField();
-                                    t.setParent(null);
-                                    game.removeTank(t.getId());
-                                }
-                            }
-                            else if ( nextField.getEntity() instanceof Wall){
-                                Wall w = (Wall) nextField.getEntity();
-                                if (w.getIntValue() >1000 && w.getIntValue()<=2000 ){
-                                    //game.getHolderGrid().get(w.getPos()).clearField();
-                                    nextField.clearField();
-                                }
-                            }
-                            else if (nextField.getEntity() instanceof Soldier)
-                            {
-                                Soldier s = (Soldier) nextField.getEntity();
-                                if (s.getLife() <= 0)
-                                {
-                                    s.getParent().clearField();
-                                    s.setParent(null);
-                                    game.removeTank(s.getId());
-                                }
-                            }
+                            nextField.getEntity().hit(bullet);
 
                             if (isVisible) {
                                 // Remove bullet from field

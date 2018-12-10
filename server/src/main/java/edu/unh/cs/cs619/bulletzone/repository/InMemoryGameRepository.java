@@ -120,7 +120,7 @@ public class InMemoryGameRepository implements GameRepository {
 
             Long tankId = this.idGenerator.getAndIncrement();
 
-            tank = new Tank(tankId, Direction.Up, ip);
+            tank = new Tank(tankId, Direction.Up, ip, game);
             tank.setLife(TANK_LIFE);
 
             Random random = new Random();
@@ -220,65 +220,7 @@ public class InMemoryGameRepository implements GameRepository {
                 }
             }, 0, 1000);
 
-            //UIthread
-            /*Runnable spawnPowerup = () -> {
-                if(Math.random() < 1.0/20)
-                {
-
-                }
-            };*/
-            //UIThread
-            //BackgroundExecutor.execute(new BackgroundExecutor.Task("dbpoller", 0L, "") {
-
         }
-
-
-            // Test // TODO XXX Remove & integrate map loader
-            /*game.getHolderGrid().get(1).setFieldEntity(new Wall());
-            game.getHolderGrid().get(2).setFieldEntity(new Wall());
-            game.getHolderGrid().get(3).setFieldEntity(new Wall());
-
-            game.getHolderGrid().get(17).setFieldEntity(new Wall());
-            game.getHolderGrid().get(33).setFieldEntity(new Wall(1500, 33));
-            game.getHolderGrid().get(49).setFieldEntity(new Wall(1500, 49));
-            game.getHolderGrid().get(65).setFieldEntity(new Wall(1500, 65));
-
-            game.getHolderGrid().get(34).setFieldEntity(new Wall());
-            game.getHolderGrid().get(66).setFieldEntity(new Wall(1500, 66));
-
-            game.getHolderGrid().get(35).setFieldEntity(new Wall());
-            game.getHolderGrid().get(51).setFieldEntity(new Wall());
-            game.getHolderGrid().get(67).setFieldEntity(new Wall(1500, 67));
-
-            game.getHolderGrid().get(5).setFieldEntity(new Wall());
-            game.getHolderGrid().get(21).setFieldEntity(new Wall());
-            game.getHolderGrid().get(37).setFieldEntity(new Wall());
-            game.getHolderGrid().get(53).setFieldEntity(new Wall());
-            game.getHolderGrid().get(69).setFieldEntity(new Wall(1500, 69));
-
-            game.getHolderGrid().get(7).setFieldEntity(new Wall());
-            game.getHolderGrid().get(23).setFieldEntity(new Wall());
-            game.getHolderGrid().get(39).setFieldEntity(new Wall());
-            game.getHolderGrid().get(71).setFieldEntity(new Wall(1500, 71));
-
-            game.getHolderGrid().get(8).setFieldEntity(new Wall());
-            game.getHolderGrid().get(40).setFieldEntity(new Wall());
-            game.getHolderGrid().get(72).setFieldEntity(new Wall(1500, 72));
-
-            game.getHolderGrid().get(9).setFieldEntity(new Wall());
-            game.getHolderGrid().get(25).setFieldEntity(new Wall());
-            game.getHolderGrid().get(41).setFieldEntity(new Wall());
-            game.getHolderGrid().get(57).setFieldEntity(new Wall());
-            game.getHolderGrid().get(73).setFieldEntity(new Wall());
-
-            game.getHolderGrid().get(199).setFieldEntity(new DebrisField());
-            game.getHolderGrid().get(200).setFieldEntity(new DebrisField());
-            game.getHolderGrid().get(201).setFieldEntity(new DebrisField());
-
-            game.getHolderGrid().get(105).setFieldEntity(new Hill());
-            game.getHolderGrid().get(104).setFieldEntity(new Hill());
-            game.getHolderGrid().get(103).setFieldEntity(new Hill());
-            game.getHolderGrid().get(106).setFieldEntity(new Hill());*/
     }
 
     private void addPowerUp(int target) {
@@ -317,15 +259,6 @@ public class InMemoryGameRepository implements GameRepository {
                     waters++;
                 }
 
-                /*grid.get(seed).getNeighbor(Direction.Down).setFieldEntity(new Water());
-                temp.setParent(grid.get(seed));
-                waters++;
-                grid.get(seed).getNeighbor(Direction.Right).setFieldEntity(new Water());
-                temp.setParent(grid.get(seed));
-                waters++;
-                grid.get(seed).getNeighbor(Direction.Left).setFieldEntity(new Water());
-                temp.setParent(grid.get(seed));
-                waters++;*/
             }
             catch (Exception e){}// neighbor was off the edge, ignore
 
@@ -375,7 +308,7 @@ public class InMemoryGameRepository implements GameRepository {
             ArrayList<FieldHolder> holderGrid = game.getHolderGrid();
 
             int firstWall = random.nextInt(256);
-            while(!grid.get(firstWall).isPresent() && !holderGrid.get(firstWall).isPresent())
+            while(grid.get(firstWall).isPresent() || holderGrid.get(firstWall).isPresent())
                 firstWall = random.nextInt(256);
 
 
@@ -389,8 +322,11 @@ public class InMemoryGameRepository implements GameRepository {
                         continue;
 
                     //generate walls
-                    if (holderGrid.get(cell).getNeighbor(Direction.Up).getEntity() instanceof Wall ||
-                            holderGrid.get(cell).getNeighbor(Direction.Right).getEntity() instanceof Wall){
+                    FieldHolder up = holderGrid.get(cell).getNeighbor(Direction.Up);
+                    FieldHolder right = holderGrid.get(cell).getNeighbor(Direction.Right);
+
+                    if ((up.isPresent() && up.getEntity() instanceof Wall) ||
+                            (right.isPresent() && right.getEntity() instanceof Wall)){
 
                         if(random.nextBoolean())
                             holderGrid.get(cell).setFieldEntity(new Wall());

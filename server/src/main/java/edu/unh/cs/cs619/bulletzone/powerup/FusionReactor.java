@@ -3,7 +3,7 @@ package edu.unh.cs.cs619.bulletzone.powerup;
 import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 
-public class FusionReactor extends FieldEntity implements Powerup {
+public class FusionReactor extends Powerup {
     @Override
     public int getIntValue() {
         return 7 * 10000000;
@@ -12,16 +12,6 @@ public class FusionReactor extends FieldEntity implements Powerup {
     @Override
     public FieldEntity copy() {
         return new FusionReactor();
-    }
-
-    @Override
-    public boolean powerupSpawnable() {
-        return false;
-    }
-
-    @Override
-    public boolean tankSpawnable() {
-        return false;
     }
 
     @Override

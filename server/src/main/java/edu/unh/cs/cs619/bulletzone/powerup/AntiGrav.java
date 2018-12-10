@@ -3,7 +3,7 @@ package edu.unh.cs.cs619.bulletzone.powerup;
 import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 
-public class AntiGrav extends FieldEntity implements Powerup {
+public class AntiGrav extends Powerup {
     @Override
     public int getIntValue() {
         return 6 * 10000000;
@@ -12,15 +12,6 @@ public class AntiGrav extends FieldEntity implements Powerup {
     @Override
     public FieldEntity copy() {
         return new AntiGrav();
-    }
-
-    @Override
-    public boolean powerupSpawnable() {
-        return false;
-    }
-    @Override
-    public boolean tankSpawnable() {
-        return false;
     }
 
     @Override

@@ -104,6 +104,16 @@
                 android:orientation="vertical" />
         </ScrollView>
 
+        <Button
+            android:id="@+id/buttonEjectP"
+            android:layout_width="wrap_content"
+            android:layout_height="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="184dp"
+            android:layout_marginEnd="0dp"
+            android:text="Eject Power" />
+
     </RelativeLayout>
 
 </LinearLayout>

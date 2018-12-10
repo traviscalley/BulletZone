@@ -17,4 +17,7 @@ public class Water extends FieldEntity{
     public boolean tankSpawnable() {
         return false;
     }
+
+    @Override
+    public void hit(Bullet bullet){}
 }

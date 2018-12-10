@@ -25,20 +25,10 @@ public abstract class FieldEntity {
 
     public abstract FieldEntity copy();
 
-    public void hit(int damage) {
-    }
+    public abstract void hit(Bullet bullet);
 
     public abstract boolean powerupSpawnable();
 
     public abstract boolean tankSpawnable();
 
-    /*public static final void registerEventBusListener(Object listener) {
-        checkNotNull(listener);
-        eventBus.register(listener);
-    }
-
-    public static final void unregisterEventBusListener(Object listener) {
-        checkNotNull(listener);
-        eventBus.unregister(listener);
-    }*/
 }

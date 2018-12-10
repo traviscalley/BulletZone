@@ -49,6 +49,9 @@ public interface BulletZoneRestClient extends RestClientErrorHandling {
     @Put("/{tankId}/eject/0")
     BooleanWrapper eject(@Path long tankId);
 
+    @Put("/{tankId}/ejectP")
+    BooleanWrapper ejectP(@Path long tankId);
+
     @Put("/select/{selected}")
     BooleanWrapper select(@Path boolean selected);
 

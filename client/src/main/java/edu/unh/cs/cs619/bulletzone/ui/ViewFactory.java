@@ -52,7 +52,7 @@ public class ViewFactory {
         layers[3] = context.getDrawable(R.drawable.empty);
 
         int dir = value % 10;
-        int health = (value/10) % 1000;
+        double health = (value/10) % 1000;
         int tankID = (value/10000) % 1000;
         int objectType = (value/ 10000000) % 10;
         int terrainType = value / 100000000;
@@ -82,26 +82,14 @@ public class ViewFactory {
             int obj = R.drawable.empty;
             switch (objectType){
                 case TANK:
-                    //if(tankID == myID) {
-                        if (dir == 0)
-                            obj = R.drawable.user_tank_up;
-                        else if (dir == 2)
-                            obj = R.drawable.user_tank_right;
-                        else if (dir == 4)
-                            obj = R.drawable.user_tank_down;
-                        else if (dir == 6)
-                            obj = R.drawable.user_tank_left;
-                    /*}
-                    else {
-                        if (dir == 0)
-                            obj = R.drawable.enemy_tank_up;
-                        else if (dir == 2)
-                            obj = R.drawable.enemy_tank_right;
-                        else if (dir == 4)
-                            obj = R.drawable.enemy_tank_down;
-                        else if (dir == 6)
-                            obj = R.drawable.enemy_tank_left;
-                    }*/
+                    if (dir == 0)
+                        obj = R.drawable.user_tank_up;
+                    else if (dir == 2)
+                        obj = R.drawable.user_tank_right;
+                    else if (dir == 4)
+                        obj = R.drawable.user_tank_down;
+                    else if (dir == 6)
+                        obj = R.drawable.user_tank_left;
                     break;
                 case SOLDIER:
                     if (dir == 0)
@@ -142,7 +130,7 @@ public class ViewFactory {
         //set health
         if(health != 0) {
             int hea = R.drawable.empty;
-            int total = -1;
+            double total = -1;
 
             switch (objectType){
                 case TANK:
@@ -161,7 +149,7 @@ public class ViewFactory {
 
             }
 
-            long percentage = (long)health/total;
+            double percentage = health/total;
             if(percentage == 0.0)
                 hea = R.drawable.health_0;
             else if(percentage > 0.0 && percentage <= 0.3)

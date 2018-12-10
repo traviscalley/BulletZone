@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.otto.Subscribe;
 
 public class HealthViewAdapter {
     Context context;
