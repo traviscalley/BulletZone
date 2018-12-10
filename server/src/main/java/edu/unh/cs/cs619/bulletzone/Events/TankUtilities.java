@@ -11,6 +11,7 @@ import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.Hill;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
@@ -55,7 +56,11 @@ public abstract class TankUtilities
             checkNotNull(direction);
 
             // Find user
-            Tank tank = game.getTanks().get(tankId);
+            Tank tank = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+
             if (tank == null) {
                 throw new TankDoesNotExistException(tankId);
             }
@@ -97,7 +102,12 @@ public abstract class TankUtilities
             // Find tank
             FieldEntity prev = null;
 
-            Tank tank = game.getTanks().get(tankId);
+            // Find user
+            Tank tank = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+
             if (tank == null) {
                 throw new TankDoesNotExistException(tankId);
             }
@@ -176,7 +186,11 @@ public abstract class TankUtilities
             throws TankDoesNotExistException
     {
         synchronized (monitor) {
-            Tank tank = game.getTanks().get(tankId);
+            // Find user
+            Tank tank = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
             if (tank == null)
                 throw new TankDoesNotExistException(tankId);
 
@@ -188,7 +202,11 @@ public abstract class TankUtilities
             throws TankDoesNotExistException
     {
         synchronized (monitor) {
-            Tank tank = game.getTanks().get(tankId);
+            // Find user
+            Tank tank = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
             if (tank == null)
                 throw new TankDoesNotExistException(tankId);
 
@@ -200,8 +218,14 @@ public abstract class TankUtilities
             throws TankDoesNotExistException {
         synchronized (monitor) {
 
-            // Find tank
-            Tank tank = game.getTanks().get(tankId);
+            // Find user
+            Tank tank;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+            else
+                tank = null;
+
             if (tank == null) {
                 throw new TankDoesNotExistException(tankId);
             }

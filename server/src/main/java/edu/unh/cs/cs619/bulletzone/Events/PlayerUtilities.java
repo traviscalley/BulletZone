@@ -15,12 +15,10 @@ public abstract class PlayerUtilities
     public static boolean turn(long id, Direction direction)
             throws TankDoesNotExistException
     {
-        PlayableObject player = game.getShips().get(id);
+        PlayableObject player = game.getPlayers().get(id);
 
         if (player instanceof Ship && player != null)
             return ShipUtilities.turn(id, direction);
-
-        player = game.getTanks().get(id);
 
         if (player instanceof Tank)
             return TankUtilities.turn(id, direction);
@@ -31,12 +29,10 @@ public abstract class PlayerUtilities
     public static boolean move(long id, Direction direction)
             throws TankDoesNotExistException
     {
-        PlayableObject player = game.getShips().get(id);
+        PlayableObject player = game.getPlayers().get(id);
 
         if (player instanceof Ship && player != null)
             return ShipUtilities.move(id, direction);
-
-        player = game.getTanks().get(id);
 
         if (player instanceof Tank)
             return TankUtilities.move(id, direction);
@@ -47,12 +43,10 @@ public abstract class PlayerUtilities
     public static boolean fire(long id, int bulletType)
             throws TankDoesNotExistException
     {
-        PlayableObject player = game.getShips().get(id);
+        PlayableObject player = game.getPlayers().get(id);
 
         if (player instanceof Ship && player != null)
             return ShipUtilities.fire(id, bulletType);
-
-        player = game.getTanks().get(id);
 
         if (player instanceof Tank)
             return TankUtilities.fire(id, bulletType);
@@ -63,7 +57,7 @@ public abstract class PlayerUtilities
     public static boolean ejectSoldier(long id)
             throws TankDoesNotExistException
     {
-        PlayableObject player = game.getShips().get(id);
+        PlayableObject player = game.getPlayers().get(id);
 
         if (player instanceof Tank && player != null)
             return TankUtilities.ejectSoldier(id);

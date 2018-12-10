@@ -17,6 +17,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.NonConfigurationInstance;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.rest.spring.annotations.RestService;
 
@@ -31,7 +32,6 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 
 @EActivity(R.layout.activity_client)
 public class ClientActivity extends Activity {
-
     private static final String TAG = "ClientActivity";
 
     @Bean
@@ -55,10 +55,8 @@ public class ClientActivity extends Activity {
 
     SensorHandler sensorHandler;
 
-    /**
-     * Remote tank identifier
-     */
     private long tankId = -1;
+    private boolean isTank;
 
     @Bean
     GridRepo gridRepo;
@@ -70,8 +68,12 @@ public class ClientActivity extends Activity {
 
         sensorHandler = new SensorHandler((SensorManager) getSystemService(Context.SENSOR_SERVICE), this::onButtonFire);
 
-        //clear old gameplays
+        //clear old replays
         gridRepo.deleteAll();
+
+        // Select tank or ship
+        Intent intent = getIntent();
+        isTank = intent.getBooleanExtra("tankBoolean", true);
     }
 
     @Override
@@ -108,7 +110,7 @@ public class ClientActivity extends Activity {
 
     @Background(id = "grid_insert")
     public void storeState(GridWrapper gw){
-        gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
+            gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
     }
 
     /**
@@ -139,7 +141,6 @@ public class ClientActivity extends Activity {
      * Allows the soldier to eject from tank.
      * @param view View
      */
-    @Background
     @Click(R.id.buttonEject)
     protected void onButtonEject(View view) {
         restClient.eject(tankId);
@@ -149,7 +150,6 @@ public class ClientActivity extends Activity {
      * Allows the soldier to eject from tank.
      * @param view View
      */
-    @Background
     @Click(R.id.buttonEjectP)
     protected void onButtonEjectPower(View view) {
         restClient.ejectP(tankId);
@@ -179,15 +179,6 @@ public class ClientActivity extends Activity {
     }
 
     @Background
-    @Click(R.id.buttonReplay)
-    protected void onButtonReplay(View view){
-        leaveGame();
-
-        startActivity(new Intent(this, DBActivity_.class));
-    }
-
-
-    @Background
     void moveAsync(long tankId, byte direction) {
         restClient.move(tankId, direction);
     }
@@ -204,11 +195,11 @@ public class ClientActivity extends Activity {
     }
 
     @Click(R.id.buttonLeave)
-    @Background
     void leaveGame() {
         System.out.println("leaveGame() called, tank ID: "+tankId);
         gridPollTask.end();
         restClient.leave(tankId);
+        startActivity(new Intent(this, MainScreenActivity_.class));
     }
 
     @Background
@@ -217,5 +208,4 @@ public class ClientActivity extends Activity {
         gridPollTask.end();
         restClient.leave(tankId);
     }
-
 }

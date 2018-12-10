@@ -23,7 +23,7 @@ public class SoldierUtilitiesTest {
 
     @Test
     public void turn() throws Exception{
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertTrue(tank.eject());
 
         Soldier s = tank.getSoldier();
@@ -36,7 +36,7 @@ public class SoldierUtilitiesTest {
 
     @Test
     public void move() throws Exception{
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertTrue(tank.eject());
 
         Soldier s = tank.getSoldier();
@@ -55,7 +55,7 @@ public class SoldierUtilitiesTest {
 
     @Test
     public void fire() throws Exception{
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertTrue(tank.eject());
 
         Soldier s = tank.getSoldier();

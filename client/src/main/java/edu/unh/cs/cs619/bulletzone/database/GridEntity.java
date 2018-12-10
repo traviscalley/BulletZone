@@ -10,7 +10,7 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 @Entity(tableName = "gridTable")
 public class GridEntity {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "time")
     private long timestamp;

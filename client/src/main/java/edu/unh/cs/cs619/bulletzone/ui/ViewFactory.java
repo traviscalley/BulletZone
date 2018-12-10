@@ -101,8 +101,14 @@ public class ViewFactory {
                     else if (dir == 6)
                         obj = R.drawable.soldier_left;
                 case SHIP:
-                    ///obj = R.drawable.ship_up;
-                    //add more later
+                    if (dir == 0)
+                        obj = R.drawable.boat_up;
+                    else if (dir == 2)
+                        obj = R.drawable.boat_right;
+                    else if (dir == 4)
+                        obj = R.drawable.boat_down;
+                    else if ( dir == 6)
+                        obj = R.drawable.boat_left;
                     break;
                 case BULLET:
                     obj = R.drawable.bullet;

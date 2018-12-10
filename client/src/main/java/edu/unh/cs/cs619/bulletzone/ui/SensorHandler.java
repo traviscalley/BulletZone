@@ -12,7 +12,6 @@ public class SensorHandler implements SensorEventListener {
 
     public SensorHandler(SensorManager sensorManager, Runnable doit){
         this.todo = doit;
-        //mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         Sensor mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -33,7 +32,6 @@ public class SensorHandler implements SensorEventListener {
         if (gForce > 2.7f) {
             BackgroundExecutor.execute(todo);
         }
-
     }
 
     @Override

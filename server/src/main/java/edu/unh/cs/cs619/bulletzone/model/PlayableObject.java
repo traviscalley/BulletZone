@@ -65,7 +65,7 @@ public abstract class PlayableObject extends FieldEntity {
         if (life <= 0) {
             parent.clearField();
             parent = null;
-            game.removeTank(id);
+            game.removePlayer(id);
         }
     }
 

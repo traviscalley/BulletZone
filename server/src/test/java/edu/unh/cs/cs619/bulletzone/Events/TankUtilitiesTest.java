@@ -26,7 +26,7 @@ public class TankUtilitiesTest {
 
     @Test
     public void turn() throws Exception{
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
@@ -48,7 +48,7 @@ public class TankUtilitiesTest {
 
     @Test
     public void move() throws Exception{
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
@@ -78,7 +78,7 @@ public class TankUtilitiesTest {
 
     @Test
     public void fire() throws Exception {
-        Tank tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        Tank tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getParent());

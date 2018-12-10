@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Ship extends PlayableObject
 {
-    public Ship(long id, Direction direction, String ip)
+    public Ship(long id, Direction direction, String ip, Game game)
     {
-        super(id, direction, ip);
+        super(id, direction, ip, game);
         numberOfBullets = 0;
         allowedNumberOfBullets = 8;
         lastFireTime = 0;
@@ -23,7 +23,7 @@ public class Ship extends PlayableObject
 
     @Override
     public FieldEntity copy() {
-        return new Tank(id, direction, ip);
+        return new Ship(id, direction, ip, game);
     }
 
     @Override

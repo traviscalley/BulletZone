@@ -7,6 +7,7 @@ import edu.unh.cs.cs619.bulletzone.model.Bullet;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
@@ -48,7 +49,10 @@ public abstract class SoldierUtilities
             checkNotNull(direction);
 
             // Find user
-            Soldier soldier = game.getTanks().get(tankId).getSoldier();
+            Soldier soldier = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Soldier)
+                soldier = (Soldier)tmp;
 
             byte rotation;
             if(direction == Direction.Right)
@@ -75,9 +79,11 @@ public abstract class SoldierUtilities
     public static boolean move(long tankId, Direction direction)
     {
         synchronized (monitor) {
-            // Find tank
-
-            Soldier soldier = game.getTanks().get(tankId).getSoldier();
+            // Find user
+            Soldier soldier = null;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Soldier)
+                soldier = (Soldier)tmp;
 
             int terrainType = soldier.getParent().getEntity().getIntValue();
 
@@ -142,9 +148,13 @@ public abstract class SoldierUtilities
     public static boolean fire(long tankId, int bulletType)
     {
         synchronized (monitor) {
-
-            // Find tank
-            Soldier soldier = game.getTanks().get(tankId).getSoldier();
+            // Find user
+            Soldier soldier;
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Soldier)
+                soldier = (Soldier)tmp;
+            else
+                soldier = null;
 
             if(soldier.getNumberOfBullets() >= soldier.getAllowedNumberOfBullets())
                 return false;

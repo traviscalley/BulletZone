@@ -1,25 +1,15 @@
 package edu.unh.cs.cs619.bulletzone.repository;
 
-import com.google.common.base.Optional;
-
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-//import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-
 import edu.unh.cs.cs619.bulletzone.Events.PlayerUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.SoldierUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
-import edu.unh.cs.cs619.bulletzone.model.Bullet;
 import edu.unh.cs.cs619.bulletzone.model.Coast;
 import edu.unh.cs.cs619.bulletzone.model.DebrisField;
 import edu.unh.cs.cs619.bulletzone.model.Direction;
@@ -27,32 +17,18 @@ import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.Hill;
-import edu.unh.cs.cs619.bulletzone.model.IllegalTransitionException;
-import edu.unh.cs.cs619.bulletzone.model.LimitExceededException;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Ship;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
 import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
 import edu.unh.cs.cs619.bulletzone.model.Water;
-import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 import edu.unh.cs.cs619.bulletzone.powerup.PowerupFactory;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static edu.unh.cs.cs619.bulletzone.model.Direction.fromByte;
-import static edu.unh.cs.cs619.bulletzone.model.Direction.toByte;
 
 @Component
 public class InMemoryGameRepository implements GameRepository {
 
-    /**
-     * Field dimensions
-     */
     private static final int FIELD_DIM = 16;
-
-    /**
-     * Tank's default life [life]
-     */
     private static final int TANK_LIFE = 100;
     private static final int SHIP_LIFE = 100;
     private final AtomicLong idGenerator = new AtomicLong();
@@ -71,18 +47,17 @@ public class InMemoryGameRepository implements GameRepository {
     public Ship joinShip(String ip)
     {
         synchronized (this.monitor) {
-            Ship ship;
+            PlayableObject ship;
             if (game == null) {
                 this.create();
             }
-
-            if( (ship = game.getShip(ip)) != null){
-                return ship;
+            if( (ship = game.getPlayer(ip)) != null && ship instanceof Ship){
+                return (Ship)ship;
             }
 
             Long id = this.idGenerator.getAndIncrement();
 
-            ship = new Ship(id, Direction.Up, ip);
+            ship = new Ship(id, Direction.Up, ip, game);
             ship.setLife(SHIP_LIFE);
 
             Random random = new Random();
@@ -93,29 +68,28 @@ public class InMemoryGameRepository implements GameRepository {
                 x = random.nextInt(FIELD_DIM);
                 y = random.nextInt(FIELD_DIM);
                 FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
-                if (fieldElement != null && fieldElement.getEntity() instanceof Water) {
+                if (fieldElement != null && fieldElement.getEntity() instanceof Water ||
+                        fieldElement != null && fieldElement.getEntity() instanceof Coast) {
                     fieldElement.setFieldEntity(ship);
-                    ship.setParent(fieldElement);
+                    //ship.setParent(fieldElement);
                     break;
                 }
             }
+            game.addPlayer(ip, ship);
 
-            game.addShip(ip, ship);
-
-            return ship;
+            return (Ship)ship;
         }
     }
 
     public Tank joinTank(String ip)
     {
         synchronized (this.monitor) {
-            Tank tank;
+            PlayableObject tank;
             if (game == null) {
                 this.create();
             }
-
-            if( (tank = game.getTank(ip)) != null){
-                return tank;
+            if( (tank = game.getPlayer(ip)) != null && tank instanceof Tank){
+                return (Tank)tank;
             }
 
             Long tankId = this.idGenerator.getAndIncrement();
@@ -140,21 +114,19 @@ public class InMemoryGameRepository implements GameRepository {
                     break;
                 }
             }
+            game.addPlayer(ip, tank);
 
-            game.addTank(ip, tank);
-
-            return tank;
+            return (Tank)tank;
         }
     }
 
     @Override
     public PlayableObject join(String ip) {
         synchronized (this.monitor) {
-//            if (isTank)
-//                return joinTank(ip);
-//            else
-//                return joinShip(ip);
-            return joinTank(ip);
+            if (isTank)
+                return joinTank(ip);
+            else
+                return joinShip(ip);
         }
     }
 
@@ -172,25 +144,16 @@ public class InMemoryGameRepository implements GameRepository {
     public void leave(long tankId)
             throws TankDoesNotExistException {
         synchronized (this.monitor) {
-            if (!this.game.getTanks().containsKey(tankId) ||
-                    !this.game.getShips().containsKey(tankId)) {
+            if (!this.game.getPlayers().containsKey(tankId)) {
                 throw new TankDoesNotExistException(tankId);
             }
 
             System.out.println("leave() called, tank ID: " + tankId);
 
-            if (isTank) {
-                Tank tank = game.getTanks().get(tankId);
-                FieldHolder parent = tank.getParent();
-                parent.clearField();
-                game.removeTank(tankId);
-            }
-            else {
-                Ship ship = game.getShips().get(tankId);
-                FieldHolder parent = ship.getParent();
-                parent.clearField();
-                game.removeShip(tankId);
-            }
+            PlayableObject playerObj = game.getPlayers().get(tankId);
+            FieldHolder parent = playerObj.getParent();
+            parent.clearField();
+            game.removePlayer(tankId);
         }
     }
 

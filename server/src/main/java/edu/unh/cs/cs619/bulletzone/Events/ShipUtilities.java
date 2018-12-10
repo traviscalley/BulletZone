@@ -9,6 +9,7 @@ import edu.unh.cs.cs619.bulletzone.model.Direction;
 import edu.unh.cs.cs619.bulletzone.model.FieldEntity;
 import edu.unh.cs.cs619.bulletzone.model.FieldHolder;
 import edu.unh.cs.cs619.bulletzone.model.Game;
+import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Ship;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
@@ -41,9 +42,13 @@ public abstract class ShipUtilities
     {
         synchronized (monitor) {
             checkNotNull(direction);
+            Ship ship = null;
 
             // Find user
-            Ship ship = game.getShips().get(tankId);
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Ship)
+                ship = (Ship)tmp;
+
             if (ship == null) {
                 throw new TankDoesNotExistException(tankId);
             }
@@ -82,7 +87,12 @@ public abstract class ShipUtilities
             // Find tank
             FieldEntity prev = null;
 
-            Ship ship = game.getShips().get(tankId);
+            Ship ship = null;
+            // Find user
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Ship)
+                ship = (Ship)tmp;
+
             if (ship == null) {
                 throw new TankDoesNotExistException(tankId);
             }
@@ -136,9 +146,15 @@ public abstract class ShipUtilities
     public static boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException {
         synchronized (monitor) {
+            Ship ship;
 
-            // Find tank
-            Ship ship = game.getShips().get(tankId);
+            // Find user
+            PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp instanceof Ship)
+                ship = (Ship)tmp;
+            else
+                ship = null;
+
             if (ship == null) {
                 throw new TankDoesNotExistException(tankId);
             }
@@ -185,7 +201,7 @@ public abstract class ShipUtilities
                     synchronized (monitor) {
                         int prev_dmg = bullet.getDamage();
 
-                        System.out.println("Active Bullet: "+ship.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
+                        System.out.println("Active Bullet: "+ ship.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
                         FieldHolder currentField = bullet.getParent();
                         Direction direction = bullet.getDirection();
                         FieldHolder nextField = currentField
@@ -201,7 +217,7 @@ public abstract class ShipUtilities
 
                         if (nextField.isPresent()) {
                             // Something is there, hit it
-                            nextField.getEntity().hit(bullet.getDamage());
+                            nextField.getEntity().hit(bullet);
 
                             if ( nextField.getEntity() instanceof  Tank){
                                 Tank t = (Tank) nextField.getEntity();
@@ -209,7 +225,7 @@ public abstract class ShipUtilities
                                 if (t.getLife() <= 0 ){
                                     t.getParent().clearField();
                                     t.setParent(null);
-                                    game.removeTank(t.getId());
+                                    game.removePlayer(t.getId());
                                 }
                             }
                             else if ( nextField.getEntity() instanceof Wall){
@@ -226,7 +242,7 @@ public abstract class ShipUtilities
                                 {
                                     s.getParent().clearField();
                                     s.setParent(null);
-                                    game.removeTank(s.getId());
+                                    game.removePlayer(s.getId());
                                 }
                             }
 

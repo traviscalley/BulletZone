@@ -21,10 +21,8 @@ public final class Game {
     private final ArrayList<FieldHolder> terrainGrid = new ArrayList<>();
 
     //list of playable instead???
-    private final ConcurrentMap<Long, Tank> tanks = new ConcurrentHashMap<>();
-    private final ConcurrentMap<Long, Ship> ships = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, PlayableObject> players = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Long> playersIP = new ConcurrentHashMap<>();
-
     private final Object monitor = new Object();
 
     public Game() {
@@ -36,10 +34,16 @@ public final class Game {
         return id;
     }
 
+    /** isTank - gets boolean to determine if the player is playing as a tank or ship.
+     *
+     * @return isTank
+     */
     public boolean isTank() { return isTank; }
 
-    public boolean isShip() {return !isTank; }
-
+    /** setTank - sets boolean to determine if player is a tank or ship.
+     *
+     * @param b - true for tank, false for ship
+     */
     public void setTank(boolean b) {isTank = b;}
 
     @JsonIgnore
@@ -52,34 +56,62 @@ public final class Game {
         return terrainGrid;
     }
 
-
-    public void addTank(String ip, Tank tank) {
-        synchronized (tanks) {
-            tanks.put(tank.getId(), tank);
-            playersIP.put(ip, tank.getId());
-        }
-    }
-
-    public void addShip(String ip, Ship ship)
+    /** addPlayer - adds a polymorhpic PlayableObject players collection.
+     *
+     * @param ip - player ip
+     * @param obj - players object
+     */
+    public void addPlayer(String ip, PlayableObject obj)
     {
-        synchronized (ships)
+        synchronized (players)
         {
-            ships.put(ship.getId(), ship);
-            playersIP.put(ip, ship.getId());
+            players.put(obj.getId(), obj);
+            playersIP.put(ip, obj.getId());
         }
     }
 
-    public Tank getTank(int tankId) {
-        return tanks.get(tankId);
+    /** getPlayer - gets the player's PlayableObject with the given id
+     *
+     * @param id - players id
+     * @return PlayableObject - either a tank or ship
+     */
+    public PlayableObject getPlayer(int id) {
+        return players.get(id);
     }
 
-    public Ship getShip(int id) { return ships.get(id); }
-
-    public ConcurrentMap<Long, Tank> getTanks() {
-        return tanks;
+    /** getPlayers - gets players collection
+     *
+     * @return ConcurrentMap<Long, PlayableObject>
+     */
+    public ConcurrentMap<Long, PlayableObject> getPlayers() {
+        return players;
     }
 
-    public ConcurrentMap<Long, Ship> getShips() { return ships; }
+    /** getPlayer - returns a PlayableObject for the given IP, null if not present
+     *
+     * @param ip - players ip address
+     * @return PlayableObject either a ship or tank
+     */
+    public PlayableObject getPlayer(String ip)
+    {
+        if (playersIP.containsKey(ip))
+            return players.get(playersIP.get(ip));
+        return null;
+    }
+
+    /** removePlayer - removes player from the game with the given id.
+     *
+     * @param id - players id
+     */
+    public void removePlayer(long id)
+    {
+        synchronized (players)
+        {
+            PlayableObject s = players.remove(id);
+            if (s != null)
+                playersIP.remove(s.getIp());
+        }
+    }
 
     public List<Optional<FieldEntity>> getGrid() {
         synchronized (holderGrid) {
@@ -97,39 +129,6 @@ public final class Game {
                 }
             }
             return entities;
-        }
-    }
-
-    public Tank getTank(String ip){
-        if (playersIP.containsKey(ip)){
-            return tanks.get(playersIP.get(ip));
-        }
-        return null;
-    }
-
-    public Ship getShip(String ip)
-    {
-        if (playersIP.containsKey(ip))
-            return ships.get(playersIP.get(ip));
-        return null;
-    }
-
-    public void removeTank(long tankId){
-        synchronized (tanks) {
-            Tank t = tanks.remove(tankId);
-            if (t != null) {
-                playersIP.remove(t.getIp());
-            }
-        }
-    }
-
-    public void removeShip(long id)
-    {
-        synchronized (ships)
-        {
-            Ship s = ships.remove(id);
-            if (s != null)
-                playersIP.remove(s.getIp());
         }
     }
 
