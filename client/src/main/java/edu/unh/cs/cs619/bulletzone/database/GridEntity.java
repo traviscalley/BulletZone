@@ -11,6 +11,8 @@ import edu.unh.cs.cs619.bulletzone.util.GridWrapper;
 public class GridEntity {
 
     @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @NonNull
     @ColumnInfo(name = "time")
     private long timestamp;

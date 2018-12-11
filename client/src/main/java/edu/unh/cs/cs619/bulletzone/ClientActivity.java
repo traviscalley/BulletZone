@@ -108,10 +108,10 @@ public class ClientActivity extends Activity {
         mGridAdapter.updateList(gw.getGrid());
     }
 
-    @Background(id = "grid_insert")
+    /*@Background(id = "grid_insert")
     public void storeState(GridWrapper gw){
             gridRepo.insert(gw);//new GridEntity(gw));//res, gw.getTimeStamp()) );
-    }
+    }*/
 
     /**
      * Value of direction causes either case of a "buttonUp" press
