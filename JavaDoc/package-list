@@ -3,6 +3,7 @@ edu.unh.cs.cs619.bulletzone.Events
 edu.unh.cs.cs619.bulletzone.database
 edu.unh.cs.cs619.bulletzone.events
 edu.unh.cs.cs619.bulletzone.model
+edu.unh.cs.cs619.bulletzone.powerup
 edu.unh.cs.cs619.bulletzone.repository
 edu.unh.cs.cs619.bulletzone.rest
 edu.unh.cs.cs619.bulletzone.ui

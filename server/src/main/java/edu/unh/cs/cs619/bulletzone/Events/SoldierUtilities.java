@@ -104,6 +104,7 @@ public abstract class SoldierUtilities
 
             FieldHolder nextField = parent.getNeighbor(direction);
             checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
+            FieldHolder terrainField = game.getTerrainGrid().get(nextField.getPosition());
 
             boolean isCompleted;
 

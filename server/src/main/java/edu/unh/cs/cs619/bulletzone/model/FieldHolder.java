@@ -11,7 +11,7 @@ public class FieldHolder {
 
     private final Map<Direction, FieldHolder> neighbors = new HashMap<Direction, FieldHolder>();
     private Optional<FieldEntity> entityHolder = Optional.absent();
-    protected int position;
+    private int position;
 
     public FieldHolder(int pos){
         position = pos;
@@ -47,4 +47,13 @@ public class FieldHolder {
         }
     }
 
+    public int getPosition()
+    {
+        return position;
+    }
+
+    public void setPosition(int position)
+    {
+        this.position = position;
+    }
 }

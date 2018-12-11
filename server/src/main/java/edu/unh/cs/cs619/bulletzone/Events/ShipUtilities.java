@@ -114,6 +114,7 @@ public abstract class ShipUtilities
 
             FieldHolder nextField = parent.getNeighbor(direction);
             checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
+            FieldHolder terrainField = game.getTerrainGrid().get(nextField.getPosition());
 
             boolean isCompleted;
 
@@ -125,8 +126,8 @@ public abstract class ShipUtilities
 
                 isCompleted = true;
             }
-            else if (nextField.getEntity() instanceof Water ||
-                    nextField.getEntity() instanceof Coast)
+            else if (terrainField.getEntity() instanceof Water ||
+                    terrainField.getEntity() instanceof Coast)
             {
                 parent.clearField();
                 nextField.setFieldEntity(ship);

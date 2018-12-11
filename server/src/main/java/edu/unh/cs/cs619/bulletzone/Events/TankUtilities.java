@@ -115,17 +115,6 @@ public abstract class TankUtilities
             if (tank.getEjected())
                 return SoldierUtilities.move(tankId, direction);
 
-            int terrainType = tank.getParent().getEntity().getIntValue();
-
-            switch (terrainType)
-            {
-                case 2000: // hill
-                    tank.setAllowedMoveInterval(1000);
-                    break;
-                default:
-                    tank.setAllowedMoveInterval(500);
-            }
-
             long millis = System.currentTimeMillis();
             if(millis < tank.getLastMoveTime())
                 return false;
@@ -142,6 +131,7 @@ public abstract class TankUtilities
                 return false;
 
             FieldHolder nextField = parent.getNeighbor(direction);
+            FieldHolder terrainField = game.getTerrainGrid().get(nextField.getPosition());
             checkNotNull(parent.getNeighbor(direction), "Neightbor is not available");
 
             boolean isCompleted;
@@ -153,9 +143,9 @@ public abstract class TankUtilities
 
                 isCompleted = true;
             }
-            else if (nextField.getEntity() instanceof DebrisField ||
-                     nextField.getEntity() instanceof Hill ||
-                     nextField.getEntity() instanceof Coast)
+            else if (!nextField.isPresent() && (terrainField.getEntity() instanceof DebrisField ||
+                     terrainField.getEntity() instanceof Hill ||
+                     terrainField.getEntity() instanceof Coast))
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
