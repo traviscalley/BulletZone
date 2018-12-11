@@ -347,8 +347,8 @@ public class InMemoryGameRepository implements GameRepository {
             game.getHolderGrid().clear();
             game.getTerrainGrid().clear();
             for (int i = 0; i < FIELD_DIM * FIELD_DIM; i++) {
-                game.getHolderGrid().add(new FieldHolder());
-                game.getTerrainGrid().add(new FieldHolder());
+                game.getHolderGrid().add(new FieldHolder(i));
+                game.getTerrainGrid().add(new FieldHolder(i));
             }
 
             FieldHolder targetHolder;
