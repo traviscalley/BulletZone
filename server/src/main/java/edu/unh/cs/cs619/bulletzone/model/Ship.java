@@ -29,7 +29,7 @@ public class Ship extends PlayableObject
     @Override
     public int getIntValue()
     {
-        return (int) (20000000 + 10000 * id + 10 * life + Direction
+        return (int) (30000000 + 10000 * id + 10 * life + Direction
                 .toByte(direction));
     }
 }

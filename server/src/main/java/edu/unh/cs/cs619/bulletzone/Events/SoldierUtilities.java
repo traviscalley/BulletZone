@@ -10,6 +10,7 @@ import edu.unh.cs.cs619.bulletzone.model.Game;
 import edu.unh.cs.cs619.bulletzone.model.PlayableObject;
 import edu.unh.cs.cs619.bulletzone.model.Soldier;
 import edu.unh.cs.cs619.bulletzone.model.Tank;
+import edu.unh.cs.cs619.bulletzone.model.TankDoesNotExistException;
 import edu.unh.cs.cs619.bulletzone.model.Wall;
 import edu.unh.cs.cs619.bulletzone.powerup.Powerup;
 
@@ -47,12 +48,13 @@ public abstract class SoldierUtilities
     {
         synchronized (monitor) {
             checkNotNull(direction);
-
             // Find user
             Soldier soldier = null;
+            Tank tank = null;
             PlayableObject tmp = game.getPlayers().get(tankId);
-            if (tmp instanceof Soldier)
-                soldier = (Soldier)tmp;
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+            soldier = tank.getSoldier();
 
             byte rotation;
             if(direction == Direction.Right)
@@ -81,9 +83,11 @@ public abstract class SoldierUtilities
         synchronized (monitor) {
             // Find user
             Soldier soldier = null;
+            Tank tank = null;
             PlayableObject tmp = game.getPlayers().get(tankId);
-            if (tmp instanceof Soldier)
-                soldier = (Soldier)tmp;
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+            soldier = tank.getSoldier();
 
             int terrainType = soldier.getParent().getEntity().getIntValue();
 
@@ -150,12 +154,11 @@ public abstract class SoldierUtilities
     {
         synchronized (monitor) {
             // Find user
-            Soldier soldier;
+            Tank tank = null;
             PlayableObject tmp = game.getPlayers().get(tankId);
-            if (tmp instanceof Soldier)
-                soldier = (Soldier)tmp;
-            else
-                soldier = null;
+            if (tmp instanceof Tank)
+                tank = (Tank)tmp;
+            Soldier soldier = tank.getSoldier();
 
             if(soldier.getNumberOfBullets() >= soldier.getAllowedNumberOfBullets())
                 return false;
@@ -200,7 +203,7 @@ public abstract class SoldierUtilities
                     synchronized (monitor) {
                         int prev_dmg = bullet.getDamage();
 
-                        System.out.println("Active Bullet: "+soldier.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
+                        System.out.println("Active Bullet: "+ soldier.getNumberOfBullets()+"---- Bullet ID: "+bullet.getIntValue());
                         FieldHolder currentField = bullet.getParent();
                         Direction direction = bullet.getDirection();
                         FieldHolder nextField = currentField.getNeighbor(direction);

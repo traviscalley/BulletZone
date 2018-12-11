@@ -74,6 +74,7 @@ public class Tank extends PlayableObject
             return false;
 
         isEjected = false;
+        soldier = null;
 
         return isEjected;
     }

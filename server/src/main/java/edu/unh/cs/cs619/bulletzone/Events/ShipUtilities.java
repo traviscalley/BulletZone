@@ -42,16 +42,15 @@ public abstract class ShipUtilities
     {
         synchronized (monitor) {
             checkNotNull(direction);
-            Ship ship = null;
-
             // Find user
+            Ship ship;
             PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp == null)
+                throw new TankDoesNotExistException(tankId);
             if (tmp instanceof Ship)
                 ship = (Ship)tmp;
-
-            if (ship == null) {
-                throw new TankDoesNotExistException(tankId);
-            }
+            else
+                ship = null;
 
             long millis = System.currentTimeMillis();
             if(millis < ship.getLastMoveTime())
@@ -84,18 +83,15 @@ public abstract class ShipUtilities
     public static boolean move(long tankId, Direction direction)
             throws TankDoesNotExistException {
         synchronized (monitor) {
-            // Find tank
-            FieldEntity prev = null;
-
-            Ship ship = null;
             // Find user
+            Ship ship;
             PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp == null)
+                throw new TankDoesNotExistException(tankId);
             if (tmp instanceof Ship)
                 ship = (Ship)tmp;
-
-            if (ship == null) {
-                throw new TankDoesNotExistException(tankId);
-            }
+            else
+                ship = null;
 
             long millis = System.currentTimeMillis();
             if(millis < ship.getLastMoveTime())
@@ -147,18 +143,15 @@ public abstract class ShipUtilities
     public static boolean fire(long tankId, int bulletType)
             throws TankDoesNotExistException {
         synchronized (monitor) {
-            Ship ship;
-
             // Find user
+            Ship ship;
             PlayableObject tmp = game.getPlayers().get(tankId);
+            if (tmp == null)
+                throw new TankDoesNotExistException(tankId);
             if (tmp instanceof Ship)
                 ship = (Ship)tmp;
             else
                 ship = null;
-
-            if (ship == null) {
-                throw new TankDoesNotExistException(tankId);
-            }
 
             if(ship.getNumberOfBullets() >= ship.getAllowedNumberOfBullets())
                 return false;

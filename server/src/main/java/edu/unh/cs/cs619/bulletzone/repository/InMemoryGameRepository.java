@@ -72,11 +72,10 @@ public class InMemoryGameRepository implements GameRepository {
                 FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
                 FieldHolder terrainElement = game.getTerrainGrid().get(x * FIELD_DIM + y);
 
-                if (!fieldElement.isPresent() && (!terrainElement.isPresent() ||
-                        terrainElement.getEntity() instanceof Water ||
+                if (fieldElement != null && terrainElement != null &&
+                        (terrainElement.getEntity() instanceof Water ||
                         terrainElement.getEntity() instanceof Coast)) {
                     fieldElement.setFieldEntity(ship);
-                    //tank.setParent(fieldElement);
                     break;
                 }
             }

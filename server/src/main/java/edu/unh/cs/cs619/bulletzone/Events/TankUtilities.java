@@ -99,9 +99,6 @@ public abstract class TankUtilities
     public static boolean move(long tankId, Direction direction)
             throws TankDoesNotExistException {
         synchronized (monitor) {
-            // Find tank
-            FieldEntity prev = null;
-
             // Find user
             Tank tank = null;
             PlayableObject tmp = game.getPlayers().get(tankId);

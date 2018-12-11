@@ -17,7 +17,10 @@ public abstract class PlayerUtilities
     {
         PlayableObject player = game.getPlayers().get(id);
 
-        if (player instanceof Ship && player != null)
+        if (player == null)
+            throw new TankDoesNotExistException(id);
+
+        if (player instanceof Ship)
             return ShipUtilities.turn(id, direction);
 
         if (player instanceof Tank)
@@ -31,7 +34,10 @@ public abstract class PlayerUtilities
     {
         PlayableObject player = game.getPlayers().get(id);
 
-        if (player instanceof Ship && player != null)
+        if (player == null)
+            throw new TankDoesNotExistException(id);
+
+        if (player instanceof Ship)
             return ShipUtilities.move(id, direction);
 
         if (player instanceof Tank)
@@ -45,7 +51,10 @@ public abstract class PlayerUtilities
     {
         PlayableObject player = game.getPlayers().get(id);
 
-        if (player instanceof Ship && player != null)
+        if (player == null)
+            throw new TankDoesNotExistException(id);
+
+        if (player instanceof Ship)
             return ShipUtilities.fire(id, bulletType);
 
         if (player instanceof Tank)
@@ -59,7 +68,10 @@ public abstract class PlayerUtilities
     {
         PlayableObject player = game.getPlayers().get(id);
 
-        if (player instanceof Tank && player != null)
+        if (player == null)
+            throw new TankDoesNotExistException(id);
+
+        if (player instanceof Tank)
             return TankUtilities.ejectSoldier(id);
         else
             return false;

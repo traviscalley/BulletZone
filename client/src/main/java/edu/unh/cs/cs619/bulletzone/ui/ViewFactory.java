@@ -100,6 +100,7 @@ public class ViewFactory {
                         obj = R.drawable.soldier_down;
                     else if (dir == 6)
                         obj = R.drawable.soldier_left;
+                    break;
                 case SHIP:
                     if (dir == 0)
                         obj = R.drawable.boat_up;
