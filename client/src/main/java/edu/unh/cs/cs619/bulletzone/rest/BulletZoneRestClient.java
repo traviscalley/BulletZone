@@ -31,8 +31,8 @@ import edu.unh.cs.cs619.bulletzone.util.LongWrapper;
 public interface BulletZoneRestClient extends RestClientErrorHandling {
     void setRootUrl(String rootUrl);
 
-    @Post("")
-    LongWrapper join() throws RestClientException;
+    @Post("/{selected}")
+    LongWrapper join(@Path boolean selected) throws RestClientException;
 
     @Get("")
     GridWrapper grid();

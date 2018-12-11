@@ -97,7 +97,7 @@ public class ClientActivity extends Activity {
     @Background
     void joinAsync() {
         try {
-            tankId = restClient.join().getResult();
+            tankId = restClient.join(isTank).getResult();
             gridPollTask.start();
             mGridAdapter.setPlayerID(tankId);
         } catch (Exception e) {
@@ -141,6 +141,7 @@ public class ClientActivity extends Activity {
      * Allows the soldier to eject from tank.
      * @param view View
      */
+    @Background
     @Click(R.id.buttonEject)
     protected void onButtonEject(View view) {
         restClient.eject(tankId);
@@ -150,6 +151,7 @@ public class ClientActivity extends Activity {
      * Allows the soldier to eject from tank.
      * @param view View
      */
+    @Background
     @Click(R.id.buttonEjectP)
     protected void onButtonEjectPower(View view) {
         restClient.ejectP(tankId);
@@ -195,6 +197,7 @@ public class ClientActivity extends Activity {
     }
 
     @Click(R.id.buttonLeave)
+    @Background
     void leaveGame() {
         System.out.println("leaveGame() called, tank ID: "+tankId);
         gridPollTask.end();

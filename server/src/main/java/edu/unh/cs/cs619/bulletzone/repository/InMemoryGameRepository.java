@@ -37,11 +37,13 @@ public class InMemoryGameRepository implements GameRepository {
     private static final Timer timer = new Timer();
 
     private Random random = new Random();
-    private boolean isTank = true;
+    private boolean isTank;
 
     public void setSelectBool(boolean isTank)
     {
         this.isTank = isTank;
+        if (game != null)
+            game.setTank(isTank);
     }
 
     public Ship joinShip(String ip)
@@ -68,10 +70,13 @@ public class InMemoryGameRepository implements GameRepository {
                 x = random.nextInt(FIELD_DIM);
                 y = random.nextInt(FIELD_DIM);
                 FieldHolder fieldElement = game.getHolderGrid().get(x * FIELD_DIM + y);
-                if (fieldElement != null && fieldElement.getEntity() instanceof Water ||
-                        fieldElement != null && fieldElement.getEntity() instanceof Coast) {
+                FieldHolder terrainElement = game.getTerrainGrid().get(x * FIELD_DIM + y);
+
+                if (!fieldElement.isPresent() && (!terrainElement.isPresent() ||
+                        terrainElement.getEntity() instanceof Water ||
+                        terrainElement.getEntity() instanceof Coast)) {
                     fieldElement.setFieldEntity(ship);
-                    //ship.setParent(fieldElement);
+                    //tank.setParent(fieldElement);
                     break;
                 }
             }

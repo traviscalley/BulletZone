@@ -45,12 +45,13 @@ class GamesController {
         this.gameRepository = gameRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/{selected}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    ResponseEntity<LongWrapper> join(HttpServletRequest request) {
+    ResponseEntity<LongWrapper> join(HttpServletRequest request, @PathVariable boolean selected) {
         PlayableObject player;
         try {
+            gameRepository.setSelectBool(selected);
             player = gameRepository.join(request.getRemoteAddr());
             log.info("Player joined: tankId={} IP={}", player.getId(), request.getRemoteAddr());
 
@@ -82,7 +83,7 @@ class GamesController {
         );
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value="", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.PUT, value="/select/{selected}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BooleanWrapper> select(@PathVariable boolean isTank)
     {

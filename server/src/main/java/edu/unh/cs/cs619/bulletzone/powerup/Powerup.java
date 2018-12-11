@@ -19,7 +19,9 @@ public abstract class Powerup extends FieldEntity {
     }
 
     @Override
-    public void hit(Bullet bullet){}
+    public void hit(Bullet bullet){
+        parent.clearField();
+    }
 
     //for when powerup is ejected (maybe instaed have stack of state)
 }

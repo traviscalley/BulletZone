@@ -30,5 +30,4 @@ public abstract class FieldEntity {
     public abstract boolean powerupSpawnable();
 
     public abstract boolean tankSpawnable();
-
 }

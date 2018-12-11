@@ -155,8 +155,7 @@ public abstract class TankUtilities
             }
             else if (nextField.getEntity() instanceof DebrisField ||
                      nextField.getEntity() instanceof Hill ||
-                     nextField.getEntity() instanceof Coast ||
-                     nextField.getEntity() instanceof Water)
+                     nextField.getEntity() instanceof Coast)
             {
                 parent.clearField();
                 nextField.setFieldEntity(tank);
