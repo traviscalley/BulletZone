@@ -11,6 +11,11 @@ public class FieldHolder {
 
     private final Map<Direction, FieldHolder> neighbors = new HashMap<Direction, FieldHolder>();
     private Optional<FieldEntity> entityHolder = Optional.absent();
+    protected int position;
+
+    public FieldHolder(int pos){
+        position = pos;
+    }
 
     public void addNeighbor(Direction direction, FieldHolder fieldHolder) {
         neighbors.put(checkNotNull(direction), checkNotNull(fieldHolder));
