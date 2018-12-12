@@ -1,5 +1,6 @@
 package edu.unh.cs.cs619.bulletzone.repository;
 
+import edu.unh.cs.cs619.bulletzone.Events.PlayerUtilities;
 import edu.unh.cs.cs619.bulletzone.Events.TankUtilities;
 import edu.unh.cs.cs619.bulletzone.model.Game;
 import org.junit.Assert;
@@ -41,13 +42,13 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testTurn() throws Exception {
-        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
         Assert.assertTrue(tank.getDirection() == Direction.Up);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(TankUtilities.turn(tank.getId(), Direction.Right));
+        Assert.assertTrue(PlayerUtilities.turn(tank.getId(), Direction.Right));
         Assert.assertTrue(tank.getDirection() == Direction.Right);
 
 //        thrown.expect(TankDoesNotExistException.class);
@@ -57,24 +58,24 @@ public class InMemoryGameRepositoryTest {
 
     @Test
     public void testMove() throws Exception {
-        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getDirection());
         Assert.assertTrue(tank.getDirection() == Direction.Up);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(TankUtilities.move(tank.getId(), Direction.Up));
+        Assert.assertTrue(PlayerUtilities.move(tank.getId(), Direction.Up));
         Assert.assertTrue(tank.getDirection() == Direction.Up);
 
     }
 
     @Test
     public void testFire() throws Exception {
-        PlayableObject tank = repo.join("http://stman1.cs.unh.edu:6192/games");
+        PlayableObject tank = repo.joinTank("http://stman1.cs.unh.edu:6192/games");
         Assert.assertNotNull(tank);
         Assert.assertTrue(tank.getId() >= 0);
         Assert.assertNotNull(tank.getParent());
-        Assert.assertTrue(TankUtilities.fire(tank.getId(), 1));
+        Assert.assertTrue(PlayerUtilities.fire(tank.getId(), 1));
 
     }
 
